@@ -1,5 +1,5 @@
 # health_gis
 
 ## Developers
-*Himanshi
-*Animesh
+* Himanshi
+* Animesh
