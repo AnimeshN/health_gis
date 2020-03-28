@@ -1,0 +1,207 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  
+    <link rel="stylesheet" href="{% static 'footer.css' %}" >
+    <link rel="stylesheet" href="{% static 'leaflet.css' %}" >
+    <link rel="stylesheet" href="{% static 'plugins/L.Control.Pan.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/L.Control.Zoomslider.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/L.Control.MousePosition.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/L.Control.Sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/Leaflet.PolylineMeasure.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/easy-button.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mycss.css' %}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'front.css' %}">
+
+    <script src="{% static 'leaflet-src.js' %}" ></script>
+    <!-- <script src="src/jquery-3.2.0.min.js"></script> -->
+    <script src="{% static 'plugins/L.Control.Pan.js' %}" ></script>
+    <script src="{% static 'plugins/L.Control.Zoomslider.js' %}" ></script>
+    <script src="{% static 'plugins/L.Control.MousePosition.js' %}"></script>
+    <script src="{% static 'plugins/L.Control.Sidebar.js' %}"></script>
+    <script src="{% static 'plugins/Leaflet.PolylineMeasure.js' %}"></script>
+    <script src="{% static 'plugins/easy-button.js' %}"></script>
+    <script src="{% static 'plugins/leaflet-providers.js' %}"></script>
+    <script src="{% static 'plugins/leaflet-opencage/src/js/L.Control.OpenCageSearch.js' %}"></script>
+    <!-- <script src="{% static 'app.js' %}"></script> -->
+    <!-- <link rel="stylesheet" type="leaflet.wms.js" href="{% static 'css/component.css' %}"  /> -->
+    <link rel="stylesheet" href="{% static 'mystyle.css' %}">
+    <link rel= 'stylesheet' href="{% static 'css/component.css' %}">
+    <script src="{% static 'plugins/leaflet.ajax.min.js' %}" ></script>
+    <script src="{% static 'js/modernizr-custom.js' %}" ></script>
+    <script src="{% static 'leaflet.wms.js' %}" ></script>
+
+    <script src="{% static 'js/classie.js' %}"></script>
+    <!-- <script src="js/dummydata.js"></script> -->
+    <!-- <script src="src/js/main.js"></script> -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'myscript.js' %}"></script>
+
+
+    <!-- scripts for spinner -->
+
+    <script src="{% static 'spin/spin.js'%}" ></script>
+    <script src="{% static 'leaflet.spin.min.js' %}"></script>
+
+<!-- font-awesome -->
+<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+<!-- script for leaflet font awesome-->
+<script src = "{% static 'leaflet.awesome-markers.js' %}"></script>
+<link rel="stylesheet" href="{% static 'leaflet.awesome-markers.css' %}">
+
+
+
+<!-- leaflet-messagebox-->
+<script src = "{% static 'leaflet-messagebox.js' %}"></script>
+<link rel="stylesheet" href="{% static 'leaflet-messagebox.css' %}">
+
+ <!-- leaflet-measure-->
+<script src = "{% static 'leaflet_measure/leaflet.measure.js' %}"></script>
+<link rel="stylesheet" href="{% static 'leaflet_measure/leaflet.measure.css' %}">
+
+
+<!-- leaflet-search -->
+<script src = "{% static 'leaflet-search/leaflet-search.src.js' %}"></script>
+<link rel="stylesheet" href="{% static 'leaflet-search/leaflet-search.src.css' %}">
+
+
+<!-- leaflet minimap -->
+<script src = "{% static 'leaflet-minimap/Control.MiniMap.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'leaflet-minimap/Control.MiniMap.min.css' %}">
+ 
+
+
+<!-- leaflet lagend graphic -->
+
+<script src = "{% static 'leaflet-legend-graphics/leaflet.wmslegend.js' %}"></script>
+<link rel="stylesheet" href="{% static 'leaflet-legend-graphics/leaflet.wmslegend.css' %}">
+
+<!-- <link rel="stylesheet" href=""/>
+<script src="leaflet-legend-graphics/leaflet.wmslegend.js"></script> -->
+
+</head>
+
+  <body>
+<style>
+
+    .select {
+        background:rgb(255,255,255);
+    }
+    .select.highlight {
+        background:rgb(26, 255, 0);
+    }
+  </style>
+<div id="mapdiv" class="col-md-12"></div>
+
+<script>
+var mymap;
+
+var source = L.wms.source(
+      "https://makerghat.urbansciences.in/geoserver/wms",
+      {
+          "format": "image/png",
+          "transparent": "true"
+      }        
+  );
+
+  mymap = L.map('mapdiv', {
+    center:[19.0760, 84.8777], 
+    zoom:5, zoomControl:false, 
+    attributionControl:false,
+    messagebox: true,
+    contextmenu: true,
+    measureControl: false
+  });
+  mymap.messagebox.options.timeout = 5000;
+  mymap.messagebox.setPosition("bottomright");
+  lyrOSM = L.tileLayer.provider('OpenStreetMap.Mapnik');
+  lyrOSM2 = L.tileLayer.provider('OpenStreetMap.Mapnik');
+  lyrImagery = L.tileLayer.provider('Esri.WorldImagery');
+  mymap.addLayer(lyrOSM);
+  var miniMap = new L.Control.MiniMap(lyrOSM2, { toggleDisplay: true }).addTo(mymap);
+//  var miniMap = new L.Control.MiniMap(lyrOSM).addTo(mymap);
+
+function round(value, precision) {
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+}
+
+
+function copyToClipboard(text) {
+    var dummy = document.createElement("textarea");
+    // dummy.style.display = 'none'
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+}
+
+mymap.on('contextmenu',function(e){
+  copyToClipboard(e.latlng.lat+","+e.latlng.lng);
+  mymap.messagebox.show("<h6>Latitude:<b>"+round(e.latlng.lat,4)+"</b> Longitude:<b>"+round(e.latlng.lng,4)+"</b> copied to clipboard</h6>");
+});
+
+
+
+$('.select').click(function () {
+  $(this).toggleClass('highlight')
+})
+</script>
+
+
+
+   
+{% block content%}
+{% endblock %}
+
+<script>
+  
+  
+  
+  $("#closebutton").click(function(){
+  ctlSidebar.toggle();
+});
+ 
+  
+  
+  objBasemaps = {
+      "Open Street Maps": lyrOSM,
+      "Imagery":lyrImagery
+  };
+  
+  objOverlays = {
+  };
+  
+  // var ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap);
+  var ctlSidebar = L.control.sidebar('side-bar').addTo(mymap);
+  var ctlPan = L.control.pan().addTo(mymap);
+
+  var ctlEasybutton = L.easyButton('fa fa fa-bars', function(){
+      ctlSidebar.toggle(); 
+  }).addTo(mymap);
+  ctlSidebar.show();
+
+  var ctlZoomslider = L.control.zoomslider({position:'topright'}).addTo(mymap);
+  
+  ctlAttribute = L.control.attribution({position:'bottomleft'}).addTo(mymap);
+  ctlAttribute.addAttribution('&copy; <a href="http://www.makerghat.org">makerGHAT</a>');
+
+      
+</script>
+   
+
+  </body>
+</html>

@@ -1,0 +1,12 @@
+.navbar-brand {
+    /* width: 300px; */
+    /* height: 90px; */
+    /* background: transparent url("../img/communityGIS.png") no-repeat; */
+    /* background-size: 300px 90px; */
+    background-position-y: center;
+}
+
+.jumbotron {
+    background: url("../img/jumbo.png") no-repeat !important;
+    background-size: cover !important;
+}

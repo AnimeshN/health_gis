@@ -1,0 +1,55 @@
+{% extends 'health_dash/base.html' %}
+{% load static%}
+{% block content %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+<script src="{% static 'js/indexdb.js' %}"></script>
+
+<style>
+
+.info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+.info h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
+
+.table{
+  border-collapse: collapse;
+  padding: 50px;
+  font-weight: bold;
+
+  
+  /* background:rgba(191, 149, 233, 0.473); */
+
+}
+
+/* css to customize Leaflet default styles  */
+.leaflet-popup-content-wrapper {
+    background: rgba(0, 0, 0, 0.9);
+    color: #ffffff;
+}
+
+.leaflet-popup-content{
+    font-weight: bold;
+}
+
+</style>
+
+<div id="side-bar" style="background-color: rgba(0, 0, 0, 0.2);">                <!-- side-bar container -->
+
+</div>
+
+
+
+<script>
+    
+</script>
+
+{% endblock %}

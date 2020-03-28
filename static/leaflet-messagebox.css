@@ -1,0 +1,9 @@
+.leaflet-control-messagebox {
+	display: none; /* Initially hidden */
+	border: 2px;
+	background-color: rgba(255, 0, 0, 0.493);
+	border-radius: 50px;
+	color: white;
+	padding: 3px 10px;
+	font-size: 20px;
+}
