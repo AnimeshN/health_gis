@@ -1,11 +1,6 @@
 {% extends 'health_dash/base.html' %}
 {% load static%}
 {% block content %}
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-<script src="{% static 'js/indexdb.js' %}"></script>
-
 <style>
 
 .info {
@@ -44,12 +39,229 @@
 
 <div id="side-bar" style="background-color: rgba(0, 0, 0, 0.2);">                <!-- side-bar container -->
 
+    <h3 class="text-center">Rural Health GIS</h3>
+    <div class="tooltips" title="Please select the District">
+        <select class='form-control' id="district" style="">
+            <option value="All">Select District</option>
+            <!-- <optgroup label="Vidarbh(East)"> -->
+                <option value="Akola">Akola</option>
+                <option value="Amravati">Amrawati</option>
+              <!--  <option value="Buldana">Buldana</option>
+                <option value="Yavatmal">Yavatmal</option>
+                <option value="Washim">Washim</option>
+             </optgroup>
+            <optgroup label="Marathwada">
+                <option value="Aurangabad">Aurangabad</option>
+                <option value="Beed">Beed</option>
+                <option value="Jalna">Jalna</option>
+                <option value="Osmanabad">Osmanabad</option>
+                <option value="Nanded">Nanded</option>
+                <option value="Latur">Latur</option>
+                <option value="Parbhani">Parbhani</option>
+                <option value="Hingoli">Hingoli</option>
+            </optgroup>
+            <optgroup label="Kokan">
+                <option value="Mumbai City">Mumbai City</option>
+                <option value="Mumbai Suburban">Mumbai Suburban</option>
+                <option value="Thane">Thane</option>
+                <option value="Palghar">Palghar</option>
+                <option value="Raigad">Raigad</option>
+                <option value="Ratnagiri">Ratnagiri</option>
+                <option value="Sindhudurg">Sindhudurg</option>
+            </optgroup>
+  
+          <optgroup label="Vidarbh(West)">
+                <option value="Bhandara">Bhandara</option>
+                <option value="Gadchiroli">Gadchiroli</option>
+                <option value="Chandrapur">Chandrapur</option>
+                <option value="Gondia">Gondia</option>
+                <option value="Nagpur">Nagpur</option>
+                <option value="Wardha">Wardha</option>
+            </optgroup>
+  
+              <optgroup label="Khandesh">
+                <option value="Ahmednagar">Ahmednagar</option>
+                <option value="Dhule">Dhule</option>
+                <option value="Jalgaon">Jalgaon</option>
+                <option value="Nandurbar">Nandurbar</option>
+                <option value="Nashik">Nashik</option>
+            </optgroup>
+  
+          
+              <optgroup label="Paschim Maharashtra">
+                <option value="Kolhapur">Kolhapur</option>
+                <option value="Pune">Pune</option>
+                <option value="Sangli">Sangli</option>
+                <option value="Satara">Satara</option>
+                <option value="Solapur">Solapur</option>
+            </optgroup> -->
+          </select> 
+     </div>  
+
+     <hr>
+     <div class="text-center">
+     <h5>Select health facilities</h5>
+
+        <form id="projectList" >
+
+            <!-- <input type="checkbox" class="myCheckbox" value="Am"/> All Projects <br> -->
+              <label><input type="checkbox" id="val" value="CHC" name='facility'/><span> CHC </span> </label><br>
+              <label><input type="checkbox" id="phs" value="PHC" name='facility'/><span> PHC</span> </label><br>
+            <button type="button" class="btn btn-primary" onclick = "GetSelected()">Display</button>
+         </form> 
+     </div>
+     
+
 </div>
 
 
 
 <script>
+
+    let listDistrict = {'Akola':['Akola',20.7002, 77.0082],'Amravati':['Amravati',20.9374,77.7796]}
+    let listFacility = {'CHC':'chc_num','PHC':'phc_num'}
+    let url;
     
+
+    $('#district').on('click',function(){
+        let district = document.getElementById('district').value;
+        let lat = listDistrict[district][1];
+        let long = listDistrict[district][2];
+
+        switch(district){
+        case 'Akola': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Akola'&propertyName=the_geom";break;
+        case 'Amravati': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Amravati'&propertyName=the_geom";break;
+        }
+        mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+        fetch(url).then(
+        function(response) {
+        if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+            return;
+        }
+        response.json().then(function(geojsonData) {
+            console.log(geojsonData.features);
+            mymap.setView([lat, long], 9);
+            geojson = L.geoJson(geojsonData.features, {
+            // style : style,
+            // onEachFeature: onEachFeature
+        }).addTo(mymap);
+            // LayerList.push(geojson);
+             mymap.spin(false);
+        });
+
+
+        }
+    )
+    .catch(function(err) {
+        console.log('Fetch Error :-S', err);
+    });
+
+
+    // blockLayer = new L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/geonode/ows', {
+    //     layers: 'geonode:maha_map_06feb2020',
+    //     format: 'image/png',
+    //     version: '1.3.0',
+    //     transparent: true,
+    // });
+    // console.log(blockLayer);
+    // blockLayer.addTo(mymap);
+
+
+    })
+
+
+
+
+
+    function GetSelected() {
+         var selected = new Array();
+         var projectList = document.getElementById("projectList");
+         var chks = projectList.getElementsByTagName("INPUT");
+         for (var i = 0; i < chks.length; i++) {
+             if (chks[i].checked) {
+                 selected.push(chks[i].value);
+             }
+         }
+         var geojsonMarkerOptions = {
+            radius: 8,
+            fillColor: "#ff7800",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+
+        var geojsonMarkerOptions2 = {
+            radius: 5,
+            fillColor: "#007800",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+
+
+  
+
+        selected.forEach(sel => {
+            let newurl =`https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar&cql_filter=district_n='Akola' AND ${listFacility[sel]}>0`
+            
+            function onEachFeatureForPoint(feature, layer) {
+            if(sel === 'PHC'){
+                layer.bindPopup(`<div class = 'text-center'>PHC<br>
+                                Distance Range: ${feature.properties.phc_distan}<br>
+                                Doctors In Position :${feature.properties.phc_doc_in}<br>
+                                Doctors Total Strength :${feature.properties.phc_doc_nu}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.phc_param_}<br>
+                                Para Medical Staff In Position : ${feature.properties.phc_para_1}
+                                </div>`) 
+            }else if(sel === 'CHC'){
+                layer.bindPopup(`<div class = 'text-center'>CHC<br>
+                                Distance Range: ${feature.properties.chc_distan}<br>
+                                Doctors In Position :${feature.properties.chc_doc_in}<br>
+                                Doctors Total Strength :${feature.properties.chc_doc_nu}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.chc_param_}<br>
+                                Para Medical Staff In Position : ${feature.properties.chc_para_1}
+                                </div>`) 
+            }
+            
+            }
+            fetch(newurl).then(
+            function(response) {
+            if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' +
+                response.status);
+                return;
+            }
+            response.json().then(function(geojsonData) {
+                console.log(geojsonData.features);
+                geojson = L.geoJson(geojsonData.features, {
+                    pointToLayer: function (feature, latlng) {
+                        if(sel === 'CHC')
+                            return L.circleMarker(latlng, geojsonMarkerOptions);
+                        else if(sel === 'PHC')
+                        return L.circleMarker(latlng, geojsonMarkerOptions2);
+
+                    },onEachFeature:onEachFeatureForPoint,
+                }).addTo(mymap);
+            });
+
+
+        }).catch(function(err) {
+                console.log('Fetch Error :-S', err);
+        });
+        })
+
+
+        };	
+
+  
+    
+
+
+
 </script>
 
 {% endblock %}
