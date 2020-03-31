@@ -1,2 +1,6 @@
 # health_gis
-Himanshi
+
+## Developers
+* Shweta Panwar
+* Himanshi
+* Animesh
