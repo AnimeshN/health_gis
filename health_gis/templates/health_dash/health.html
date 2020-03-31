@@ -41,66 +41,59 @@
 
     <h3 class="text-center">Rural Health GIS</h3>
     <div class="tooltips" title="Please select the District">
-        <select class='form-control' id="district" style="">
+        <select class='form-control' id="district" name="district">
             <option value="All">Select District</option>
             <!-- <optgroup label="Vidarbh(East)"> -->
                 <option value="Akola">Akola</option>
                 <option value="Amravati">Amrawati</option>
-              <!--  <option value="Buldana">Buldana</option>
+             	 <option value="Buldana">Buldana</option>
                 <option value="Yavatmal">Yavatmal</option>
                 <option value="Washim">Washim</option>
-             </optgroup>
-            <optgroup label="Marathwada">
                 <option value="Aurangabad">Aurangabad</option>
-                <option value="Beed">Beed</option>
+                <option value="Bid">Bid</option>
                 <option value="Jalna">Jalna</option>
                 <option value="Osmanabad">Osmanabad</option>
                 <option value="Nanded">Nanded</option>
                 <option value="Latur">Latur</option>
                 <option value="Parbhani">Parbhani</option>
                 <option value="Hingoli">Hingoli</option>
-            </optgroup>
-            <optgroup label="Kokan">
-                <option value="Mumbai City">Mumbai City</option>
-                <option value="Mumbai Suburban">Mumbai Suburban</option>
+              <!--   <option value="Mumbai City">Mumbai City</option>
+                <option value="Mumbai Suburban">Mumbai Suburban</option> -->
                 <option value="Thane">Thane</option>
                 <option value="Palghar">Palghar</option>
                 <option value="Raigad">Raigad</option>
                 <option value="Ratnagiri">Ratnagiri</option>
                 <option value="Sindhudurg">Sindhudurg</option>
-            </optgroup>
+           
   
-          <optgroup label="Vidarbh(West)">
                 <option value="Bhandara">Bhandara</option>
                 <option value="Gadchiroli">Gadchiroli</option>
                 <option value="Chandrapur">Chandrapur</option>
                 <option value="Gondia">Gondia</option>
                 <option value="Nagpur">Nagpur</option>
                 <option value="Wardha">Wardha</option>
-            </optgroup>
+           
   
-              <optgroup label="Khandesh">
-                <option value="Ahmednagar">Ahmednagar</option>
+                <option value="Ahmadnagar">Ahmednagar</option>
                 <option value="Dhule">Dhule</option>
                 <option value="Jalgaon">Jalgaon</option>
                 <option value="Nandurbar">Nandurbar</option>
                 <option value="Nashik">Nashik</option>
-            </optgroup>
+           
   
           
-              <optgroup label="Paschim Maharashtra">
                 <option value="Kolhapur">Kolhapur</option>
                 <option value="Pune">Pune</option>
                 <option value="Sangli">Sangli</option>
                 <option value="Satara">Satara</option>
                 <option value="Solapur">Solapur</option>
-            </optgroup> -->
+    
           </select> 
      </div>  
 
      <hr>
      <div class="text-center">
-     <h5>Select health facilities</h5>
+     <h5>Explore Health Facilities</h5>
 
         <form id="projectList" >
 
@@ -118,20 +111,57 @@
 
 <script>
 
-    let listDistrict = {'Akola':['Akola',20.7002, 77.0082],'Amravati':['Amravati',20.9374,77.7796]}
+    let listDistrict = {'Akola':['Akola',20.7002, 77.0082],'Amravati':['Amravati',20.9374,77.7796],
+    'Buldana':['Buldana',20.4561,76.3637],'Yavatmal':['Yavatmal',20.3888,78.1204],'Washim':['Washim',20.139,77.1025],
+    'Aurangabad':['Aurangabad',19.8762,75.3433],'Bid':['Bid',18.9891,75.7601],'Jalna':['Jalna',19.8297,75.88],
+    'Osmanabad':['Osmanabad',18.207,76.1784],'Nanded':['Nanded',19.1383,77.321],'Latur':['Latur',18.4088,76.5604],
+    'Parbhani':['Parbhani',19.2644,76.6413],'Hingoli':['Hingoli',19.5781,77.1025],'Thane':['Thane',19.2183,72.9781],
+    'Palghar':['Palghar',19.6936,72.7655],'Raigad':['Raigad',18.5158,73.1822],'Ratnagiri':['Ratnagiri',16.9902,73.312],'Sindhudurg':['Sindhudurg',16.3492,73.5594],'Bhandara':['Bhandara',21.0736,79.8297],
+    'Gadchiroli':['Gadchiroli',19.4969,80.2767],'Chandrapur':['Chandrapur',19.9615,79.2961],
+    'Gondia':['Gondia',21.4624,80.221],'Nagpur':['Nagpur',21.1458,79.0882],'Wardha':['Wardha',20.7453,78.6022],
+    'Ahmadnagar':['Ahmadnagar',19.0948,74.748],'Dhule':['Dhule',20.9042,74.7749],'Jalgaon':['Jalgaon',21.0077,75.5626],
+    'Nandurbar':['Nandurbar',21.7469,74.124],'Nashik':['Nashik',19.9975,73.7898],'Kolhapur':['Kolhapur',16.705,74.2433],
+    'Pune':['Pune',18.5204,73.8567],'Sangli':['Sangli',16.8524,74.5815],'Satara':['Satara',17.6805,74.0183],
+    'Solapur':['Solapur',17.6599,74.9064]}
+    
     let listFacility = {'CHC':'chc_num','PHC':'phc_num'}
     let url;
-    
+	const domain = ['https://makerghat.urbansciences.in/','http://localhost/'];
+	var rootUrl = domain[0] + 'geoserver/geonode/ows';
+
+	var defaultParameters = {
+		service: 'WFS',
+		version: '1.0.0',
+		request: 'GetFeature',
+		outputFormat: 'json'
+		};
+
+	var info = L.control();
+	var attribute_table = L.control({position: 'bottomright'});  
+	var LayerList = [];
+  
 
     $('#district').on('click',function(){
+    	clear_layer();
         let district = document.getElementById('district').value;
-        let lat = listDistrict[district][1];
-        let long = listDistrict[district][2];
+        // let lat = listDistrict[district][1];
+        // let long = listDistrict[district][2];
+         tempParameter = defaultParameters;
+    	 tempParameter.typeName = 'geonode:maha_blocks_30mar'; 
+    	 tempParameter.propertyName="the_geom";
+         var aspiD = document.getElementById('district').value;
+    	 var distLayerLatLong= listDistrict[aspiD];
+    // console.log(distLayerLatLong);
+    	tempParameter.cql_filter = "dtname='"+distLayerLatLong[0]+"'";
+   		 displayPolygon(tempParameter);
+    	// districtlayer = distLayerLatLong[0];
+    	mymap.setView([distLayerLatLong[1],distLayerLatLong[2]],9);
 
-        switch(district){
-        case 'Akola': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Akola'&propertyName=the_geom";break;
-        case 'Amravati': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Amravati'&propertyName=the_geom";break;
-        }
+        // switch(district){
+        // case 'Akola': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Akola'&propertyName=the_geom";break;
+        // case 'Amravati': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Amravati'&propertyName=the_geom";break;
+        // }
+
         mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
         fetch(url).then(
         function(response) {
@@ -172,8 +202,57 @@
     })
 
 
+function displayPolygon(param){
+var parameters = L.Util.extend(param);
+layer_url = rootUrl + L.Util.getParamString(parameters)
+// console.log(layer_url);
+mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
+
+fetch(layer_url,{mode:'cors'})
+.then(
+    function(response) {
+    if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+        response.status);
+        return;
+    }
+
+    // Examine the text in the response
+    response.json().then(function(geojsonData) {
+        // console.log(geojsonData)
+        geojson = L.geoJson(geojsonData.features, {
+        style : style,
+        // onEachFeature: onEachFeature
+    }).addTo(mymap);
+        
+    mymap.spin(false);
+    LayerList.push(geojson);
+
+    });
 
 
+    }
+)
+.catch(function(err) {
+    console.log('Fetch Error :-S', err);
+});
+
+    
+}
+function clear_layer(){
+    LayerList.forEach(layer => mymap.removeLayer(layer));
+    // pointLayerList.forEach(layer => console.log(layer));
+    
+}
+
+function style(feature) {
+    return {
+        weight: 2,
+        opacity: 1,
+        color: "black",
+        fillOpacity: 0
+    };
+}
 
     function GetSelected() {
          var selected = new Array();
