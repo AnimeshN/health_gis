@@ -3,6 +3,12 @@
 {% block content %}
 <style>
 
+.border {
+    padding: 6px 8px;
+    border-style: groove;
+    border-radius: 5px;
+    margin:20px;
+}
 .info {
     padding: 6px 8px;
     font: 14px/16px Arial, Helvetica, sans-serif;
@@ -100,17 +106,29 @@
 
      <hr>
      <div class="text-center">
-     <h5>Select health facilities</h5>
 
-        <form id="projectList" >
+        <form id="projectList" class="border">
+            <h5>Select health facilities</h5>
 
             <!-- <input type="checkbox" class="myCheckbox" value="Am"/> All Projects <br> -->
               <label><input type="checkbox" id="val" value="CHC" name='facility'/><span> CHC </span> </label><br>
               <label><input type="checkbox" id="phs" value="PHC" name='facility'/><span> PHC</span> </label><br>
             <button type="button" class="btn btn-primary" onclick = "GetSelected()">Display</button>
          </form> 
+
+         <div class="border">
+            <button type="button" class="btn btn-primary" onclick = "findMylocation()">Your Location</button>
+            <button type="button" class="btn btn-primary" onclick = "findNearestLocation()">Find Nearest Facility</button>
+         </div>
+
+         <div class="border row">
+            <input type="text" placeholder = "Enter facility Name" class="form-control col-7" id="usr">
+
+            <button type="button" class="btn btn-primary col" onclick = "searchFacilities()">Search Facility</button>
+         </div>
+    
      </div>
-     
+
 
 </div>
 
@@ -171,10 +189,6 @@
 
     })
 
-
-
-
-
     function GetSelected() {
          var selected = new Array();
          var projectList = document.getElementById("projectList");
@@ -215,7 +229,7 @@
                                 Doctors In Position :${feature.properties.phc_doc_in}<br>
                                 Doctors Total Strength :${feature.properties.phc_doc_nu}<br>
                                 Para Medical Staff Total Strength : ${feature.properties.phc_param_}<br>
-                                Para Medical Staff In Position : ${feature.properties.phc_para_1}
+                                Para Medical Staff In Position : ${feature.properties.phc_para_1}fen
                                 </div>`) 
             }else if(sel === 'CHC'){
                 layer.bindPopup(`<div class = 'text-center'>CHC<br>
