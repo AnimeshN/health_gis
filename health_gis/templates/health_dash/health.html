@@ -111,13 +111,12 @@
          </form> 
 
          <div class="border">
-            <button type="button" class="btn btn-primary" onclick = "findMylocation()">Your Location</button>
-            <button type="button" class="btn btn-primary" onclick = "findNearestLocation()">Find Nearest Facility</button>
+            <button type="button" class="btn btn-primary" id='locate'>Your Location</button>
+            <button type="button" class="btn btn-primary" id='find-nearest'>Find Nearest Facility</button>
          </div>
 
          <div class="border row">
             <input type="text" placeholder = "Enter facility Name" class="form-control col-7" id="usr">
-
             <button type="button" class="btn btn-primary col" onclick = "searchFacilities()">Search Facility</button>
          </div>
     
@@ -129,6 +128,66 @@
 
 
 <script>
+        let healthFacility,
+            $locate = $('#locate'),
+            $body = $('body'),
+            $findNearest = $('#find-nearest')
+
+
+    $locate.on('click', function(e) {
+            // $status.html('finding your location');
+            if (!navigator.geolocation){
+                alert("<p>Sorry, your browser does not support Geolocation</p>");
+                return;
+            }
+            $body.removeClass('loaded');
+            navigator.geolocation.getCurrentPosition(success, error);
+        });   
+
+        function success(position) {
+        $body.addClass('loaded');
+        var currentPos = [position.coords.latitude,position.coords.longitude];
+        mymap.setView(currentPos, 13);
+        var myLocation = L.marker(currentPos)
+                            .addTo(mymap)
+                            .bindTooltip("Your Location")
+                            .openTooltip();
+        
+        $findNearest.on('click', function(e) {
+                // $status.html('finding your nearest locations')
+                queryFeatures(currentPos, 5);
+                // myLocation.unbindTooltip();
+        });
+    };
+    function error() {
+        alert("Unable to retrieve your location");
+    };
+    function queryFeatures(currentPos, numResults) {
+        var distances = [];
+        healthFacility.eachLayer(function(l) {
+            var distance = L.latLng(currentPos).distanceTo(l.getLatLng())/1000;
+            distances.push(distance);
+        });
+        distances.sort(function(a, b) {
+            return a - b;
+        });
+        var facilityLayer = L.featureGroup();
+        healthFacility.eachLayer(function(l) {
+            var distance = L.latLng(currentPos).distanceTo(l.getLatLng())/1000;
+            if(distance < distances[numResults]) {
+                l.bindTooltip(distance.toLocaleString() + ' km from current location.');
+                L.polyline([currentPos, l.getLatLng()], {
+                    color : 'blue',
+                    weight : 4,
+                    opacity: .5,
+                }).addTo(facilityLayer);
+            }
+        });
+        mymap.flyToBounds(facilityLayer.getBounds(), {duration : 3, easeLinearity: .1 });
+        mymap.on('zoomend', function() {
+            mymap.addLayer(facilityLayer);
+        })
+    }
 
     let listDistrict = {'Akola':['Akola',20.7002, 77.0082],'Amravati':['Amravati',20.9374,77.7796],
     'Buldana':['Buldana',20.4561,76.3637],'Yavatmal':['Yavatmal',20.3888,78.1204],'Washim':['Washim',20.139,77.1025],
@@ -145,6 +204,17 @@
     
     let listFacility = {'CHC':'chc_num','PHC':'phc_num'}
     let url;
+    
+    function style(feature) {
+    return {
+        fillColor: "#0000",
+        weight: 2,
+        opacity: 1,
+        color: 'black',
+        // dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
 	const domain = ['https://makerghat.urbansciences.in/','http://localhost/'];
 	var rootUrl = domain[0] + 'geoserver/geonode/ows';
 
@@ -182,6 +252,7 @@
         // case 'Amravati': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Amravati'&propertyName=the_geom";break;
         // }
 
+<<<<<<< HEAD
         //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
         fetch(url).then(
         function(response) {
@@ -207,6 +278,33 @@
     .catch(function(err) {
         console.log('Fetch Error :-S', err);
     });
+=======
+    //     mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+    //     fetch(url).then(
+    //     function(response) {
+    //     if (response.status !== 200) {
+    //         console.log('Looks like there was a problem. Status Code: ' +
+    //         response.status);
+    //         return;
+    //     }
+    //     response.json().then(function(geojsonData) {
+    //         console.log(geojsonData.features);
+    //         mymap.setView([lat, long], 9);
+    //         geojson = L.geoJson(geojsonData.features, {
+    //         style : style
+    //         // onEachFeature: onEachFeature
+    //     }).addTo(mymap);
+    //         // LayerList.push(geojson);
+    //          mymap.spin(false);
+    //     });
+
+
+    //     }
+    // )
+    // .catch(function(err) {
+    //     console.log('Fetch Error :-S', err);
+    // });
+>>>>>>> 303af8eb0eda301c8a3e2d8dae8d1856b1b91b2b
 
 
     // blockLayer = new L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/geonode/ows', {
@@ -340,7 +438,7 @@ function style(feature) {
             }
             response.json().then(function(geojsonData) {
                 console.log(geojsonData.features);
-                geojson = L.geoJson(geojsonData.features, {
+                healthFacility = L.geoJson(geojsonData.features, {
                     pointToLayer: function (feature, latlng) {
                         if(sel === 'CHC')
                             return L.circleMarker(latlng, geojsonMarkerOptions);
@@ -356,14 +454,7 @@ function style(feature) {
                 console.log('Fetch Error :-S', err);
         });
         })
-
-
         };	
-
-  
-    
-
-
 
 </script>
 
