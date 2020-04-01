@@ -99,13 +99,10 @@
 
      <hr>
      <div class="text-center">
-<<<<<<< HEAD
-     <h5>Explore Health Facilities</h5>
-=======
->>>>>>> 74278147c7c2ad9d8d2165ec0f67f4cacf371755
+
 
         <form id="projectList" class="border">
-            <h5>Select health facilities</h5>
+            <h5>Explore Health Facilities</h5>
 
             <!-- <input type="checkbox" class="myCheckbox" value="Am"/> All Projects <br> -->
               <label><input type="checkbox" id="val" value="CHC" name='facility'/><span> CHC </span> </label><br>
@@ -164,8 +161,9 @@
   
 
     $('#district').on('click',function(){
-    	clear_layer();
         let district = document.getElementById('district').value;
+        //clear_layer();
+
         // let lat = listDistrict[district][1];
         // let long = listDistrict[district][2];
          tempParameter = defaultParameters;
@@ -184,7 +182,7 @@
         // case 'Amravati': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Amravati'&propertyName=the_geom";break;
         // }
 
-        mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+        //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
         fetch(url).then(
         function(response) {
         if (response.status !== 200) {
@@ -223,13 +221,14 @@
 
     })
 
-<<<<<<< HEAD
 
 function displayPolygon(param){
+// clear_layer();
+
 var parameters = L.Util.extend(param);
 layer_url = rootUrl + L.Util.getParamString(parameters)
 // console.log(layer_url);
-mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
+//mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
 
 fetch(layer_url,{mode:'cors'})
 .then(
@@ -247,7 +246,8 @@ fetch(layer_url,{mode:'cors'})
         style : style,
         // onEachFeature: onEachFeature
     }).addTo(mymap);
-        
+     clear_layer();
+   
     mymap.spin(false);
     LayerList.push(geojson);
 
@@ -258,6 +258,7 @@ fetch(layer_url,{mode:'cors'})
 )
 .catch(function(err) {
     console.log('Fetch Error :-S', err);
+    
 });
 
     
@@ -277,8 +278,6 @@ function style(feature) {
     };
 }
 
-=======
->>>>>>> 74278147c7c2ad9d8d2165ec0f67f4cacf371755
     function GetSelected() {
          var selected = new Array();
          var projectList = document.getElementById("projectList");
