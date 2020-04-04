@@ -4,3 +4,6 @@ from django.shortcuts import render
 
 def healthDash(request):
     return render(request,"health_dash/health.html")
+
+def trialDash(request):
+    return render(request,"health_dash/trial.html")    
