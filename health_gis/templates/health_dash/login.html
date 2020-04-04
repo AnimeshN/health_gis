@@ -1,0 +1,14 @@
+
+<div class="container m-5">
+    <form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+        <button class="btn btn-outline-info" type="submit">Login</button>
+    </form>
+    <!-- Don't have an account? <a href="/register" target="blank"><strong>register here</strong></a>! -->
+</div>
+{% if messages %}
+        {% for message in messages %}
+          <script>M.toast({html: "{{message}}", classes: 'blue rounded', displayLength:2000});</script>
+        {% endfor %}
+{% endif %}
