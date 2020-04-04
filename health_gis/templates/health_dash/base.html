@@ -192,12 +192,12 @@ $('.select').click(function () {
   
   // var ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap);
   var ctlSidebar = L.control.sidebar('side-bar').addTo(mymap);
-  var ctlPan = L.control.pan().addTo(mymap);
+  // var ctlPan = L.control.pan().addTo(mymap);
 
   var ctlEasybutton = L.easyButton('fa fa fa-bars', function(){
       ctlSidebar.toggle(); 
   }).addTo(mymap);
-  ctlSidebar.show();
+  // ctlSidebar.show();
 
   var ctlZoomslider = L.control.zoomslider({position:'topright'}).addTo(mymap);
   

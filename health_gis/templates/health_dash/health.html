@@ -43,7 +43,7 @@
 
 </style>
 
-<div id="side-bar" style="background-color: rgba(0, 0, 0, 0.2);">                <!-- side-bar container -->
+<div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
 
     <h3 class="text-center">Rural Health GIS</h3>
     <div class="tooltips" title="Please select the District">
@@ -228,28 +228,57 @@
 	var info = L.control();
 	var attribute_table = L.control({position: 'bottomright'});  
 	var LayerList = [];
-  
+  	var searchControl;
 
     $('#district').on('click',function(){
     	clear_layer();
         let district = document.getElementById('district').value;
+
+        putWMSLayer();
+        //
         // let lat = listDistrict[district][1];
         // let long = listDistrict[district][2];
          tempParameter = defaultParameters;
     	 tempParameter.typeName = 'geonode:maha_blocks_30mar'; 
-    	 tempParameter.propertyName="the_geom";
+    	 tempParameter.propertyName="the_geom,ipname";
          var aspiD = document.getElementById('district').value;
     	 var distLayerLatLong= listDistrict[aspiD];
     // console.log(distLayerLatLong);
     	tempParameter.cql_filter = "dtname='"+distLayerLatLong[0]+"'";
-   		 displayPolygon(tempParameter);
-    	// districtlayer = distLayerLatLong[0];
+   		displayPolygon(tempParameter);
+    	//districtlayer = distLayerLatLong[0];
     	mymap.setView([distLayerLatLong[1],distLayerLatLong[2]],9);
 
         // switch(district){
         // case 'Akola': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Akola'&propertyName=the_geom";break;
         // case 'Amravati': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Amravati'&propertyName=the_geom";break;
         // }
+
+        //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+        fetch(url).then(
+        function(response) {
+        if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+            return;
+        }
+        response.json().then(function(geojsonData) {
+            console.log(geojsonData.features);
+            mymap.setView([lat, long], 9);
+            geojson = L.geoJson(geojsonData.features, {
+            // style : style,
+            // onEachFeature: onEachFeature
+        }).addTo(mymap);
+            // LayerList.push(geojson);
+             mymap.spin(false);
+        });
+
+
+        }
+    )
+    .catch(function(err) {
+        console.log('Fetch Error :-S', err);
+    });
 
     //     mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
     //     fetch(url).then(
@@ -291,11 +320,66 @@
     })
 
 
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+
+    layer.bindTooltip("<div style = 'text-transform: capitalize'>"+feature.properties.village_na+"</div>",{permanent: true, 
+   direction: "center",
+   className: "my-labels"});
+   
+
+}
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5        
+    });
+    info.update(layer.feature.properties);
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+}
+
+function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+    info.update();
+}
+
+
+
+function putWMSLayer(){
+      		 var aspiD = document.getElementById('district').value;
+    		 var distLayerLatLong= listDistrict[aspiD];
+    		 //clear_layer();
+            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+            layers: 'geonode:maha_blocks_30mar',
+            format: 'image/png',
+            transparent:'true',
+            opacity:0.5,
+            // version: '1.3.0',
+            cql_filter: "dtname='"+distLayerLatLong[0]+"'",
+        	style:""});
+        	clear_layer();
+            wms_layer.addTo(mymap);
+
+            LayerList.push(wms_layer);
+            // addWMSLegend(layer);
+            
+
+         }
+
 function displayPolygon(param){
+// clear_layer();
+
 var parameters = L.Util.extend(param);
 layer_url = rootUrl + L.Util.getParamString(parameters)
 // console.log(layer_url);
-mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
+//mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
 
 fetch(layer_url,{mode:'cors'})
 .then(
@@ -311,9 +395,13 @@ fetch(layer_url,{mode:'cors'})
         // console.log(geojsonData)
         geojson = L.geoJson(geojsonData.features, {
         style : style,
-        // onEachFeature: onEachFeature
+        onEachFeature: onEachFeature
     }).addTo(mymap);
-        
+     clear_layer();
+   	if(typeof searchControl === 'undefined'){
+                searchControl = addSearchControl(geojson,'ipname');
+                mymap.addControl(searchControl);
+          }
     mymap.spin(false);
     LayerList.push(geojson);
 
@@ -324,6 +412,7 @@ fetch(layer_url,{mode:'cors'})
 )
 .catch(function(err) {
     console.log('Fetch Error :-S', err);
+    
 });
 
     
@@ -342,6 +431,39 @@ function style(feature) {
         fillOpacity: 0
     };
 }
+
+function addSearchControl(layer,propertyName){
+    var searchControl = new L.Control.Search({
+    layer: layer,
+    propertyName: 'ipname',
+    marker: false,
+    moveToLocation: function(latlng, title, mymap) {
+        //mymap.fitBounds( latlng.layer.getBounds() );
+        console.log(latlng);
+        var zoom = mymap.getBoundsZoom(latlng.layer.getBounds());
+        mymap.setView(latlng, zoom); // access the zoom
+    }
+});
+searchControl.on('search:locationfound', function(e) {
+    e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
+    if(e.layer._popup)
+        e.layer.openPopup();
+
+}).on('search:collapsed', function(e) {
+
+    featuresLayer.eachLayer(function(layer) {	//restore feature color
+        featuresLayer.resetStyle(layer);
+    });	
+});
+
+return searchControl;
+}
+
+L.Map.include({
+    hasSearchControl: function () {
+        return (this.searchControl) ? true : false;
+    }
+});
 
     function GetSelected() {
          var selected = new Array();
