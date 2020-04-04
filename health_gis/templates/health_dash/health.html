@@ -43,7 +43,7 @@
 
 </style>
 
-<div id="side-bar" style="background-color: rgba(0, 0, 0, 0.2);">                <!-- side-bar container -->
+<div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
 
     <h3 class="text-center">Rural Health GIS</h3>
     <div class="tooltips" title="Please select the District">
@@ -251,31 +251,7 @@
         // case 'Amravati': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Amravati'&propertyName=the_geom";break;
         // }
 
-    //     mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
-    //     fetch(url).then(
-    //     function(response) {
-    //     if (response.status !== 200) {
-    //         console.log('Looks like there was a problem. Status Code: ' +
-    //         response.status);
-    //         return;
-    //     }
-    //     response.json().then(function(geojsonData) {
-    //         console.log(geojsonData.features);
-    //         mymap.setView([lat, long], 9);
-    //         geojson = L.geoJson(geojsonData.features, {
-    //         style : style
-    //         // onEachFeature: onEachFeature
-    //     }).addTo(mymap);
-    //         // LayerList.push(geojson);
-    //          mymap.spin(false);
-    //     });
-
-
-    //     }
-    // )
-    // .catch(function(err) {
-    //     console.log('Fetch Error :-S', err);
-    // });
+`
 
 
     // blockLayer = new L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/geonode/ows', {
