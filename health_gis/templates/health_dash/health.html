@@ -99,13 +99,10 @@
 
      <hr>
      <div class="text-center">
-<<<<<<< HEAD
-     <h5>Explore Health Facilities</h5>
-=======
->>>>>>> 74278147c7c2ad9d8d2165ec0f67f4cacf371755
+
 
         <form id="projectList" class="border">
-            <h5>Select health facilities</h5>
+            <h5>Explore Health Facilities</h5>
 
             <!-- <input type="checkbox" class="myCheckbox" value="Am"/> All Projects <br> -->
               <label><input type="checkbox" id="val" value="CHC" name='facility'/><span> CHC </span> </label><br>
@@ -114,13 +111,12 @@
          </form> 
 
          <div class="border">
-            <button type="button" class="btn btn-primary" onclick = "findMylocation()">Your Location</button>
-            <button type="button" class="btn btn-primary" onclick = "findNearestLocation()">Find Nearest Facility</button>
+            <button type="button" class="btn btn-primary" id='locate'>Your Location</button>
+            <button type="button" class="btn btn-primary" id='find-nearest'>Find Nearest Facility</button>
          </div>
 
          <div class="border row">
             <input type="text" placeholder = "Enter facility Name" class="form-control col-7" id="usr">
-
             <button type="button" class="btn btn-primary col" onclick = "searchFacilities()">Search Facility</button>
          </div>
     
@@ -132,6 +128,66 @@
 
 
 <script>
+        let healthFacility,
+            $locate = $('#locate'),
+            $body = $('body'),
+            $findNearest = $('#find-nearest')
+
+
+    $locate.on('click', function(e) {
+            // $status.html('finding your location');
+            if (!navigator.geolocation){
+                alert("<p>Sorry, your browser does not support Geolocation</p>");
+                return;
+            }
+            $body.removeClass('loaded');
+            navigator.geolocation.getCurrentPosition(success, error);
+        });   
+
+        function success(position) {
+        $body.addClass('loaded');
+        var currentPos = [position.coords.latitude,position.coords.longitude];
+        mymap.setView(currentPos, 13);
+        var myLocation = L.marker(currentPos)
+                            .addTo(mymap)
+                            .bindTooltip("Your Location")
+                            .openTooltip();
+        
+        $findNearest.on('click', function(e) {
+                // $status.html('finding your nearest locations')
+                queryFeatures(currentPos, 5);
+                // myLocation.unbindTooltip();
+        });
+    };
+    function error() {
+        alert("Unable to retrieve your location");
+    };
+    function queryFeatures(currentPos, numResults) {
+        var distances = [];
+        healthFacility.eachLayer(function(l) {
+            var distance = L.latLng(currentPos).distanceTo(l.getLatLng())/1000;
+            distances.push(distance);
+        });
+        distances.sort(function(a, b) {
+            return a - b;
+        });
+        var facilityLayer = L.featureGroup();
+        healthFacility.eachLayer(function(l) {
+            var distance = L.latLng(currentPos).distanceTo(l.getLatLng())/1000;
+            if(distance < distances[numResults]) {
+                l.bindTooltip(distance.toLocaleString() + ' km from current location.');
+                L.polyline([currentPos, l.getLatLng()], {
+                    color : 'blue',
+                    weight : 4,
+                    opacity: .5,
+                }).addTo(facilityLayer);
+            }
+        });
+        mymap.flyToBounds(facilityLayer.getBounds(), {duration : 3, easeLinearity: .1 });
+        mymap.on('zoomend', function() {
+            mymap.addLayer(facilityLayer);
+        })
+    }
 
     let listDistrict = {'Akola':['Akola',20.7002, 77.0082],'Amravati':['Amravati',20.9374,77.7796],
     'Buldana':['Buldana',20.4561,76.3637],'Yavatmal':['Yavatmal',20.3888,78.1204],'Washim':['Washim',20.139,77.1025],
@@ -148,6 +204,17 @@
     
     let listFacility = {'CHC':'chc_num','PHC':'phc_num'}
     let url;
+    
+    function style(feature) {
+    return {
+        fillColor: "#0000",
+        weight: 2,
+        opacity: 1,
+        color: 'black',
+        // dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
 	const domain = ['https://makerghat.urbansciences.in/','http://localhost/'];
 	var rootUrl = domain[0] + 'geoserver/geonode/ows';
 
@@ -161,22 +228,25 @@
 	var info = L.control();
 	var attribute_table = L.control({position: 'bottomright'});  
 	var LayerList = [];
-  
+  	var searchControl;
 
     $('#district').on('click',function(){
     	clear_layer();
         let district = document.getElementById('district').value;
+
+        putWMSLayer();
+        //
         // let lat = listDistrict[district][1];
         // let long = listDistrict[district][2];
          tempParameter = defaultParameters;
     	 tempParameter.typeName = 'geonode:maha_blocks_30mar'; 
-    	 tempParameter.propertyName="the_geom";
+    	 tempParameter.propertyName="the_geom,ipname";
          var aspiD = document.getElementById('district').value;
     	 var distLayerLatLong= listDistrict[aspiD];
     // console.log(distLayerLatLong);
     	tempParameter.cql_filter = "dtname='"+distLayerLatLong[0]+"'";
-   		 displayPolygon(tempParameter);
-    	// districtlayer = distLayerLatLong[0];
+   		displayPolygon(tempParameter);
+    	//districtlayer = distLayerLatLong[0];
     	mymap.setView([distLayerLatLong[1],distLayerLatLong[2]],9);
 
         // switch(district){
@@ -184,7 +254,7 @@
         // case 'Amravati': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Amravati'&propertyName=the_geom";break;
         // }
 
-        mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+        //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
         fetch(url).then(
         function(response) {
         if (response.status !== 200) {
@@ -210,6 +280,32 @@
         console.log('Fetch Error :-S', err);
     });
 
+    //     mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+    //     fetch(url).then(
+    //     function(response) {
+    //     if (response.status !== 200) {
+    //         console.log('Looks like there was a problem. Status Code: ' +
+    //         response.status);
+    //         return;
+    //     }
+    //     response.json().then(function(geojsonData) {
+    //         console.log(geojsonData.features);
+    //         mymap.setView([lat, long], 9);
+    //         geojson = L.geoJson(geojsonData.features, {
+    //         style : style
+    //         // onEachFeature: onEachFeature
+    //     }).addTo(mymap);
+    //         // LayerList.push(geojson);
+    //          mymap.spin(false);
+    //     });
+
+
+    //     }
+    // )
+    // .catch(function(err) {
+    //     console.log('Fetch Error :-S', err);
+    // });
+
 
     // blockLayer = new L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/geonode/ows', {
     //     layers: 'geonode:maha_map_06feb2020',
@@ -223,13 +319,67 @@
 
     })
 
-<<<<<<< HEAD
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+
+    layer.bindTooltip("<div style = 'text-transform: capitalize'>"+feature.properties.village_na+"</div>",{permanent: true, 
+   direction: "center",
+   className: "my-labels"});
+   
+
+}
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5        
+    });
+    info.update(layer.feature.properties);
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+}
+
+function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+    info.update();
+}
+
+
+
+function putWMSLayer(){
+      		 var aspiD = document.getElementById('district').value;
+    		 var distLayerLatLong= listDistrict[aspiD];
+    		 //clear_layer();
+            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+            layers: 'geonode:maha_blocks_30mar',
+            format: 'image/png',
+            transparent:'true',
+            opacity:0.5,
+            // version: '1.3.0',
+            cql_filter: "dtname='"+distLayerLatLong[0]+"'",
+        	style:""});
+        	clear_layer();
+            wms_layer.addTo(mymap);
+
+            LayerList.push(wms_layer);
+            // addWMSLegend(layer);
+            
+
+         }
 
 function displayPolygon(param){
+// clear_layer();
+
 var parameters = L.Util.extend(param);
 layer_url = rootUrl + L.Util.getParamString(parameters)
 // console.log(layer_url);
-mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
+//mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
 
 fetch(layer_url,{mode:'cors'})
 .then(
@@ -245,9 +395,13 @@ fetch(layer_url,{mode:'cors'})
         // console.log(geojsonData)
         geojson = L.geoJson(geojsonData.features, {
         style : style,
-        // onEachFeature: onEachFeature
+        onEachFeature: onEachFeature
     }).addTo(mymap);
-        
+     clear_layer();
+   	if(typeof searchControl === 'undefined'){
+                searchControl = addSearchControl(geojson,'ipname');
+                mymap.addControl(searchControl);
+          }
     mymap.spin(false);
     LayerList.push(geojson);
 
@@ -258,6 +412,7 @@ fetch(layer_url,{mode:'cors'})
 )
 .catch(function(err) {
     console.log('Fetch Error :-S', err);
+    
 });
 
     
@@ -277,8 +432,39 @@ function style(feature) {
     };
 }
 
-=======
->>>>>>> 74278147c7c2ad9d8d2165ec0f67f4cacf371755
+function addSearchControl(layer,propertyName){
+    var searchControl = new L.Control.Search({
+    layer: layer,
+    propertyName: 'ipname',
+    marker: false,
+    moveToLocation: function(latlng, title, mymap) {
+        //mymap.fitBounds( latlng.layer.getBounds() );
+        console.log(latlng);
+        var zoom = mymap.getBoundsZoom(latlng.layer.getBounds());
+        mymap.setView(latlng, zoom); // access the zoom
+    }
+});
+searchControl.on('search:locationfound', function(e) {
+    e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
+    if(e.layer._popup)
+        e.layer.openPopup();
+
+}).on('search:collapsed', function(e) {
+
+    featuresLayer.eachLayer(function(layer) {	//restore feature color
+        featuresLayer.resetStyle(layer);
+    });	
+});
+
+return searchControl;
+}
+
+L.Map.include({
+    hasSearchControl: function () {
+        return (this.searchControl) ? true : false;
+    }
+});
+
     function GetSelected() {
          var selected = new Array();
          var projectList = document.getElementById("projectList");
@@ -341,7 +527,7 @@ function style(feature) {
             }
             response.json().then(function(geojsonData) {
                 console.log(geojsonData.features);
-                geojson = L.geoJson(geojsonData.features, {
+                healthFacility = L.geoJson(geojsonData.features, {
                     pointToLayer: function (feature, latlng) {
                         if(sel === 'CHC')
                             return L.circleMarker(latlng, geojsonMarkerOptions);
@@ -357,14 +543,7 @@ function style(feature) {
                 console.log('Fetch Error :-S', err);
         });
         })
-
-
         };	
-
-  
-    
-
-
 
 </script>
 
