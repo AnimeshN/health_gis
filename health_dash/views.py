@@ -9,8 +9,7 @@ from django.shortcuts import redirect
 
 def healthDash(request):
     return render(request,"health_dash/health.html")
-
-
+ 
 def contribute(request):
     return render(request,"health_dash/contribute.html")
 
@@ -39,3 +38,4 @@ def logout_request(request):
     logout(request)
     messages.info(request, "Logged out successfully!")
     return redirect("/")
+
