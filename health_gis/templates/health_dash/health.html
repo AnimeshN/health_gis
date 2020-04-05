@@ -43,9 +43,8 @@
 
 </style>
 
-<div id="side-bar" style="background-color: rgba(0, 0, 0, 0.2);">                <!-- side-bar container -->
+<div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
 
-    <h3 class="text-center">Rural Health GIS</h3>
     <div class="tooltips" title="Please select the District">
         <select class='form-control' id="district" name="district">
             <option value="All">Select District</option>
@@ -228,10 +227,13 @@
     var info = L.control();
     var attribute_table = L.control({position: 'bottomright'});  
     var LayerList = [];
+    var pointLayerList = [];
     var searchControl;
 
     $('#district').on('click',function(){
         clear_layer();
+        clearpoint_layer();
+
         let district = document.getElementById('district').value;
 
         putWMSLayer();
@@ -245,7 +247,7 @@
          var distLayerLatLong= listDistrict[aspiD];
     // console.log(distLayerLatLong);
         tempParameter.cql_filter = "dtname='"+distLayerLatLong[0]+"'";
-        displayPolygon(tempParameter);
+       // displayPolygon(tempParameter);
         //districtlayer = distLayerLatLong[0];
         mymap.setView([distLayerLatLong[1],distLayerLatLong[2]],9);
 
@@ -324,7 +326,7 @@ function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        click: zoomToFeature
+        //click: zoomToFeature,
     });
 
     layer.bindTooltip("<div style = 'text-transform: capitalize'>"+feature.properties.village_na+"</div>",{permanent: true, 
@@ -365,6 +367,7 @@ function putWMSLayer(){
             cql_filter: "dtname='"+distLayerLatLong[0]+"'",
             style:""});
             clear_layer();
+            clearpoint_layer();
             wms_layer.addTo(mymap);
 
             LayerList.push(wms_layer);
@@ -419,7 +422,12 @@ fetch(layer_url,{mode:'cors'})
 }
 function clear_layer(){
     LayerList.forEach(layer => mymap.removeLayer(layer));
-    // pointLayerList.forEach(layer => console.log(layer));
+    
+}
+
+function clearpoint_layer(){
+    //console.log(pointLayerList);
+    pointLayerList.forEach(layer => mymap.removeLayer(layer));
     
 }
 
@@ -475,7 +483,7 @@ L.Map.include({
              }
          }
          var geojsonMarkerOptions = {
-            radius: 8,
+            radius: 10,
             fillColor: "#ff7800",
             color: "#000",
             weight: 1,
@@ -484,7 +492,7 @@ L.Map.include({
         };
 
         var geojsonMarkerOptions2 = {
-            radius: 5,
+            radius: 7,
             fillColor: "#007800",
             color: "#000",
             weight: 1,
@@ -493,14 +501,19 @@ L.Map.include({
         };
 
 
-  
+  //"dtname='"+distLayerLatLong[0]+"'"
 
         selected.forEach(sel => {
-            let newurl =`https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar&cql_filter=district_n='Akola' AND ${listFacility[sel]}>0`
-            
+            var aspiD = document.getElementById('district').value;
+            var distLayerLatLong= listDistrict[aspiD];
+            console.log(distLayerLatLong[0]);
+
+            let newurl =`https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar&cql_filter=district_n='${distLayerLatLong[0]}' AND ${listFacility[sel]}>0`
+            clearpoint_layer();
             function onEachFeatureForPoint(feature, layer) {
             if(sel === 'PHC'){
                 layer.bindPopup(`<div class = 'text-center'>PHC<br>
+                                Village Name: ${feature.properties.village_na}<br>
                                 Distance Range: ${feature.properties.phc_distan}<br>
                                 Doctors In Position :${feature.properties.phc_doc_in}<br>
                                 Doctors Total Strength :${feature.properties.phc_doc_nu}<br>
@@ -509,6 +522,7 @@ L.Map.include({
                                 </div>`) 
             }else if(sel === 'CHC'){
                 layer.bindPopup(`<div class = 'text-center'>CHC<br>
+                                Village Name: ${feature.properties.village_na}<br>
                                 Distance Range: ${feature.properties.chc_distan}<br>
                                 Doctors In Position :${feature.properties.chc_doc_in}<br>
                                 Doctors Total Strength :${feature.properties.chc_doc_nu}<br>
@@ -516,7 +530,7 @@ L.Map.include({
                                 Para Medical Staff In Position : ${feature.properties.chc_para_1}
                                 </div>`) 
             }
-            
+            //clearpoint_layer();
             }
             fetch(newurl).then(
             function(response) {
@@ -525,6 +539,7 @@ L.Map.include({
                 response.status);
                 return;
             }
+
             response.json().then(function(geojsonData) {
                 console.log(geojsonData.features);
                 healthFacility = L.geoJson(geojsonData.features, {
@@ -532,10 +547,11 @@ L.Map.include({
                         if(sel === 'CHC')
                             return L.circleMarker(latlng, geojsonMarkerOptions);
                         else if(sel === 'PHC')
-                        return L.circleMarker(latlng, geojsonMarkerOptions2);
+                            return L.circleMarker(latlng, geojsonMarkerOptions2);
 
                     },onEachFeature:onEachFeatureForPoint,
                 }).addTo(mymap);
+                pointLayerList.push(healthFacility);
             });
 
 
