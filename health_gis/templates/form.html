@@ -1,0 +1,264 @@
+<html>
+    <head>
+        <title>Leaflet-form</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <script>L_PREFER_CANVAS=false; L_NO_TOUCH=false; L_DISABLE_3D=false;
+</script>
+
+    <!-- import leaflet and leaflet.draw-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.4.0/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.EasyButton/2.4.0/easy-button.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+
+    <!-- other stylesheets -->
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.4.0/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.EasyButton/2.4.0/easy-button.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+
+    <!-- font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width,
+        initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <style>
+         
+            html,
+            body,
+            #mymap {
+                padding: 0;
+                width: 100%;
+                margin: 0;
+                height: 100%;
+            }
+    </style>
+
+</head>
+<body>
+    <div class="" id="mymap" ></div>
+    <script>
+        // INITIALISE MAP AND LAYERS
+
+        //initialise map
+        let mymap = L.map(
+            'mymap', {
+            center: [57.708870, 11.974560],
+            zoom: 12,
+            layers: [],
+            drawControl: true
+         
+        });
+         //initialise background tiles
+         let tileLayer = L.tileLayer(
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                {
+                "attribution": null,
+                "detectRetina": false,
+                "maxNativeZoom": 18,
+                "maxZoom": 18,
+                "minZoom": 0,
+                "noWrap": false,
+                "opacity": 1,
+                "subdomains": "abc",
+                "tms": false
+        }).addTo(mymap);
+
+        // import empty GeoJSON to be populated by user
+        let geojson = L.geoJson({
+            "type": "FeatureCollection",
+            "features": []
+            },{
+                onEachFeature: function (feature, layer){
+                layer.on('click', layerClickHandler);
+            }
+            }).addTo(mymap);
+
+
+        //Listen to changes in form
+        //this listener idea from: http://embed.plnkr.co/8qVoW5/
+        function layerClickHandler (e) {
+            let marker = e.target,
+                    properties = e.target.feature.properties;
+                    console.log(properties);
+
+            if(marker.hasOwnProperty('_popup')){
+                marker.unbindPopup();
+            }
+            marker.bindPopup(popupContent);
+            marker.openPopup();
+
+            //event listeners
+            //DATETIME
+            L.DomUtil.get('datetime').textContent = properties.datetime;
+            let dateTime = L.DomUtil.get('datetime');
+            dateTime.value = properties.datetime;
+            L.DomEvent.addListener(dateTime, "change", function (e){
+                properties.datetime = e.target.value;
+            });
+            //PARKING TIME
+            L.DomUtil.get('parktime').textContent = properties.parktime;
+            let parkTime = L.DomUtil.get('parktime');
+            parkTime.value = properties.parktime;
+            L.DomEvent.addListener(parkTime, "change", function (e){
+                properties.parktime = e.target.value;
+            });
+            // //LIKERT
+            // // Does not work properly 
+            // //idea http://jsfiddle.net/XFc2j/
+            // $(document).ready(function(){
+            //     $('input[name=likert]').click(function(){
+            //         alert(this.value);
+            //         properties.likert = this.value;
+            //         console.log(this.value);
+            //     });
+            // });
+            //PARK SPOT TYPE
+            
+            L.DomUtil.get('parkspot').textContent = properties.parkspot;
+            let parkSpot = L.DomUtil.get('parkspot');
+            parkSpot.value = properties.parkspot;
+            L.DomEvent.addListener(parkSpot, "change", function (e){
+                properties.parkspot = e.target.value;
+            });
+
+            //TEST
+            L.DomUtil.get('testtext').textContent = properties.testtext;
+            let testText = L.DomUtil.get('testtext');
+            testText.value = properties.testtext;
+            L.DomEvent.addListener(testText, "change", function (e){
+                properties.testtext = e.target.value;
+            });
+
+            //SAVE BUTTON
+            let buttonSubmit = L.DomUtil.get('button-submit');
+            L.DomEvent.addListener(buttonSubmit, "click", function (e){
+                marker.closePopup();
+            });
+        }
+        // INFOTEXT AND INFOBUTTON
+        // infotext and infobutton and associated stuff    
+
+//initialise drawing tools, disable a bunch
+let draw_control = new L.Control.Draw({
+            "edit": {
+                "featureGroup": geojson
+            },
+            "draw": {
+                marker: {
+                    icon: new L.Icon({
+                        iconUrl: 'http://cdn.leafletjs.com/leaflet-0.6.4/images/marker-icon.png',
+                        shadowUrl: 'http://cdn.leafletjs.com/leaflet-0.6.4/images/marker-shadow.png',
+                        iconAnchor: [12, 40],
+                        popupAnchor: [0, -41]
+                    }),
+                    shapeOptions: {
+                        clickable: true
+                    }
+
+                },
+                polyline: false,
+                polygon: false,
+                rectangle: false,
+                circle: false,
+                circlemarker: false
+            }
+            }).addTo(mymap);
+
+            //determine behaviour of popups
+        let popup = L.popup();
+
+function onMapClick(e){
+    popup.setLatLng(e.latlng).setContent(e.latlng.toString() + popupContent).openOn(mymap);
+}
+
+mymap.on(L.Draw.Event.CREATED, function (e) {
+    let layer = e.layer;
+    let lat = layer.getLatLng().lat;
+    let lng = layer.getLatLng().lng;
+    //let coords = JSON.stringify(layer.toGeoJSON());
+    let geojsonFeature = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [lng, lat]
+            },
+            "properties":{
+                "datetime": null,
+                "parktime": null,
+                "likert": null,
+                "parkspot": null,
+                "testtext": [lng, lat]
+            }
+    };
+
+    layer.on('click', layerClickHandler); //"mouseover", "click"
+    geojson.addData(geojsonFeature);
+});
+
+mymap.on('draw:created', function(e) {
+            let layer = e.layer;
+            let lat = layer.getLatLng().lat;
+            let lng = layer.getLatLng().lng;
+            let geojsonFeature = {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [lng, lat]
+                    },
+                    "properties":{
+                        "parktime": 4343,
+                        "testtext": [lng, lat]
+                    }
+            };
+
+
+        });
+
+        let popupContent = '<form name="myform" role="form" id="form" enctype="multipart/form-data" class = "form-horizontal" onsubmit="addMarker()">'+
+            //datetime
+            '<div class="form-group">'+
+                '<label class="control-label col-sm-5"><strong>timedate question<br></strong></label>'+
+                '<input type="datetime-local" placeholder="Required" id="datetime" name="datetime" class="form-control"/>'+ 
+            '</div>'+
+            //time to search parking
+            '<div class="form-group">'+
+                '<label class="control-label col-sm-5"><strong>how long question<br></strong></label>'+
+                '<input type="number" min="0" max="120" placeholder="Required" class="form-control" id="parktime" name="parktime">'+
+            '</div>'+
+            //likert familiarity of parking area
+            '<div class="row">'+
+                '<label class="control-label col-sm-5"><strong>area question</strong></label>'+
+                '<div class="small-3 column">'+
+                    '<ul class="likert" onclick="myfunction()">'+
+                        '<li><input value="1" id="likert" name="likert" type="radio">area very frequently</li>'+
+                        '<li><input value="2" id="likert" name="likert" type="radio">area frequently</li>'+
+                        '<li><input value="3" id="likert" name="likert" type="radio">area sometimes</li>'+
+                        '<li><input value="4" id="likert" name="likert" type="radio">area seldomly</li>'+
+                        '<li><input value="5" id="likert" name="likert" type="radio">area never</li>'+
+                    '</ul>'+
+                '</div>'+
+            '</div>'+
+//type of parking spot
+'<div class="form-group">'+
+                '<label for="parkspot">Parkspot question<br></label>'+
+                '<select id="parkspot" name="parkspot" onclick="myfunction()">'+
+                    '<option disabled selected value> -- select an option -- </option>'+
+                    '<option value="3" name="parkspot" label="parkspot1"></option>'+
+                    '<option value="2" name="parkspot" label="parkspot2 (parkkipaikka)"></option>'+
+                    '<option value="3" name="parkspot" label="parkspot3"></option>'+
+                    '<option value="4" name="parkspot" label="parkspot4"></option>'+
+                '</select>'+ 
+            '</div>'+
+
+            //text box for testing
+            '<div class="form-group">'+
+                'testing: <input type="text" placeholder="Required" id="testtext" name="testtext">'+
+            '</div>'+
+
+            //submit button
+            '<button id="button-submit" type="button">Save Changes</button>'+
+        '</form>';
+
+    </script>
+</body>
