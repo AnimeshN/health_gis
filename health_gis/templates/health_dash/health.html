@@ -2,7 +2,9 @@
 {% load static%}
 {% block content %}
 <style>
-
+.btn{
+    margin:10px;
+}
 .border {
     padding: 6px 8px;
     border-style: groove;
@@ -44,7 +46,23 @@
 </style>
 
 <div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
-
+    <div class="border">
+        <h5>Maharashtra Admin Boundaries</h5>
+        <div class="text-center">
+            <div class="checkbox">
+                <label><input type="checkbox" value="state" onclick="getBoundary()">State</label>
+              </div>
+              <div class="checkbox">
+                <label><input type="checkbox" value="district" onclick="getBoundary()">District</label>
+              </div>
+              <div class="checkbox disabled">
+                <label><input type="checkbox" value="taluka" disabled>Taluka</label>
+              </div>
+              <div class="checkbox disabled">
+                <label><input type="checkbox" value="village" disabled>Village</label>
+              </div>
+        </div>
+    </div>
     <div class="tooltips" title="Please select the District">
         <select class='form-control' id="district" name="district">
             <option value="All">Select District</option>
@@ -111,6 +129,7 @@
 
          <div class="border">
             <button type="button" class="btn btn-primary" id='locate'>Your Location</button>
+            <button type="button" class="btn btn-primary disable" id='locate'>Set Location</button>
             <button type="button" class="btn btn-primary" id='find-nearest'>Find Nearest Facility</button>
          </div>
 
@@ -127,6 +146,16 @@
 
 
 <script>
+
+        function getBoundary() {
+        var checkBox = document.getElementById("myCheck");
+        var text = document.getElementById("text");
+        if (checkBox.checked == true){
+            console.log(text);
+        } else {
+            text.style.display = "none";
+        }
+        }
         let healthFacility,
             $locate = $('#locate'),
             $body = $('body'),
