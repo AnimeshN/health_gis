@@ -151,82 +151,56 @@
 
 <script>
 
-        function getBoundary(obj) {
-            if($(obj).is(":checked")){ 
-                //have to call the layer according to the value recieved in boundary
-                var boundary = obj.value;
-                if(boundary== "{state}")
-                   {
-                        //alert("State boundary");
-                        putWMSLayerState();
-                   } 
-                else if(boundary== "{district}"){
-                        //alert("District boundary");
-                        putWMSLayerDistrict();
-                }
-                else{
-                        putWMSLayermahadem();
-                }
-                
-            }else{
-                //alert("Not checked"); //when not checked have to add remove layer function
-               var boundary = obj.value;
-                if(boundary== "{state}")
-                   {
-                        //alert("State boundary");
-                        clearState();
-                   } 
-                else if(boundary== "{district}"){
-                        //alert("District boundary");
-                        clearDistrict();
-                }
-                else {
-                    clearMaha();
-                }
-            }
-        // var checkBox = document.getElementById("myCheck");
-        // var text = document.getElementById("text");
-        // if (checkBox.checked == true){
-        //     console.log(text);
-        // } else {
-        //     text.style.display = "none";
-        // }
+function getBoundary(obj) {
+    let boundary = obj.value;
+    if($(obj).is(":checked")){ 
+        if(boundary == "{state}")
+            putWMS("geonode:states_in_india");
+        else if(boundary== "{district}")
+            putWMS("geonode:all_india_districts_27march2020");
+        else
+            putWMS("geonode:maha_demography_with_mumbai");
+    }else{
+        if(boundary== "{state}")
+            removeWMS("geonode:states_in_india");
+        else if(boundary== "{district}")
+            removeWMS("geonode:all_india_districts_27march2020");
+        else 
+            removeWMS("geonode:maha_demography_with_mumbai");
+    }
+}
 
+let healthFacility,
+    $locate = $('#locate'),
+    $body = $('body'),
+    $findNearest = $('#find-nearest')
+
+
+$locate.on('click', function(e) {
+        // $status.html('finding your location');
+        if (!navigator.geolocation){
+            alert("<p>Sorry, your browser does not support Geolocation</p>");
+            return;
         }
+        $body.removeClass('loaded');
+        navigator.geolocation.getCurrentPosition(success, error);
+    });   
 
+function success(position) {
+    $body.addClass('loaded');
+    var currentPos = [position.coords.latitude,position.coords.longitude];
+    mymap.setView(currentPos, 13);
+    var myLocation = L.marker(currentPos)
+                        .addTo(mymap)
+                        .bindTooltip("Your Location")
+                        .openTooltip();
 
-
-        let healthFacility,
-            $locate = $('#locate'),
-            $body = $('body'),
-            $findNearest = $('#find-nearest')
-
-
-    $locate.on('click', function(e) {
-            // $status.html('finding your location');
-            if (!navigator.geolocation){
-                alert("<p>Sorry, your browser does not support Geolocation</p>");
-                return;
-            }
-            $body.removeClass('loaded');
-            navigator.geolocation.getCurrentPosition(success, error);
-        });   
-
-        function success(position) {
-        $body.addClass('loaded');
-        var currentPos = [position.coords.latitude,position.coords.longitude];
-        mymap.setView(currentPos, 13);
-        var myLocation = L.marker(currentPos)
-                            .addTo(mymap)
-                            .bindTooltip("Your Location")
-                            .openTooltip();
-        
-        $findNearest.on('click', function(e) {
-                // $status.html('finding your nearest locations')
-                queryFeatures(currentPos, 5);
-                // myLocation.unbindTooltip();
-        });
-    };
+    $findNearest.on('click', function(e) {
+            // $status.html('finding your nearest locations')
+            queryFeatures(currentPos, 5);
+            // myLocation.unbindTooltip();
+    });
+};
     function error() {
         alert("Unable to retrieve your location");
     };
@@ -297,9 +271,8 @@
     var attribute_table = L.control({position: 'bottomright'});  
     var LayerList = [];
     var pointLayerList = [];
-    var stateLayerList = [];
-    var districtLayerList = [];
-    var mahademLayerList =[];
+    var newLayerList = [];
+  
 
     var searchControl;
 
@@ -310,18 +283,12 @@
         let district = document.getElementById('district').value;
 
         putWMSLayer();
-        //
-        // let lat = listDistrict[district][1];
-        // let long = listDistrict[district][2];
          tempParameter = defaultParameters;
          tempParameter.typeName = 'geonode:maha_blocks_30mar'; 
          tempParameter.propertyName="the_geom,ipname";
          var aspiD = document.getElementById('district').value;
          var distLayerLatLong= listDistrict[aspiD];
-    // console.log(distLayerLatLong);
         tempParameter.cql_filter = "dtname='"+distLayerLatLong[0]+"'";
-       // displayPolygon(tempParameter);
-        //districtlayer = distLayerLatLong[0];
         mymap.setView([distLayerLatLong[1],distLayerLatLong[2]],9);
 
         // switch(district){
@@ -448,67 +415,18 @@ function putWMSLayer(){
             
 
          }
+
+
 //this function is for state boundary
-function putWMSLayerState(){
-           // alert("State boundary");
-
-            
-             //clear_layer();
-            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-            layers: 'geonode:states_in_india',
-            format: 'image/png',
-            transparent:'true',
-            // version: '1.3.0',
-            //cql_filter: "dtname='"+distLayerLatLong[0]+"'",
-            style:""});
-            //clear_layer();
-            //clearpoint_layer();
-            wms_layer.addTo(mymap);
-            stateLayerList.push(wms_layer);
-            //LayerList.push(wms_layer);
-            // addWMSLegend(layer);
-            
-
-         }
-
-function putWMSLayerDistrict(){
-            //alert("District boundary");
-            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-            layers: 'geonode:all_india_districts_27march2020',
-            format: 'image/png',
-            transparent:'true',
-            // version: '1.3.0',
-            //cql_filter: "dtname='"+distLayerLatLong[0]+"'",
-            style:""});
-            //clear_layer();
-            //clearpoint_layer();
-            wms_layer.addTo(mymap);
-            districtLayerList.push(wms_layer);
-
-            //LayerList.push(wms_layer);
-            // addWMSLegend(layer);
-            
-
-         }
-function putWMSLayermahadem(){
-            //alert("District boundary");
-            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-            layers: 'geonode:maha_demography_with_mumbai',
-            format: 'image/png',
-            transparent:'true',
-            opacity:0.3,
-            //cql_filter: "dtname='"+distLayerLatLong[0]+"'",
-            style:""});
-            //clear_layer();
-            //clearpoint_layer();
-            wms_layer.addTo(mymap);
-            mahademLayerList.push(wms_layer);
-
-            //LayerList.push(wms_layer);
-            // addWMSLegend(layer);
-            
-
-         }
+function putWMS(layer){
+    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+        layers: layer,
+        format: 'image/png',
+        transparent:'true',
+    });
+    wms_layer.addTo(mymap);
+    newLayerList.push(wms_layer);
+}
 
 function displayPolygon(param){
 // clear_layer();
@@ -565,17 +483,15 @@ function clearpoint_layer(){
     
 }
 
-function clearState(){
-        stateLayerList.forEach(layer => mymap.removeLayer(layer));
+function removeWMS(unchecked_layer){
+        newLayerList.forEach((layer, index) => {
+            if(layer.options.layers === unchecked_layer){
+                mymap.removeLayer(layer);
+                newLayerList.splice(index, 1);
+            }
+        });
 }
 
-function clearDistrict(){
-        districtLayerList.forEach(layer => mymap.removeLayer(layer));
-}
-
-function clearMaha(){
-        mahademLayerList.forEach(layer => mymap.removeLayer(layer));
-}
 
 
 function style(feature) {
