@@ -49,18 +49,21 @@
     <div class="border">
         <h5>Maharashtra Admin Boundaries</h5>
         <div class="text-center">
-            <div class="checkbox">
-                <label><input type="checkbox" value="state" onclick="getBoundary()">State</label>
+            <div class="checkbox" id="boundary">
+                <label><input type="checkbox" value="{state}" onchange="getBoundary(this)">State</label>
               </div>
               <div class="checkbox">
-                <label><input type="checkbox" value="district" onclick="getBoundary()">District</label>
+                <label><input type="checkbox" value="{district}" onchange="getBoundary(this)">District</label>
               </div>
-              <div class="checkbox disabled">
+              <div class="checkbox">
+                <label><input type="checkbox" value="{mahadem}" onchange="getBoundary(this)">Maharashtra Demography</label>
+              </div>
+             <!--  <div class="checkbox disabled">
                 <label><input type="checkbox" value="taluka" disabled>Taluka</label>
               </div>
               <div class="checkbox disabled">
                 <label><input type="checkbox" value="village" disabled>Village</label>
-              </div>
+              </div> -->
         </div>
     </div>
     <div class="tooltips" title="Please select the District">
@@ -142,20 +145,57 @@
 
 
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 
 
 <script>
 
-        function getBoundary() {
-        var checkBox = document.getElementById("myCheck");
-        var text = document.getElementById("text");
-        if (checkBox.checked == true){
-            console.log(text);
-        } else {
-            text.style.display = "none";
+        function getBoundary(obj) {
+            if($(obj).is(":checked")){ 
+                //have to call the layer according to the value recieved in boundary
+                var boundary = obj.value;
+                if(boundary== "{state}")
+                   {
+                        //alert("State boundary");
+                        putWMSLayerState();
+                   } 
+                else if(boundary== "{district}"){
+                        //alert("District boundary");
+                        putWMSLayerDistrict();
+                }
+                else{
+                        putWMSLayermahadem();
+                }
+                
+            }else{
+                //alert("Not checked"); //when not checked have to add remove layer function
+               var boundary = obj.value;
+                if(boundary== "{state}")
+                   {
+                        //alert("State boundary");
+                        clearState();
+                   } 
+                else if(boundary== "{district}"){
+                        //alert("District boundary");
+                        clearDistrict();
+                }
+                else {
+                    clearMaha();
+                }
+            }
+        // var checkBox = document.getElementById("myCheck");
+        // var text = document.getElementById("text");
+        // if (checkBox.checked == true){
+        //     console.log(text);
+        // } else {
+        //     text.style.display = "none";
+        // }
+
         }
-        }
+
+
+
         let healthFacility,
             $locate = $('#locate'),
             $body = $('body'),
@@ -257,6 +297,10 @@
     var attribute_table = L.control({position: 'bottomright'});  
     var LayerList = [];
     var pointLayerList = [];
+    var stateLayerList = [];
+    var districtLayerList = [];
+    var mahademLayerList =[];
+
     var searchControl;
 
     $('#district').on('click',function(){
@@ -382,7 +426,7 @@ function resetHighlight(e) {
 }
 
 
-
+//this is for putting districts in drop down menu
 function putWMSLayer(){
              var aspiD = document.getElementById('district').value;
              var distLayerLatLong= listDistrict[aspiD];
@@ -400,6 +444,67 @@ function putWMSLayer(){
             wms_layer.addTo(mymap);
 
             LayerList.push(wms_layer);
+            // addWMSLegend(layer);
+            
+
+         }
+//this function is for state boundary
+function putWMSLayerState(){
+           // alert("State boundary");
+
+            
+             //clear_layer();
+            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+            layers: 'geonode:states_in_india',
+            format: 'image/png',
+            transparent:'true',
+            // version: '1.3.0',
+            //cql_filter: "dtname='"+distLayerLatLong[0]+"'",
+            style:""});
+            //clear_layer();
+            //clearpoint_layer();
+            wms_layer.addTo(mymap);
+            stateLayerList.push(wms_layer);
+            //LayerList.push(wms_layer);
+            // addWMSLegend(layer);
+            
+
+         }
+
+function putWMSLayerDistrict(){
+            //alert("District boundary");
+            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+            layers: 'geonode:all_india_districts_27march2020',
+            format: 'image/png',
+            transparent:'true',
+            // version: '1.3.0',
+            //cql_filter: "dtname='"+distLayerLatLong[0]+"'",
+            style:""});
+            //clear_layer();
+            //clearpoint_layer();
+            wms_layer.addTo(mymap);
+            districtLayerList.push(wms_layer);
+
+            //LayerList.push(wms_layer);
+            // addWMSLegend(layer);
+            
+
+         }
+function putWMSLayermahadem(){
+            //alert("District boundary");
+            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+            layers: 'geonode:maha_demography_with_mumbai',
+            format: 'image/png',
+            transparent:'true',
+            opacity:0.3,
+            //cql_filter: "dtname='"+distLayerLatLong[0]+"'",
+            style:""});
+            //clear_layer();
+            //clearpoint_layer();
+            wms_layer.addTo(mymap);
+            mahademLayerList.push(wms_layer);
+
+            //LayerList.push(wms_layer);
             // addWMSLegend(layer);
             
 
@@ -459,6 +564,19 @@ function clearpoint_layer(){
     pointLayerList.forEach(layer => mymap.removeLayer(layer));
     
 }
+
+function clearState(){
+        stateLayerList.forEach(layer => mymap.removeLayer(layer));
+}
+
+function clearDistrict(){
+        districtLayerList.forEach(layer => mymap.removeLayer(layer));
+}
+
+function clearMaha(){
+        mahademLayerList.forEach(layer => mymap.removeLayer(layer));
+}
+
 
 function style(feature) {
     return {

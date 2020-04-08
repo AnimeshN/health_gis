@@ -43,16 +43,15 @@
 
 </style>
 
-<div id="side-bar" style="background-color: rgba(0, 0, 0, 0.2);">                <!-- side-bar container -->
+<div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
 
-    <h3 class="text-center">Rural Health GIS</h3>
     <div class="tooltips" title="Please select the District">
         <select class='form-control' id="district" name="district">
             <option value="All">Select District</option>
             <!-- <optgroup label="Vidarbh(East)"> -->
                 <option value="Akola">Akola</option>
                 <option value="Amravati">Amrawati</option>
-             	 <option value="Buldana">Buldana</option>
+                 <option value="Buldana">Buldana</option>
                 <option value="Yavatmal">Yavatmal</option>
                 <option value="Washim">Washim</option>
                 <option value="Aurangabad">Aurangabad</option>
@@ -215,23 +214,26 @@
         fillOpacity: 0.7
     };
 }
-	const domain = ['https://makerghat.urbansciences.in/','http://localhost/'];
-	var rootUrl = domain[0] + 'geoserver/geonode/ows';
+    const domain = ['https://makerghat.urbansciences.in/','http://localhost/'];
+    var rootUrl = domain[0] + 'geoserver/geonode/ows';
 
-	var defaultParameters = {
-		service: 'WFS',
-		version: '1.0.0',
-		request: 'GetFeature',
-		outputFormat: 'json'
-		};
+    var defaultParameters = {
+        service: 'WFS',
+        version: '1.0.0',
+        request: 'GetFeature',
+        outputFormat: 'json'
+        };
 
-	var info = L.control();
-	var attribute_table = L.control({position: 'bottomright'});  
-	var LayerList = [];
-  	var searchControl;
+    var info = L.control();
+    var attribute_table = L.control({position: 'bottomright'});  
+    var LayerList = [];
+    var pointLayerList = [];
+    var searchControl;
 
     $('#district').on('click',function(){
-    	clear_layer();
+        clear_layer();
+        clearpoint_layer();
+
         let district = document.getElementById('district').value;
 
         putWMSLayer();
@@ -239,15 +241,15 @@
         // let lat = listDistrict[district][1];
         // let long = listDistrict[district][2];
          tempParameter = defaultParameters;
-    	 tempParameter.typeName = 'geonode:maha_blocks_30mar'; 
-    	 tempParameter.propertyName="the_geom,ipname";
+         tempParameter.typeName = 'geonode:maha_blocks_30mar'; 
+         tempParameter.propertyName="the_geom,ipname";
          var aspiD = document.getElementById('district').value;
-    	 var distLayerLatLong= listDistrict[aspiD];
+         var distLayerLatLong= listDistrict[aspiD];
     // console.log(distLayerLatLong);
-    	tempParameter.cql_filter = "dtname='"+distLayerLatLong[0]+"'";
-   		displayPolygon(tempParameter);
-    	//districtlayer = distLayerLatLong[0];
-    	mymap.setView([distLayerLatLong[1],distLayerLatLong[2]],9);
+        tempParameter.cql_filter = "dtname='"+distLayerLatLong[0]+"'";
+       // displayPolygon(tempParameter);
+        //districtlayer = distLayerLatLong[0];
+        mymap.setView([distLayerLatLong[1],distLayerLatLong[2]],9);
 
         // switch(district){
         // case 'Akola': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Akola'&propertyName=the_geom";break;
@@ -324,7 +326,7 @@ function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
-        click: zoomToFeature
+        //click: zoomToFeature,
     });
 
     layer.bindTooltip("<div style = 'text-transform: capitalize'>"+feature.properties.village_na+"</div>",{permanent: true, 
@@ -353,9 +355,9 @@ function resetHighlight(e) {
 
 
 function putWMSLayer(){
-      		 var aspiD = document.getElementById('district').value;
-    		 var distLayerLatLong= listDistrict[aspiD];
-    		 //clear_layer();
+             var aspiD = document.getElementById('district').value;
+             var distLayerLatLong= listDistrict[aspiD];
+             //clear_layer();
             var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
             layers: 'geonode:maha_blocks_30mar',
             format: 'image/png',
@@ -363,8 +365,9 @@ function putWMSLayer(){
             opacity:0.5,
             // version: '1.3.0',
             cql_filter: "dtname='"+distLayerLatLong[0]+"'",
-        	style:""});
-        	clear_layer();
+            style:""});
+            clear_layer();
+            clearpoint_layer();
             wms_layer.addTo(mymap);
 
             LayerList.push(wms_layer);
@@ -398,7 +401,7 @@ fetch(layer_url,{mode:'cors'})
         onEachFeature: onEachFeature
     }).addTo(mymap);
      clear_layer();
-   	if(typeof searchControl === 'undefined'){
+    if(typeof searchControl === 'undefined'){
                 searchControl = addSearchControl(geojson,'ipname');
                 mymap.addControl(searchControl);
           }
@@ -419,7 +422,12 @@ fetch(layer_url,{mode:'cors'})
 }
 function clear_layer(){
     LayerList.forEach(layer => mymap.removeLayer(layer));
-    // pointLayerList.forEach(layer => console.log(layer));
+    
+}
+
+function clearpoint_layer(){
+    //console.log(pointLayerList);
+    pointLayerList.forEach(layer => mymap.removeLayer(layer));
     
 }
 
@@ -451,9 +459,9 @@ searchControl.on('search:locationfound', function(e) {
 
 }).on('search:collapsed', function(e) {
 
-    featuresLayer.eachLayer(function(layer) {	//restore feature color
+    featuresLayer.eachLayer(function(layer) {   //restore feature color
         featuresLayer.resetStyle(layer);
-    });	
+    }); 
 });
 
 return searchControl;
@@ -475,7 +483,7 @@ L.Map.include({
              }
          }
          var geojsonMarkerOptions = {
-            radius: 8,
+            radius: 10,
             fillColor: "#ff7800",
             color: "#000",
             weight: 1,
@@ -484,7 +492,7 @@ L.Map.include({
         };
 
         var geojsonMarkerOptions2 = {
-            radius: 5,
+            radius: 7,
             fillColor: "#007800",
             color: "#000",
             weight: 1,
@@ -493,14 +501,19 @@ L.Map.include({
         };
 
 
-  
+  //"dtname='"+distLayerLatLong[0]+"'"
 
         selected.forEach(sel => {
-            let newurl =`https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar&cql_filter=district_n='Akola' AND ${listFacility[sel]}>0`
-            
+            var aspiD = document.getElementById('district').value;
+            var distLayerLatLong= listDistrict[aspiD];
+            console.log(distLayerLatLong[0]);
+
+            let newurl =`https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar&cql_filter=district_n='${distLayerLatLong[0]}' AND ${listFacility[sel]}>0`
+            clearpoint_layer();
             function onEachFeatureForPoint(feature, layer) {
             if(sel === 'PHC'){
                 layer.bindPopup(`<div class = 'text-center'>PHC<br>
+                                Village Name: ${feature.properties.village_na}<br>
                                 Distance Range: ${feature.properties.phc_distan}<br>
                                 Doctors In Position :${feature.properties.phc_doc_in}<br>
                                 Doctors Total Strength :${feature.properties.phc_doc_nu}<br>
@@ -509,6 +522,7 @@ L.Map.include({
                                 </div>`) 
             }else if(sel === 'CHC'){
                 layer.bindPopup(`<div class = 'text-center'>CHC<br>
+                                Village Name: ${feature.properties.village_na}<br>
                                 Distance Range: ${feature.properties.chc_distan}<br>
                                 Doctors In Position :${feature.properties.chc_doc_in}<br>
                                 Doctors Total Strength :${feature.properties.chc_doc_nu}<br>
@@ -516,7 +530,7 @@ L.Map.include({
                                 Para Medical Staff In Position : ${feature.properties.chc_para_1}
                                 </div>`) 
             }
-            
+            //clearpoint_layer();
             }
             fetch(newurl).then(
             function(response) {
@@ -525,6 +539,7 @@ L.Map.include({
                 response.status);
                 return;
             }
+
             response.json().then(function(geojsonData) {
                 console.log(geojsonData.features);
                 healthFacility = L.geoJson(geojsonData.features, {
@@ -532,10 +547,11 @@ L.Map.include({
                         if(sel === 'CHC')
                             return L.circleMarker(latlng, geojsonMarkerOptions);
                         else if(sel === 'PHC')
-                        return L.circleMarker(latlng, geojsonMarkerOptions2);
+                            return L.circleMarker(latlng, geojsonMarkerOptions2);
 
                     },onEachFeature:onEachFeatureForPoint,
                 }).addTo(mymap);
+                pointLayerList.push(healthFacility);
             });
 
 
@@ -543,7 +559,7 @@ L.Map.include({
                 console.log('Fetch Error :-S', err);
         });
         })
-        };	
+        };  
 
 </script>
 
