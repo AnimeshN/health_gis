@@ -9,6 +9,10 @@ from django.shortcuts import redirect
 
 def healthDash(request):
     return render(request,"health_dash/health.html")
+
+
+def townHealth(request):
+    return render(request,"health_dash/town_health.html")
  
 def trialDash(request):
     return render(request,"health_dash/trial.html")
