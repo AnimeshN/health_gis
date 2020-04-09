@@ -50,13 +50,13 @@
         <h5>Maharashtra Admin Boundaries</h5>
         <div class="text-center">
             <div class="checkbox" id="boundary">
-                <label><input type="checkbox" value="{state}" onchange="getBoundary(this)">State</label>
+                <label><input type="checkbox" value="{state}" onchange="getBoundary(this)"><span> State </span></label>
               </div>
               <div class="checkbox">
-                <label><input type="checkbox" value="{district}" onchange="getBoundary(this)">District</label>
+                <label><input type="checkbox" value="{district}" onchange="getBoundary(this)"><span> District </span></label>
               </div>
               <div class="checkbox">
-                <label><input type="checkbox" value="{mahadem}" onchange="getBoundary(this)">Maharashtra Demography</label>
+                <label><input type="checkbox" value="{mahadem}" onchange="getBoundary(this)"><span> Maharashtra Demography </span></label>
               </div>
              <!--  <div class="checkbox disabled">
                 <label><input type="checkbox" value="taluka" disabled>Taluka</label>
@@ -127,9 +127,20 @@
             <!-- <input type="checkbox" class="myCheckbox" value="Am"/> All Projects <br> -->
               <label><input type="checkbox" id="val" value="CHC" name='facility'/><span> CHC </span> </label><br>
               <label><input type="checkbox" id="phs" value="PHC" name='facility'/><span> PHC</span> </label><br>
+              <!-- <div class="checkbox disabled"> -->
+                <label><input type="checkbox" value="" disabled/><span> Subcentre </span></label><br>
+                <!-- <h5>Hospitals</h5> -->
+                <label><input type="checkbox" value="" disabled/><span> District Hospital </span></label><br>
+                <label><input type="checkbox" value="" disabled/><span> Sub District Hospital </span></label><br>
+                <label><input type="checkbox" value="" disabled/><span> TB Hospital </span></label><br>
+                <label><input type="checkbox" value="" disabled/><span> Maternity & Child Welfare Centre </span></label><br>
+              <!-- </div> -->
+            
+        
             <button type="button" class="btn btn-primary" onclick = "GetSelected()">Display</button>
-         </form> 
 
+         </form> 
+         <!--   -->
          <div class="border">
             <button type="button" class="btn btn-primary" id='locate'>Your Location</button>
             <button type="button" class="btn btn-primary disable" id='locate'>Set Location</button>
