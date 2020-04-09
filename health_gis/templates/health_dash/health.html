@@ -2,39 +2,41 @@
 {% load static%}
 {% block content %}
 <style>
-.multiselect {
+/* .multiselect {
   width: 200px;
-}
+} */
 
-.selectBox {
+/* .selectBox {
   position: relative;
-}
+} */
 
-.selectBox select {
+/* .selectBox select {
   width: 100%;
   font-weight: bold;
-}
+} */
 
-.overSelect {
+/* .overSelect {
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
-}
+} */
 
 #checkboxes {
   display: none;
-  border: 1px #dadada solid;
+  /* border: 1px #dadada solid; */
 }
 
 #checkboxes label {
   display: block;
+  text-align: left;
+  margin: 10px;
 }
 
-#checkboxes label:hover {
+/* #checkboxes label:hover {
   background-color: #1e90ff;
-}
+} */
 
 .btn{
     margin:10px;
@@ -111,7 +113,7 @@
                  <option value="" disabled>Assam </option>
                 <option value="" disabled>Bihar</option>
                 <option value="" disabled>Chhattisgarh</option>
-                <option value="" disabled>Goaoption>
+                <option value="" disabled>Goa</option>
                 <option value="" disabled>Gujarat</option>
                 <option value="" disabled>Haryana</option>
                 <option value="" disabled>Himachal Pradesh</option>
@@ -156,7 +158,7 @@
 <hr>
     <div class="tooltips" title="Please select the District">
         <select class='form-control' id="district" name="district">
-            <option value="All">Select District</option>
+            <option value="All">Select Maharashtra District</option>
             <!-- <optgroup label="Vidarbh(East)"> -->
                 <option value="Akola">Akola</option>
                 <option value="Amravati">Amrawati</option>
@@ -209,14 +211,13 @@
      <div class="text-center">
        
 
-        <form id="projectList" class="border">
+        <form id="projectList" class='border'>
             <h5>Explore Health Care</h5>
              <form>
               <div class="multiselect">
                 <div class="selectBox" onclick="showCheckboxes()">
-                  <select>
-                    <option>Select Health Facilities</option>
-                  </select>
+                    <button type="button" class="btn btn-outline-dark">Select Health Facilies</button>
+                    <!-- <option>Select Health Facilities</option> -->
                   <div class="overSelect"></div>
                 </div>
                 <div id="checkboxes">
