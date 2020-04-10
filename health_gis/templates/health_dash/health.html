@@ -156,6 +156,20 @@
           </select> 
      </div>  
 <hr>
+<div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
+    <div class="border">
+        <table>
+        <tr><h5>State Admin Boundaries</h5></tr>
+        <div class="text-center">
+            <div class="checkbox" id="stboun">
+              <tr><tb>  <label><input type="checkbox" value="{mahadem}" onchange="getBoundaryst(this)"></tb><tb><span> Demography </span></label></tb> </tr>
+              </div>
+              <div class="checkbox">
+                <label><input type="checkbox" value="{maharoad}" onchange="getBoundaryst(this)"><span> Road Network </span></label>
+              </div>
+        </div>
+     </table>   
+    </div>
     <div class="tooltips" title="Please select the District">
         <select class='form-control' id="district" name="district">
             <option value="All">Select Maharashtra District</option>
@@ -226,7 +240,7 @@
                     <input type="checkbox" id="val" value="CHC" name='facility'/>CHC</label>
                   <label for="two">
                     <input type="checkbox" id="phs" value="PHC" name='facility'/>PHC</label>
-                  <!-- <label for="three">
+                  <label for="three">
                     <input type="checkbox" id="" disabled/>Subcentre</label>
                   <label for="three">
                     <input type="checkbox" id="" disabled/>Rural Hospital (30 Beds)</label>
@@ -260,7 +274,7 @@
                     <input type="checkbox" id="" disabled/>Dispensaries-Allopathic</label>  
                    <label for="three">
                     <input type="checkbox" id="" disabled/>Dispensaries-Ayurvedic</label>
-                    -->
+                    
                          
                 </div>
               </div>
@@ -319,6 +333,25 @@ function getBoundary(obj) {
             removeWMS("geonode:states_in_india");
         else if(boundary== "{district}")
             removeWMS("geonode:all_india_districts_27march2020");
+        else 
+            removeWMS("geonode:maha_demography_with_mumbai");
+    }
+}
+
+function getBoundaryst(obj) {
+    let boundary = obj.value;
+    if($(obj).is(":checked")){ 
+        if(boundary == "{mahadem}")
+            putWMS("geonode:maha_demography_with_mumbai");
+        else if(boundary== "{maharoad}")
+            putWMS("geonode:osm_highways");
+        else
+            putWMS("geonode:maha_demography_with_mumbai");
+    }else{
+        if(boundary== "{mahadem}")
+            removeWMS("geonode:maha_demography_with_mumbai");
+        else if(boundary== "{maharoad}")
+            removeWMS("geonode:osm_highways");
         else 
             removeWMS("geonode:maha_demography_with_mumbai");
     }
