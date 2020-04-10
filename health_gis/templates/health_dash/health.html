@@ -105,10 +105,11 @@
      </table>   
     </div>
     <div class="tooltips" title="Please select the State">
-        <select class='form-control' id="" name="">
+        <select class='form-control' id="indstate" name="indstate">
             <option value="All">Select State</option>
             <optgroup label="States"> 
-                <option value="" onclick=""; >Maharashtra</option>
+            	<option value="Maharashtra" onclick="mymap.setView(new L.LatLng(19.7515,75.7139),7);"; >Maharashtra</option>
+
                 <option value="" disabled>Andhra Pradesh</option>
                 <option value="" disabled>Arunachal Pradesh</option>
                  <option value="" disabled>Assam </option>
@@ -460,6 +461,7 @@ function queryFeatures(currentPos, numResults) {
 }
 
 // *****************
+	let listState = {'Maharashtra':['Maharashtra',19.7515,75.7139]}
 
     let listDistrict = {'Akola':['Akola',20.7002, 77.0082],'Amravati':['Amravati',20.9374,77.7796],
     'Buldana':['Buldana',20.4561,76.3637],'Yavatmal':['Yavatmal',20.3888,78.1204],'Washim':['Washim',20.139,77.1025],
@@ -592,6 +594,20 @@ function queryFeatures(currentPos, numResults) {
     })
 
 
+$('#indstate').on('click',function(){
+        clear_layer();
+        clearpoint_layer();
+
+        let indstate = document.getElementById('indstate').value;
+
+        putWMSLayerst();
+       
+
+        //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+     })
+
+
+
 function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
@@ -646,7 +662,27 @@ function putWMSLayer(){
 
          }
 
+function putWMSLayerst(){
+             var indstate = document.getElementById('indstate').value;
+             console.log(indstate);
+             var stLayerLatLong= listState[indstate];
+            
+            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+            layers: 'geonode:states_in_india',
+            format: 'image/png',
+            transparent:'true',
+            // version: '1.3.0',
+            cql_filter: "state='"+stLayerLatLong[0]+"'",
+            style:""});
+            clear_layer();
+            clearpoint_layer();
+            wms_layer.addTo(mymap);
 
+            LayerList.push(wms_layer);
+            // addWMSLegend(layer);
+            
+
+         }
 //this function is for state boundary
 function putWMS(layer){
     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
