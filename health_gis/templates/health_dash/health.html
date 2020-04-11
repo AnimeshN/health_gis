@@ -160,13 +160,16 @@
 <div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
     <div class="border">
         <table>
-        <tr><h5>State Admin Boundaries</h5></tr>
+        <tr><h5>Selected State:Related Data</h5></tr>
         <div class="text-center">
             <div class="checkbox" id="stboun">
               <tr><tb>  <label><input type="checkbox" value="{mahadem}" onchange="getBoundaryst(this)"></tb><tb><span> Demography </span></label></tb> </tr>
               </div>
               <div class="checkbox">
                 <label><input type="checkbox" value="{maharoad}" onchange="getBoundaryst(this)"><span> Road Network </span></label>
+              </div>
+              <div class="checkbox">
+                <label><input type="checkbox" value="{mahaschool}" onchange="getBoundaryst(this)"><span> Schools (UDISE 16-17) </span></label>
               </div>
         </div>
      </table>   
@@ -347,14 +350,14 @@ function getBoundaryst(obj) {
         else if(boundary== "{maharoad}")
             putWMS("geonode:osm_highways");
         else
-            putWMS("geonode:maha_demography_with_mumbai");
+            putWMS("geonode:school_16_17_11april");
     }else{
         if(boundary== "{mahadem}")
             removeWMS("geonode:maha_demography_with_mumbai");
         else if(boundary== "{maharoad}")
             removeWMS("geonode:osm_highways");
         else 
-            removeWMS("geonode:maha_demography_with_mumbai");
+            removeWMS("geonode:school_16_17_11april");
     }
 }
 
