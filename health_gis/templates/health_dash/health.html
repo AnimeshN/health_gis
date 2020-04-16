@@ -649,12 +649,12 @@ function putWMSLayer(){
              //clear_layer();
              console.log('kk',distLayerLatLong);
             var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-            layers: 'geonode:maha_taluka_15apr2020',
+            layers: 'geonode:maha_village_polygon_29mar',
             format: 'image/png',
             transparent:'true',
             //opacity:0.5,
             // version: '1.3.0',
-            cql_filter:"distname='"+distLayerLatLong[0]+"'",
+            cql_filter:"district_n='"+distLayerLatLong[0]+"'",
             style:""});
             clear_layer();
             clearpoint_layer();
