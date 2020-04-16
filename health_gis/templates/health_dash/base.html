@@ -122,7 +122,7 @@ body {
   <div class="row w-100 header ">
     <div class="col">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Rural HealthGIS</a>
+        <a class="navbar-brand" href="#">HealthGIS</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -133,9 +133,18 @@ body {
               <a class="nav-link" href="#">Source: Census 2011 <span class="sr-only">(current)</span></a>
             </li>
 
+
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'rural_health' %}">Rural<span class="sr-only">(current)</span></a>
+          </li>
+
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'urban_health' %}">Urban<span class="sr-only">(current)</span></a>
+        </li>
+
             <li class="nav-item active">
                 <a class="nav-link" href="https://ee.humanitarianresponse.info/x/#URXRVsvI">Contribute<span class="sr-only">(current)</span></a>
-              </li>
+            </li>
           </ul>
 
           <ul class="navbar-nav ml-auto">
