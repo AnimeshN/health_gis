@@ -1,3 +1,630 @@
 
+{% extends 'health_dash/base.html' %}
+{% load static%}
+{% block content %}
+<style>
 
-add town health here
+.border {
+    padding: 6px 8px;
+    border-style: groove;
+    border-radius: 5px;
+    margin:20px;
+}
+.info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+.info h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
+
+.table{
+  border-collapse: collapse;
+  padding: 50px;
+  font-weight: bold;
+
+  
+  /* background:rgba(191, 149, 233, 0.473); */
+
+}
+
+/* css to customize Leaflet default styles  */
+.leaflet-popup-content-wrapper {
+    background: rgba(0, 0, 0, 0.9);
+    color: #ffffff;
+}
+
+.leaflet-popup-content{
+    font-weight: bold;
+}
+
+</style>
+<div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
+
+    <div class="tooltips" title="Please select the District">
+        <select class='form-control' id="district" name="district">
+            <option value="All">Select District</option>
+            <!-- <optgroup label="Vidarbh(East)"> -->
+                <option value="AKOLA">Akola</option>
+                <option value="AMRAVATI">Amrawati</option>
+             	 <option value="BULDANA">Buldana</option>
+                <option value="YAVATMAL">Yavatmal</option>
+                <option value="WASHIM">Washim</option>
+                <option value="AURANGABAD">Aurangabad</option>
+                <option value="BID">Bid</option>
+                <option value="JALNA">Jalna</option>
+                <option value="OSMANABAD">Osmanabad</option>
+                <option value="NANDED">Nanded</option>
+                <option value="LATUR">Latur</option>
+                <option value="PARBHANI">Parbhani</option>
+                <option value="HINGOLI">Hingoli</option>
+                <option value="MUMBAI CITY">Mumbai City</option>
+                <option value="MUMBAI SUBURBAN">Mumbai Suburban</option> 
+                <option value="THANE">Thane</option>
+                <option value="PALGHAR">Palghar</option>
+                <option value="RAIGAD">Raigad</option>
+                <option value="RATNAGIRI">Ratnagiri</option>
+                <option value="SINDHUDURG">Sindhudurg</option>
+           
+  
+                <option value="BHANDARA">Bhandara</option>
+                <option value="GADCHIROLI">Gadchiroli</option>
+                <option value="CHANDRAPUR">Chandrapur</option>
+                <option value="GONDIA">Gondia</option>
+                <option value="NAGPUR">Nagpur</option>
+                <option value="WARDHA">Wardha</option>
+           
+  
+                <option value="AHMADNAGAR">Ahmednagar</option>
+                <option value="DHULE">Dhule</option>
+                <option value="JALGAON">Jalgaon</option>
+                <option value="NANDURBAR">Nandurbar</option>
+                <option value="NASHIK">Nashik</option>
+           
+  
+          
+                <option value="KOLHAPUR">Kolhapur</option>
+                <option value="PUNE">Pune</option>
+                <option value="SANGLI">Sangli</option>
+                <option value="SATARA">Satara</option>
+                <option value="SOLAPUR">Solapur</option>
+    
+          </select> 
+     </div>  
+<hr>
+     <div class="text-center">
+
+        <hr>
+        <div class="text-center">
+          
+   
+           <form id="projectList" class='border'>
+               <h5>Explore Health Care</h5>
+                <form>
+                 <div class="multiselect">
+                   <div class="selectBox" onclick="showCheckboxes()">
+                       <button type="button" class="btn btn-outline-dark">Select Health Facilies</button>
+                       <!-- <option>Select Health Facilities</option> -->
+                     <div class="overSelect"></div>
+                   </div>
+                   <div id="checkboxes">
+   
+                     <label for="one">
+                       <input type="checkbox" id="val" value="Allo" name='facility'/>Allopathy Hospital</label>
+                     <label for="two">
+                       <input type="checkbox" id="phs" value="Alt" name='facility'/>Alternative hospital</label>           
+                       <label for="three">
+                       <input type="checkbox" id="" disabled/>Subcentre</label>
+                     <label for="three">
+                       <input type="checkbox" id="" disabled/>Hospital (30 Beds)</label>
+                     <label for="three">
+                       <input type="checkbox" id="" disabled/>Sub-District Hospital (50 Beds) </label>
+                      <label for="three">
+                       <input type="checkbox" id="" disabled/>Sub-District Hospital (100 Beds) </label>
+                      <label for="three">
+                       <input type="checkbox" id="" disabled/>District Hospital </label>
+                      <label for="three">
+                       <input type="checkbox" id="" disabled/>Super Speciality Hospital </label> 
+                      <label for="three">
+                       <input type="checkbox" id="" disabled/>Mental Health Institutes </label>   
+                      <label for="three">
+                       <input type="checkbox" id="" disabled/>Women Hospital</label>   
+                      <label for="three">
+                       <input type="checkbox" id="" disabled/>TB Hospitals</label> 
+                      <label for="three">
+                       <input type="checkbox" id="" disabled/>Other General Hospitals</label> 
+                      <label for="three">
+                       <input type="checkbox" id="" disabled/>Health & Family Welfare Training Institutions</label>
+                      <label for="three">
+                       <input type="checkbox" id="" disabled/>Primary Health Units</label> 
+                     <label for="three">
+                       <input type="checkbox" id="" disabled/>Ashram Health Units</label> 
+                     <label for="three">
+                       <input type="checkbox" id="" disabled/>Mobile Health Units</label>    
+                      <label for="three">
+                       <input type="checkbox" id="" disabled/>Mobile Medical Units</label>  
+                      <label for="three">
+                       <input type="checkbox" id="" disabled/>Dispensaries-Allopathic</label>  
+                      <label for="three">
+                       <input type="checkbox" id="" disabled/>Dispensaries-Ayurvedic</label>
+                       
+                            
+                   </div>
+                 </div>
+              
+                 <button type="button" class="btn btn-primary" onclick = "GetSelected()">Display</button>
+           </form>
+    
+           
+   
+            </form> 
+       
+           
+         <div class="border">
+            <button type="button" class="btn btn-primary" id='locate'>Your Location</button>
+            <button type="button" class="btn btn-primary" id='find-nearest'>Find Nearest Facility</button>
+         </div>
+
+         <div class="border row">
+            <input type="text" placeholder = "Enter facility Name" class="form-control col-7" id="usr">
+            <button type="button" class="btn btn-primary col" onclick = "searchFacilities()">Search Facility</button>
+         </div>
+    
+     </div>
+
+
+</div>
+
+<script>
+    
+    var expanded = false;
+
+function showCheckboxes() {
+  var checkboxes = document.getElementById("checkboxes");
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}   
+    
+    
+    let healthFacility,
+        $locate = $('#locate'),
+        $body = $('body'),
+        $findNearest = $('#find-nearest')
+
+
+$locate.on('click', function(e) {
+        // $status.html('finding your location');
+        if (!navigator.geolocation){
+            alert("<p>Sorry, your browser does not support Geolocation</p>");
+            return;
+        }
+        $body.removeClass('loaded');
+        navigator.geolocation.getCurrentPosition(success, error);
+    });   
+
+    function success(position) {
+    $body.addClass('loaded');
+    var currentPos = [position.coords.latitude,position.coords.longitude];
+    mymap.setView(currentPos, 13);
+    var myLocation = L.marker(currentPos)
+                        .addTo(mymap)
+                        .bindTooltip("Your Location")
+                        .openTooltip();
+    
+    $findNearest.on('click', function(e) {
+            // $status.html('finding your nearest locations')
+            queryFeatures(currentPos, 5);
+            // myLocation.unbindTooltip();
+    });
+};
+function error() {
+    alert("Unable to retrieve your location");
+};
+function queryFeatures(currentPos, numResults) {
+    var distances = [];
+    healthFacility.eachLayer(function(l) {
+        var distance = L.latLng(currentPos).distanceTo(l.getLatLng())/1000;
+        distances.push(distance);
+    });
+    distances.sort(function(a, b) {
+        return a - b;
+    });
+    var facilityLayer = L.featureGroup();
+    healthFacility.eachLayer(function(l) {
+        var distance = L.latLng(currentPos).distanceTo(l.getLatLng())/1000;
+        if(distance < distances[numResults]) {
+            l.bindTooltip(distance.toLocaleString() + ' km from current location.');
+            L.polyline([currentPos, l.getLatLng()], {
+                color : 'blue',
+                weight : 4,
+                opacity: .5,
+            }).addTo(facilityLayer);
+        }
+    });
+    mymap.flyToBounds(facilityLayer.getBounds(), {duration : 3, easeLinearity: .1 });
+    mymap.on('zoomend', function() {
+        mymap.addLayer(facilityLayer);
+    })
+}
+
+let listDistrict = {'AKOLA':['AKOLA',20.7002, 77.0082],'AMRAVATI':['AMRAVATI',20.9374,77.7796],
+'BULDANA':['BULDANA',20.4561,76.3637],'YAVATMAL':['YAVATMAL',20.3888,78.1204],'WASHIM':['WASHIM',20.139,77.1025],
+'AURANGABAD':['AURANGABAD',19.8762,75.3433],'BID':['BID',18.9891,75.7601],'JALNA':['JALNA',19.8297,75.88],
+'OSMANABAD':['OSMANABAD',18.207,76.1784],'NANDED':['NANDED',19.1383,77.321],'LATUR':['LATUR',18.4088,76.5604],
+'PARBHANI':['PARBHANI',19.2644,76.6413],'HINGOLI *':['HINGOLI *',19.5781,77.1025],
+'MUMBAI CITY':['Mumbai',19.0220,72.8515],'MUMBAI SUBURBAN':['Mumbai Suburban',18.9658,72.8354],'THANE':['THANE',19.2183,72.9781],
+'PALGHAR':['Palghar',19.6936,72.7655],'RAIGAD':['RAIGARH',18.5158,73.1822],'RATNAGIRI':['RATNAGIRI',16.9902,73.312],'SINDHUDURG':['SINDHUDURG',16.3492,73.5594],'BHANDARA':['BHANDARA',21.0736,79.8297],
+'GADCHIROLI':['GADCHIROLI',19.4969,80.2767],'CHANDRAPUR':['CHANDRAPUR',19.9615,79.2961],
+'GONDIYA *':['GONDIYA *',21.4624,80.221],'NAGPUR':['NAGPUR',21.1458,79.0882],'WARDHA':['WARDHA',20.7453,78.6022],
+'AHMADNAGAR':['AHMADNAGAR',19.0948,74.748],'DHULE':['DHULE',20.9042,74.7749],'JALGAON':['JALGAON',21.0077,75.5626],
+'NANDURBAR':['NANDURBAR',21.7469,74.124],'NASHIK':['NASHIK',19.9975,73.7898],'KOLHAPUR':['KOLHAPUR',16.705,74.2433],
+'PUNE':['PUNE',18.5204,73.8567],'SANGLI':['SANGLI',16.8524,74.5815],'SATARA':['SATARA',17.6805,74.0183],
+'SOLAPUR':['SOLAPUR',17.6599,74.9064]}
+
+let listFacility = {'Allo':'h_allo_tot','Alt':'h_alt_tot'}
+let url;
+
+function style(feature) {
+return {
+    fillColor: "#0000",
+    weight: 2,
+    opacity: 1,
+    color: 'black',
+    // dashArray: '3',
+    fillOpacity: 0.7
+};
+}
+const domain = ['https://makerghat.urbansciences.in/','http://localhost/'];
+var rootUrl = domain[0] + 'geoserver/geonode/ows';
+
+var defaultParameters = {
+    service: 'WFS',
+    version: '1.0.0',
+    request: 'GetFeature',
+    outputFormat: 'json'
+    };
+
+var info = L.control();
+var attribute_table = L.control({position: 'bottomright'});  
+var LayerList = [];
+var pointLayerList = [];
+  var searchControl;
+
+$('#district').on('click',function(){
+    clear_layer();
+    clearpoint_layer();
+    let district = document.getElementById('district').value;
+
+    putWMSLayer();
+    //
+    // let lat = listDistrict[district][1];
+    // let long = listDistrict[district][2];
+     tempParameter = defaultParameters;
+     tempParameter.typeName = 'geonode:TownHealth0'; 
+     tempParameter.propertyName="the_geom,town_name";
+     var aspiD = document.getElementById('district').value;
+     var distLayerLatLong= listDistrict[aspiD];
+// console.log(distLayerLatLong);
+    tempParameter.cql_filter = "district_n='"+distLayerLatLong[0]+"'";
+       displayPolygon(tempParameter);
+    //districtlayer = distLayerLatLong[0];
+    mymap.setView([distLayerLatLong[1],distLayerLatLong[2]],9);
+
+
+    fetch(url).then(
+    function(response) {
+    if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+        response.status);
+        return;
+    }
+    response.json().then(function(geojsonData) {
+        console.log(geojsonData.features);
+        mymap.setView([lat, long], 9);
+        geojson = L.geoJson(geojsonData.features, {
+        // style : style,
+        // onEachFeature: onEachFeature
+    }).addTo(mymap);
+        // LayerList.push(geojson);
+         mymap.spin(false);
+    });
+
+
+    }
+)
+.catch(function(err) {
+    console.log('Fetch Error :-S', err);
+});
+
+//     mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+//     fetch(url).then(
+//     function(response) {
+//     if (response.status !== 200) {
+//         console.log('Looks like there was a problem. Status Code: ' +
+//         response.status);
+//         return;
+//     }
+//     response.json().then(function(geojsonData) {
+//         console.log(geojsonData.features);
+//         mymap.setView([lat, long], 9);
+//         geojson = L.geoJson(geojsonData.features, {
+//         style : style
+//         // onEachFeature: onEachFeature
+//     }).addTo(mymap);
+//         // LayerList.push(geojson);
+//          mymap.spin(false);
+//     });
+
+
+//     }
+// )
+// .catch(function(err) {
+//     console.log('Fetch Error :-S', err);
+// });
+
+
+// blockLayer = new L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/geonode/ows', {
+//     layers: 'geonode:maha_map_06feb2020',
+//     format: 'image/png',
+//     version: '1.3.0',
+//     transparent: true,
+// });
+// console.log(blockLayer);
+// blockLayer.addTo(mymap);
+
+
+})
+
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature,
+    });
+
+    layer.bindTooltip("<div style = 'text-transform: capitalize'>"+feature.properties.town_name+"</div>",{permanent: true, 
+   direction: "center",
+   className: "my-labels"});
+   
+
+}
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5        
+    });
+    info.update(layer.feature.properties);
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+}
+
+function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+    info.update();
+}
+
+
+
+function putWMSLayer(){
+           var aspiD = document.getElementById('district').value;
+         var distLayerLatLong= listDistrict[aspiD];
+         //clear_layer();
+        var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+        layers: 'geonode:TownHealth0',
+        format: 'image/png',
+        transparent:'true',
+        opacity:0.5,
+        // version: '1.3.0',
+        cql_filter: "district_n='"+distLayerLatLong[0]+"'",
+        style:""});
+        clear_layer();
+        clearpoint_layer();
+        wms_layer.addTo(mymap);
+
+        LayerList.push(wms_layer);
+        // addWMSLegend(layer);
+        
+
+     }
+
+function displayPolygon(param){
+// clear_layer();
+
+var parameters = L.Util.extend(param);
+layer_url = rootUrl + L.Util.getParamString(parameters)
+// console.log(layer_url);
+//mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
+
+fetch(layer_url,{mode:'cors'})
+.then(
+function(response) {
+if (response.status !== 200) {
+    console.log('Looks like there was a problem. Status Code: ' +
+    response.status);
+    return;
+}
+
+// Examine the text in the response
+response.json().then(function(geojsonData) {
+    // console.log(geojsonData)
+    geojson = L.geoJson(geojsonData.features, {
+    style : style,
+    onEachFeature: onEachFeature
+}).addTo(mymap);
+ clear_layer();
+ clearpoint_layer();
+   if(typeof searchControl === 'undefined'){
+            searchControl = addSearchControl(geojson,'ipname');
+            mymap.addControl(searchControl);
+      }
+mymap.spin(false);
+LayerList.push(geojson);
+
+});
+
+
+}
+)
+.catch(function(err) {
+console.log('Fetch Error :-S', err);
+
+});
+
+
+}
+function clear_layer(){
+LayerList.forEach(layer => mymap.removeLayer(layer));
+// pointLayerList.forEach(layer => console.log(layer));
+
+}
+function clearpoint_layer(){
+    //console.log(pointLayerList);
+    pointLayerList.forEach(layer => mymap.removeLayer(layer));
+    
+}
+
+function style(feature) {
+return {
+    weight: 2,
+    opacity: 1,
+    color: "black",
+    fillOpacity: 0
+};
+}
+
+function addSearchControl(layer,propertyName){
+var searchControl = new L.Control.Search({
+layer: layer,
+propertyName: 'town_name',
+marker: false,
+moveToLocation: function(latlng, title, mymap) {
+    //mymap.fitBounds( latlng.layer.getBounds() );
+    console.log(latlng);
+    var zoom = mymap.getBoundsZoom(latlng.layer.getBounds());
+    mymap.setView(latlng, zoom); // access the zoom
+}
+});
+searchControl.on('search:locationfound', function(e) {
+e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
+if(e.layer._popup)
+    e.layer.openPopup();
+
+}).on('search:collapsed', function(e) {
+
+featuresLayer.eachLayer(function(layer) {	//restore feature color
+    featuresLayer.resetStyle(layer);
+});	
+});
+
+return searchControl;
+}
+
+L.Map.include({
+hasSearchControl: function () {
+    return (this.searchControl) ? true : false;
+}
+});
+
+function GetSelected() {
+     var selected = new Array();
+     var projectList = document.getElementById("projectList");
+     var chks = projectList.getElementsByTagName("INPUT");
+     for (var i = 0; i < chks.length; i++) {
+         if (chks[i].checked) {
+             selected.push(chks[i].value);
+         }
+     }
+     var geojsonMarkerOptions = {
+        radius: 6,
+        fillColor: "#ff4800",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    };
+
+    var geojsonMarkerOptions2 = {
+        radius: 4,
+        fillColor: "#0004ff",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    };
+
+
+
+
+    selected.forEach(sel => {
+        var aspiD = document.getElementById('district').value;
+            var distLayerLatLong= listDistrict[aspiD];
+            console.log(distLayerLatLong[0]);
+
+        // console.log(distLayerLatLong)
+        let newurl =`https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:townhealth_centroid_15apr&cql_filter=district_n='${distLayerLatLong[0]}' AND ${listFacility[sel]}>0`
+        
+        function onEachFeatureForPoint(feature, layer) {
+            if(sel === 'Allo'){
+                layer.bindPopup(`<div class = 'text-center'>Allopathy Hospital<br>
+                                Distance Range: ${feature.properties.h_allo_dst}<br>
+                                Doctors In Position :${feature.properties.h_allo_din}<br>
+                                Doctors Total Strength :${feature.properties.h_allo_doc}<br>
+                                Total Beds :${feature.properties.h_allo_bed}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.h_allo_pm}<br>
+                                Para Medical Staff In Position : ${feature.properties.h_allo_pin}
+                                </div>`) 
+            }else if(sel === 'Alt'){
+                layer.bindPopup(`<div class = 'text-center'>Alternate Hospital<br>
+                    Distance Range: ${feature.properties.h_alt_dst}<br>
+                                Doctors In Position :${feature.properties.h_alt_din}<br>
+                                Doctors Total Strength :${feature.properties.h_alt_doc}<br>
+                                Total Beds :${feature.properties.h_alt_bed}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.h_alt_pm}<br>
+                                Para Medical Staff In Position : ${feature.properties.h_alt_pin}
+                                </div>`) 
+            }
+        
+        }
+        fetch(newurl).then(
+        function(response) {
+        if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+            return;
+        }
+        response.json().then(function(geojsonData) {
+            console.log(geojsonData.features);
+            healthFacility = L.geoJson(geojsonData.features, {
+                pointToLayer: function (feature, latlng) {
+                    if(sel === 'Allo')
+                            return L.circleMarker(latlng, geojsonMarkerOptions);
+                        else if(sel === 'Alt')
+                        return L.circleMarker(latlng, geojsonMarkerOptions2);
+
+                },onEachFeature:onEachFeatureForPoint,
+            }).addTo(mymap);
+            pointLayerList.push(healthFacility);
+        });
+
+
+    }).catch(function(err) {
+            console.log('Fetch Error :-S', err);
+    });
+    })
+    };	
+
+</script>
+
+{% endblock %}
