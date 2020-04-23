@@ -1,9 +1,26 @@
-
 {% extends 'health_dash/base.html' %}
 {% load static%}
 {% block content %}
 <style>
 
+#checkboxes {
+  display: none;
+  /* border: 1px #dadada solid; */
+}
+
+#checkboxes label {
+  display: block;
+  text-align: left;
+  margin: 10px;
+}
+
+/* #checkboxes label:hover {
+  background-color: #1e90ff;
+} */
+
+.btn{
+    margin:10px;
+}
 .border {
     padding: 6px 8px;
     border-style: groove;
@@ -40,10 +57,64 @@
 
 .leaflet-popup-content{
     font-weight: bold;
+    color: white;
 }
 
+
 </style>
+ 
+    
+
 <div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
+
+    <div class="border">
+        <h6 class="text-center">Mumbai Health Facilities</h6><hr>
+        <div class="text-center" title="Please select the ward">
+               <button class="btn select" onclick="putLayer('geonode:mumbai_ward_boundary_10jun','mumbai')">Admin Ward</button>  
+               <!-- <button class="btn select" onclick="putLayer('geonode:mumbai_city_census','mumbai')">Census Ward</button> -->
+               <button class="btn select" onclick="putLayer('geonode:corporatorwardboundary_mumbai_1_0','mumbai')">Corporator Ward</button>                
+               <!-- <button class="btn select" onclick="putLayer('geonode:newHospitals_22april','mumbai')">Hospitals</button>                 -->
+            </div>
+            <hr>
+            <div class="text-center">
+                <button class="btn select" onclick="wfsHospitals()">All Hospitals</button>
+
+                <div class="tooltips" title="Please select the Facility Type">
+                    <select class='form-control' id="ward" name="ward">
+                        <option value="All">Select Facility Type</option>
+                
+                            <option value="1">Facility 1</option>
+                            <option value="2">Facility 2</option>
+                            <option value="3">Facility 3</option>
+                            <option value="4">Facility 4</option>
+                            <option value="5">Facility 5</option>
+                            
+            
+                    </select> 
+    
+                </div>
+    
+            </div>
+            
+            <hr>
+            <form id="wardList">
+                <div class="tooltips" title="Please select the Ward">
+                    <select class='form-control' id="ward" name="ward">
+                        <option value="All">Zoom to ward</option>
+                
+                            <option value="1">Ward No 1</option>
+                            <option value="2">Ward No 2</option>
+                            <option value="3">Ward No 3</option>
+                            <option value="4">Ward No 4</option>
+                            <option value="5">Ward No 5</option>
+                            
+            
+                    </select> 
+                </div>  
+           
+                <!-- <button type="button" class="btn btn-primary" onclick = "GetWard()">Show ward</button> -->
+            </form>          
+    </div>
 
     <div class="tooltips" title="Please select the District">
         <select class='form-control' id="district" name="district">
@@ -118,39 +189,39 @@
                      <label for="two">
                        <input type="checkbox" id="phs" value="Alt" name='facility'/>Alternative hospital</label>           
                        <label for="three">
-                       <input type="checkbox" id="" disabled/>Subcentre</label>
+                       <input type="checkbox" id="" disabled/>Subcentre(NA)</label>
                      <label for="three">
-                       <input type="checkbox" id="" disabled/>Hospital (30 Beds)</label>
+                       <input type="checkbox" id="" disabled/>Hospital (30 Beds)(NA)</label>
                      <label for="three">
-                       <input type="checkbox" id="" disabled/>Sub-District Hospital (50 Beds) </label>
+                       <input type="checkbox" id="" disabled/>Sub-District Hospital (50 Beds) (NA)</label>
                       <label for="three">
-                       <input type="checkbox" id="" disabled/>Sub-District Hospital (100 Beds) </label>
+                       <input type="checkbox" id="" disabled/>Sub-District Hospital (100 Beds)(NA) </label>
                       <label for="three">
-                       <input type="checkbox" id="" disabled/>District Hospital </label>
+                       <input type="checkbox" id="" disabled/>District Hospital(NA) </label>
                       <label for="three">
-                       <input type="checkbox" id="" disabled/>Super Speciality Hospital </label> 
+                       <input type="checkbox" id="" disabled/>Super Speciality Hospital(NA) </label> 
                       <label for="three">
-                       <input type="checkbox" id="" disabled/>Mental Health Institutes </label>   
+                       <input type="checkbox" id="" disabled/>Mental Health Institutes (NA)</label>   
                       <label for="three">
-                       <input type="checkbox" id="" disabled/>Women Hospital</label>   
+                       <input type="checkbox" id="" disabled/>Women Hospital(NA)</label>   
                       <label for="three">
-                       <input type="checkbox" id="" disabled/>TB Hospitals</label> 
+                       <input type="checkbox" id="" disabled/>TB Hospitals(NA)</label> 
                       <label for="three">
-                       <input type="checkbox" id="" disabled/>Other General Hospitals</label> 
+                       <input type="checkbox" id="" disabled/>Other General Hospitals(NA)</label> 
                       <label for="three">
-                       <input type="checkbox" id="" disabled/>Health & Family Welfare Training Institutions</label>
+                       <input type="checkbox" id="" disabled/>Health & Family Welfare Training Institutions(NA)</label>
                       <label for="three">
-                       <input type="checkbox" id="" disabled/>Primary Health Units</label> 
+                       <input type="checkbox" id="" disabled/>Primary Health Units(NA)</label> 
                      <label for="three">
-                       <input type="checkbox" id="" disabled/>Ashram Health Units</label> 
+                       <input type="checkbox" id="" disabled/>Ashram Health Units(NA)</label> 
                      <label for="three">
-                       <input type="checkbox" id="" disabled/>Mobile Health Units</label>    
+                       <input type="checkbox" id="" disabled/>Mobile Health Units(NA)</label>    
                       <label for="three">
-                       <input type="checkbox" id="" disabled/>Mobile Medical Units</label>  
+                       <input type="checkbox" id="" disabled/>Mobile Medical Units(NA)</label>  
                       <label for="three">
-                       <input type="checkbox" id="" disabled/>Dispensaries-Allopathic</label>  
+                       <input type="checkbox" id="" disabled/>Dispensaries-Allopathic(NA)</label>  
                       <label for="three">
-                       <input type="checkbox" id="" disabled/>Dispensaries-Ayurvedic</label>
+                       <input type="checkbox" id="" disabled/>Dispensaries-Ayurvedic(NA)</label>
                        
                             
                    </div>
@@ -180,6 +251,40 @@
 </div>
 
 <script>
+
+var myLayerList = [];
+     var LayerList = [];
+     
+     function setmap(area){
+        if(area === 'mumbai'){
+            mymap.setView([19.1056518,72.7815566], 11);
+        }else if(area === 'lward'){
+            mymap.setView([19.0790, 72.9080], 13);
+        }else if(area === 'sward'){
+            mymap.setView([19.1334, 72.9133], 13);
+        }else if(area === 'hwestward'){
+            mymap.setView([19.06251,72.8276],16);
+        }
+
+     }
+    function putLayer(geonode_source,area){
+        setmap(area);
+
+        var index = myLayerList.indexOf(geonode_source);
+        if(index >= 0){
+            // console.log('remove'+geonode_source)
+             source.getLayer(geonode_source).addTo(mymap).remove(mymap);
+            myLayerList.splice(index,1);
+
+        }else{
+            // console.log('add'+geonode_source);
+            // info.toFront(geonode_);
+            let wmslayer = source.getLayer(geonode_source).addTo(mymap);
+            // mymap.fitBounds(wmslayer.getBounds());
+
+            myLayerList.push(geonode_source);
+        }
+    }
     
     var expanded = false;
 
@@ -193,12 +298,37 @@ function showCheckboxes() {
     expanded = false;
   }
 }   
+function wfsHospitals(){
+    fetch('https://makerghat.urbansciences.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3AnewHospitals_22april&outputFormat=json').then(
+        function(response) {
+        // if (response.status !== 200) {
+        //     console.log('Looks like there was a problem. Status Code: ' +
+        //     response.status);
+        //     return;
+        // }
+        response.json().then(function(geojsonData) {
+            console.log(geojsonData);
+            mumbai_hospitals = L.geoJson(geojsonData.features, {
+                pointToLayer: function (feature, latlng) {
+                    return L.marker(latlng, {icon: L.AwesomeMarkers.icon({icon: 'fa-plus', markerColor: 'green', prefix: 'fa' }) });
+                    // return L.circleMarker(latlng, hospitalMarker);
+
+                },
+                // onEachFeature:onEachFeatureForPoint,
+            }).addTo(mymap);
+            // pointLayerList.push(mumbai_hospitals);
+        });
+
+
+    }).catch(function(err) {
+            console.log('Fetch Error :-S', err);
+    });
+}
     
-    
-    let healthFacility,
-        $locate = $('#locate'),
-        $body = $('body'),
-        $findNearest = $('#find-nearest')
+let healthFacility,
+    $locate = $('#locate'),
+    $body = $('body'),
+    $findNearest = $('#find-nearest')
 
 
 $locate.on('click', function(e) {

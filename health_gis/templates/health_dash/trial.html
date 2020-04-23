@@ -1,259 +1,407 @@
-{% load static %}
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  
-    <link rel="stylesheet" href="{% static 'footer.css' %}" >
-    <link rel="stylesheet" href="{% static 'leaflet.css' %}" >
-    <link rel="stylesheet" href="{% static 'plugins/L.Control.Pan.css' %}">
-    <link rel="stylesheet" href="{% static 'plugins/L.Control.Zoomslider.css' %}">
-    <link rel="stylesheet" href="{% static 'plugins/L.Control.MousePosition.css' %}">
-    <link rel="stylesheet" href="{% static 'plugins/L.Control.Sidebar.css' %}">
-    <link rel="stylesheet" href="{% static 'plugins/Leaflet.PolylineMeasure.css' %}">
-    <link rel="stylesheet" href="{% static 'plugins/easy-button.css' %}">
-    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/mycss.css' %}">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="{% static 'front.css' %}">
-
-    <script src="{% static 'leaflet-src.js' %}" ></script>
-    <!-- <script src="src/jquery-3.2.0.min.js"></script> -->
-    <script src="{% static 'plugins/L.Control.Pan.js' %}" ></script>
-    <script src="{% static 'plugins/L.Control.Zoomslider.js' %}" ></script>
-    <script src="{% static 'plugins/L.Control.MousePosition.js' %}"></script>
-    <script src="{% static 'plugins/L.Control.Sidebar.js' %}"></script>
-    <script src="{% static 'plugins/Leaflet.PolylineMeasure.js' %}"></script>
-    <script src="{% static 'plugins/easy-button.js' %}"></script>
-    <script src="{% static 'plugins/leaflet-providers.js' %}"></script>
-    <script src="{% static 'plugins/leaflet-opencage/src/js/L.Control.OpenCageSearch.js' %}"></script>
-    <!-- <script src="{% static 'app.js' %}"></script> -->
-    <!-- <link rel="stylesheet" type="leaflet.wms.js" href="{% static 'css/component.css' %}"  /> -->
-    <link rel="stylesheet" href="{% static 'mystyle.css' %}">
-    <link rel= 'stylesheet' href="{% static 'css/component.css' %}">
-    <script src="{% static 'plugins/leaflet.ajax.min.js' %}" ></script>
-    <script src="{% static 'js/modernizr-custom.js' %}" ></script>
-    <script src="{% static 'leaflet.wms.js' %}" ></script>
-
-    <script src="{% static 'js/classie.js' %}"></script>
-    <!-- <script src="js/dummydata.js"></script> -->
-    <!-- <script src="src/js/main.js"></script> -->
-    <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'myscript.js' %}"></script>
-
-
-    <!-- scripts for spinner -->
-
-    <script src="{% static 'spin/spin.js'%}" ></script>
-    <script src="{% static 'leaflet.spin.min.js' %}"></script>
-
-<!-- font-awesome -->
-<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-
-
-<!-- script for leaflet font awesome-->
-<script src = "{% static 'leaflet.awesome-markers.js' %}"></script>
-<link rel="stylesheet" href="{% static 'leaflet.awesome-markers.css' %}">
-
-
-
-<!-- leaflet-messagebox-->
-<script src = "{% static 'leaflet-messagebox.js' %}"></script>
-<link rel="stylesheet" href="{% static 'leaflet-messagebox.css' %}">
-
- <!-- leaflet-measure-->
-<script src = "{% static 'leaflet_measure/leaflet.measure.js' %}"></script>
-<link rel="stylesheet" href="{% static 'leaflet_measure/leaflet.measure.css' %}">
-
-
-<!-- leaflet-search -->
-<script src = "{% static 'leaflet-search/leaflet-search.src.js' %}"></script>
-<link rel="stylesheet" href="{% static 'leaflet-search/leaflet-search.src.css' %}">
-
-
-<!-- leaflet minimap -->
-<script src = "{% static 'leaflet-minimap/Control.MiniMap.min.js' %}"></script>
-<link rel="stylesheet" href="{% static 'leaflet-minimap/Control.MiniMap.min.css' %}">
- 
-
-
-<!-- leaflet lagend graphic -->
-
-<script src = "{% static 'leaflet-legend-graphics/leaflet.wmslegend.js' %}"></script>
-<link rel="stylesheet" href="{% static 'leaflet-legend-graphics/leaflet.wmslegend.css' %}">
-
-<!-- <link rel="stylesheet" href=""/>
-<script src="leaflet-legend-graphics/leaflet.wmslegend.js"></script> -->
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-
-</head>
-
-  <body>
+{% extends 'health_dash/base.html' %}
+{% load static%}
+{% block content %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 <style>
-body {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: 0;
-  overflow: hidden;
+    
+.select {
+    background:rgb(255,255,255);
 }
-.full-height {
-  height: 100%;
+.select.highlight {
+    background:rgb(26, 255, 0);
 }
 
-.header {
-    height: 50px;
+.info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
 }
-  </style>
+.info h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
 
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Rural HealthGIS</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        </div>
+.legend {
+    line-height: 18px;
+    color: #555;
+}
+.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+}
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item disable">
-              <a class="nav-link" href="#">Source: Census 2011 <span class="sr-only">(current)</span></a>
-            </li>
+.mobileShow {display: none;}
 
-            <li class="nav-item active">
-                <a class="nav-link" href="https://ee.humanitarianresponse.info/x/#URXRVsvI">Contribute<span class="sr-only">(current)</span></a>
-              </li>
-          </ul>
+  /* Smartphone Portrait and Landscape */
+  @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px){ 
+      .mobileShow {display: inline;}
+  }
+</style>
 
-          <ul class="navbar-nav ml-auto">
+</style>
 
-          </ul>
-          <!-- <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form> -->
-        </div>
-      </nav> 
+<div id="side-bar" style="background-color: rgba(0, 0, 0, 0.2);">                <!-- Main container -->
+
+  <h2>Rural Water Supply</h2>
+  <hr>
+ 
+<!-- <ul class="list-group">
+    <li class="list-group-item list-group-item-info"><b>Palgarh</b></li>
+    <li class="list-group-item list-group-item-info"><button class="btn select" onclick="displayLayer()";>Water stress</button></li>
+ </ul>  -->
+
+<!-- <div class="mobileShow"> -->
    
-<div class="full-height">
+    <div style="text-align: center; padding-bottom:30px;"> 
+        <button style="display: inline-block ;position: relative; background: #000; opacity: 0.60;" id="closebutton" name="closebutton" class="btn btn-secondary"><span class="fa fa-bars"></span></button> 
+    </div>
+
+ <!-- </div> -->
 
  
-  <div class="row h-100">
-    <div class="container-fluid">
-      <div id="mapdiv" class="col-12 h-100"></div>
- 
+<div class="tooltips" title="Please select the Taluka">
+    <select class = 'form-control' id="district" name="district">
+        <option>Please select District</option>
+         
+                 <option>Palghar</option>
+                 <option>Thane</option>
+    </select>
+</div>
+
+<!-- <div class="tooltips" title="Please select the Taluka">
+    <select class = 'form-control' id="taluka" name="taluka">
+        <option>Please select Taluka</option>
+         
+                 <option>Dahanu</option>
+                 <option>Palghar</option>
+                 <option>Talasari</option>
+                 <option>Jawhar</option>
+                 <option>Vada</option>
+                 <option>Mokhada</option>
+                 
+            
+    </select>
+</div> -->
+
+<br>
+<div class="tooltips" title="Please select the taluka">
+    <!-- <select class= 'form-control' id="structure" name="structure" placeholder="Enter structure"></select> --> 
+    <script type="text/javascript" language="JavaScript">
+        document.write('<select class= "form-control" name="taluka" id="taluka"><option value="">Select Taluka</option></select>')
+    </script>
 
 </div>
- </div>
-  </div>
-<script>
 
-var mymap;
-var source = L.wms.source(
-      "https://makerghat.urbansciences.in/geoserver/wms",
-      {
-          "format": "image/png",
-          "transparent": "true"
-      }        
-  );
+<br>
+<div class="tooltips" title="Please select the village">
+    <!-- <select class= 'form-control' id="structure" name="structure" placeholder="Enter structure"></select> --> 
+    <script type="text/javascript" language="JavaScript">
+        document.write('<select class= "form-control" name="village" id="village"><option value="">Select Village</option></select>')
+    </script>
 
-  mymap = L.map('mapdiv', {
-    center:[19.0760, 84.8777], 
-    zoom:5, zoomControl:false, 
-    attributionControl:false,
-    messagebox: true,
-    contextmenu: true,
-    measureControl: false
-  });
-  mymap.messagebox.options.timeout = 5000;
-  mymap.messagebox.setPosition("bottomright");
-  lyrOSM = L.tileLayer.provider('OpenStreetMap.Mapnik');
-  lyrOSM2 = L.tileLayer.provider('OpenStreetMap.Mapnik');
-  lyrImagery = L.tileLayer.provider('Esri.WorldImagery');
-  mymap.addLayer(lyrOSM);
-  var miniMap = new L.Control.MiniMap(lyrOSM2, { toggleDisplay: true }).addTo(mymap);
-//  var miniMap = new L.Control.MiniMap(lyrOSM).addTo(mymap);
+</div>
+<br>
+<div class="btn-group" style="text-align: center; ">
+    <button title="Execute" class = 'btn btn-primary' style="margin-left:40px; margin-right:16px;  border-radius: 5px;" id="execute">Execute</i></button>
+</div>
 
-function round(value, precision) {
-    var multiplier = Math.pow(10, precision || 0);
-    return Math.round(value * multiplier) / multiplier;
+    <script>
+  
+  (function() {
+   const PALGARH_LAT_LONG = [19.6967, 72.7699]; 
+   mymap.setView(PALGARH_LAT_LONG,7);
+    })();
+
+var talukas = {
+    'Palghar':['Select Taluka','Dahanu','Vasai','Talasari','Palghar','Mokhada','Vada','Jawhar','Vikramgad'],
+    'Thane':['Select Taluka','Ambarnath','Ulhasnagar','Kalyan','Thane','Bhiwandi','Murbad','Shahpur'],
 }
 
-
-function copyToClipboard(text) {
-    var dummy = document.createElement("textarea");
-    // dummy.style.display = 'none'
-    document.body.appendChild(dummy);
-    dummy.value = text;
-    dummy.select();
-    document.execCommand("copy");
-    document.body.removeChild(dummy);
+var villages = {
+    'Dahanu': ['Select Village','Vankas','Kosbad','Nawapur','Charoti','Kainad','Ghadane','Ambesari','Komgaon','Ganjad','Ganesh Bag','Tawa'],
+    'Palghar':['Select Village','Umroli','Nawapur','Murabe','Kudan','Kharekuran','Ghivali','Satpati','Dapoli'],
+    'Talasari':['Select Village','Talasari','Sawroli','Zari'],
+    'Jawhar':['Select Village','Raitale','Juni','Jawhar','Jamsar','Hateri','Hade','Ghiwande','Ganeshnagar','Dhanoshi','Borale','Pathardi'],
+    'Vada':['Select Village','Umrothe','Shirsad','Kondhale','Devghar','Gates Kh','Hamarapur','Asnas','Kalambhai','Palsai','Usar','Gorhe','Jale','Ambarbhui'],
+    'Mokhada':['Select Village','Khodala'],
 }
 
-mymap.on('contextmenu',function(e){
-  copyToClipboard(e.latlng.lat+","+e.latlng.lng);
-  mymap.messagebox.show("<h6>Latitude:<b>"+round(e.latlng.lat,4)+"</b> Longitude:<b>"+round(e.latlng.lng,4)+"</b> copied to clipboard</h6>");
+  var district_name = {'Palghar':['Palghar',19.6967,72.7699],'Thane':['Thane',19.2318,72.9672]};
+  var taluka_name = {'Dahanu':['Dahanu',19.9903, 72.7397],'Vasai':['Vasai',19.3919, 72.8397],'Palghar':['Palghar',19.6967, 72.7699],'Talasari':['Talasari',20.1238, 72.9169],'Jawhar':['Jawhar',19.9050, 73.2313],'Vada':['Vada',19.6570, 73.1409],'Mokhada':['Mokhada',19.9365, 73.3404],'Vikramgad':['Vikramgad',19.797260
+,73.095566]};
+  var $talukas = $('#taluka');
+  var $villages = $('#village');
+  
+    $('#district').change(function () {
+        console.log("hey");
+        var district_pal = document.getElementById('district').value;
+        // displayPolygon(district_name[district_pal][0],district_name[district_pal][1],district_name[district_pal][2]);
+        var district = $(this).val(), lcns = talukas[district] || [];
+        
+        var html = $.map(lcns, function(lcn){
+            return '<option value="' + lcn + '">' + lcn + '</option>'
+        }).join('');
+        $talukas.html(html)
+    });
+
+    $('#taluka').change(function () {
+        console.log("hey");
+        
+        var taluka_pal = document.getElementById('taluka').value;
+        console.log(villages[taluka_pal]);
+
+        displayPolygon(taluka_name[taluka_pal][0],taluka_name[taluka_pal][1],taluka_name[taluka_pal][2]);
+        displayAllVillagesPolygon(taluka_name[taluka_pal][0],taluka_name[taluka_pal][1],taluka_name[taluka_pal][2],villages[taluka_pal]);
+
+        var taluka = $(this).val(), lcns = villages[taluka] || [];
+        
+        var html = $.map(lcns, function(lcn){
+            return '<option value="' + lcn + '">' + lcn + '</option>'
+        }).join('');
+        $villages.html(html)
+    });
+
+    $('#execute').click({msg: "all"}, function(event){
+        var taluka_pal = document.getElementById('taluka').value;
+        let vill = document.getElementById('village').value;
+
+        console.log(vill);
+        displayPolygon(taluka_name[taluka_pal][0],taluka_name[taluka_pal][1],taluka_name[taluka_pal][2]);
+        displayVillagePolygon(vill,taluka_name[taluka_pal][1],taluka_name[taluka_pal][2])
+    });
+
+    
+$("#closebutton").click(function(){
+    ctlSidebar.toggle();
 });
 
 
+var geojson;
+const domain = ['https://makerghat.urbansciences.in/','http://localhost:8080/'];
+var base_url = domain[0] + "geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&outputformat=application/json&";
+var info = L.control();
+var attribute_table = L.control({position: 'bottomright'});
+var layer_name;
 
-$('.select').click(function () {
-  $(this).toggleClass('highlight')
-})
-</script>
+const fontAwesomeIcon = L.divIcon({
+    html: '<i class="fa fa-map-marker fa-4x"></i>',
+    iconSize: [20, 20],
+    className: 'myDivIcon'
+});
+
+
+var LayerList = [];
+var pointLayerList = [];
+
+function getColor(d) {
+    return d > 6 ? '#FF0000' :
+           d > 2  ? '#FFFF00' :
+           d > -1  ? '#008000' :
+                      '#FFEDA0';
+}
+
+
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+function style(feature) {
+    return {
+        fillColor: "#fff",
+        weight: 2,
+        opacity: 1,
+        color: 'black',
+        fillOpacity: 0
+    };
+}
+
+function style1(feature) {
+    return {
+        fillColor: "#fff",
+        weight: 4,
+        opacity: 1,
+        color: 'blue',
+        fillOpacity: 0
+    };
+}
+
+function style2(feature) {
+    return {
+        fillColor: "#fff",
+        weight: 4,
+        opacity: 1,
+        color: 'green',
+        fillOpacity: 0
+    };
+}
 
 
 
+function displayPolygon(taluka_name,lat,long){
+LayerList.forEach(layer => mymap.removeLayer(layer));
+console.log("Hello");
+layer_url =base_url + "&typeName=geonode%3Amaha_taluka_15apr2020&cql_filter=taluka_nam='"+taluka_name+"'";
+fetch(layer_url)
+.then(
+    function(response) {
+    if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+        response.status);
+        return;
+    }
+
+    // Examine the text in the response
+    response.json().then(function(geojsonData) {
+        mymap.setView([lat, long], 11);
+        geojson = L.geoJson(geojsonData.features, {
+        style : style
+    }).addTo(mymap);
+    LayerList.push(geojson);
+
+    });
+
+    }
+)
+.catch(function(err) {
+    console.log('Fetch Error :-S', err);
+});
    
-{% block content%}
-{% endblock %}
+}
 
-<script>
-  
-  
-  
-  $("#closebutton").click(function(){
-  ctlSidebar.toggle();
+
+function displayVillagePolygon(vill_name,lat,long){
+// LayerList.forEach(layer => mymap.removeLayer(layer));
+layer_url =base_url + "&typeName=geonode%3Amaha_village_polygon_29mar&cql_filter=village_na='"+vill_name+"'";
+fetch(layer_url)
+.then(
+    function(response) {
+    if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+        response.status);
+        return;
+    }
+
+    // Examine the text in the response
+    // let vill_name = vill
+    response.json().then(function(geojsonData) {
+        mymap.setView([lat, long], 11);
+        geojson = L.geoJson(geojsonData.features, {
+        style : style1
+        ,onEachFeature: onEachFeature,
+    }).addTo(mymap);
+    LayerList.push(geojson);
+
+    });
+    // displayVillagePolygon(vill_name);
+
+    }
+)
+.catch(function(err) {
+    console.log('Fetch Error :-S', err);
 });
+   
+}
+
+
+function displayAllVillagesPolygon(taluka_name,lat,long,villages){
+// LayerList.forEach(layer => mymap.removeLayer(layer));
+// var x;
+// for (x in villages) {
+//     console.log(x);
+//     var i;
+console.log(villages.length);
+for (i = 0; i < villages.length; i++) {
+  
+layer_url =base_url + "&typeName=geonode%3Amaha_village_polygon_29mar&cql_filter=village_na='"+villages[i+1]+"'";
+fetch(layer_url)
+.then(
+    function(response) {
+    if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+        response.status);
+        return;
+    }
+
+    // Examine the text in the response
+    // let vill_name = vill
+    response.json().then(function(geojsonData) {
+        mymap.setView([lat, long], 11);
+        geojson = L.geoJson(geojsonData.features, {
+        style : style2
+    
+    ,onEachFeature: onEachFeature,
+        
+    }).addTo(mymap);
+    LayerList.push(geojson);
+
+    });  //end of response.json
+    // displayVillagePolygon(vill_name);
  
-  
-  
-  objBasemaps = {
-      "Open Street Maps": lyrOSM,
-      "Imagery":lyrImagery
-  };
-  
-  objOverlays = {
-  };
-  
-  // var ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap);
-  var ctlSidebar = L.control.sidebar('side-bar').addTo(mymap);
-  // var ctlPan = L.control.pan().addTo(mymap);
+}  //funtion(response)
+)
+.catch(function(err) {
+    console.log('Fetch Error :-S', err);
+});
+}  // end of forloop
+}
 
-  var ctlEasybutton = L.easyButton('fa fa fa-bars', function(){
-      ctlSidebar.toggle(); 
-  }).addTo(mymap);
-  ctlSidebar.show();
 
-  var ctlZoomslider = L.control.zoomslider({position:'topright'}).addTo(mymap);
-  
-  ctlAttribute = L.control.attribution({position:'bottomleft'}).addTo(mymap);
-  ctlAttribute.addAttribution('&copy; <a href="http://www.makerghat.org">makerGHAT</a>');
 
-      
+function zoomToFeature(e) {
+    mymap.fitBounds(e.target.getBounds());
+}
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+
+    if (feature.properties) {
+        console.log("THIS IS ON EACH FEATURE");
+		layer.bindPopup("<table class = 'popupclass' ><tr><td>Village Name:</td><td>"+feature.properties.village_na+"</td></tr>"+
+        // "<tr><td>Sanction Year:</td><td>"+feature.properties.Sanction_y+"</td></tr>"+
+        // "<tr><td>Budget:</td><td>"+feature.properties.Budget+"</td></tr>"+
+        // "<tr><td>Number of pipes:</td><td>"+feature.properties.No_of_Pipe+"</td></tr>"+
+        "<tr><td>Taluka Name:</td><td>"+feature.properties.taluka_nam+"</tr>"+
+        "<tr><td>District Name:</td><td>"+feature.properties.district_n+"</td></tr></table>");
+        // "<tr><td>Final Assessment:</td><td>"+feature.properties.final_asse+"</td></tr></table>");
+    }
+}
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+        
+    });
+    
+}
+
+function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+    
+}
+
+
 </script>
-   
 
-  </body>
-</html>
+
+{% endblock %}
