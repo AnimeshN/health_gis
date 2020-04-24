@@ -77,19 +77,20 @@
             </div>
             <hr>
             <div class="text-center">
-                <button class="btn select" onclick="wfsHospitals()">All Hospitals</button>
-
-                <div class="tooltips" title="Please select the Facility Type">
-                    <select class='form-control' id="ward" name="ward">
-                        <option value="All">Select Facility Type</option>
+                <button class="btn select" onclick="wfsHospitals('no')">All Hospitals</button>
                 
-                            <option value="1">Facility 1</option>
-                            <option value="2">Facility 2</option>
-                            <option value="3">Facility 3</option>
-                            <option value="4">Facility 4</option>
-                            <option value="5">Facility 5</option>
-                            
-            
+
+                
+                
+                
+                
+                
+                <div class="tooltips" title="Please select the Facility Type">
+                    <select class='form-control' id="covid_19_facility" name="covid_19_facility">
+                        <option value="All">COVID19 Facility</option>
+                            <option value="1">Quarantine - only with beds, physicians, food and other ancillary services</option>
+                            <option value="2">Quarantine and isolation (and treatment) - Beds, team of physicians and nurses, food and other ancillary services</option>
+                            <option value="3">Quarantine and isolation (and treatment) - Beds, team of physicians, ICU beds, Ventilators (numbers?), food and other ancillary service</option>
                     </select> 
     
                 </div>
@@ -298,7 +299,25 @@ function showCheckboxes() {
     expanded = false;
   }
 }   
-function wfsHospitals(){
+function onEachHospital(feature, layer) {
+           
+layer.bindPopup(`<div class = 'text-center'>${feature.properties.FacltyName}<br>
+            
+                Address :${feature.properties.address_te}<br>`)
+           
+}   
+$('#covid_19_facility').change(function () {      
+    var block_pal = document.getElementById('covid_19_facility').value;
+    wfsHospitals('pub')
+})
+
+function filterHospitals(feature,layer,filter){
+    console.log('layer',feature);
+    if (filter == 'no')
+        return true
+  
+}
+function wfsHospitals(filterBy){
     fetch('https://makerghat.urbansciences.in/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode%3AnewHospitals_22april&outputFormat=json').then(
         function(response) {
         // if (response.status !== 200) {
@@ -310,11 +329,25 @@ function wfsHospitals(){
             console.log(geojsonData);
             mumbai_hospitals = L.geoJson(geojsonData.features, {
                 pointToLayer: function (feature, latlng) {
-                    return L.marker(latlng, {icon: L.AwesomeMarkers.icon({icon: 'fa-plus', markerColor: 'green', prefix: 'fa' }) });
+                    if(feature.properties.prvt)
+                        return L.marker(latlng, {icon: L.AwesomeMarkers.icon({icon: 'fa-plus', markerColor: 'green', prefix: 'fa' }) });
+                    else if(feature.properties.pub)
+                        return L.marker(latlng, {icon: L.AwesomeMarkers.icon({icon: 'fa-plus', markerColor: 'red', prefix: 'fa' }) });
                     // return L.circleMarker(latlng, hospitalMarker);
 
                 },
-                // onEachFeature:onEachFeatureForPoint,
+                onEachFeature:onEachHospital,
+                filter: function(feature, layer) {
+                if(filterBy == 'no'){
+                    return true;
+                }else if(feature.properties[filterBy]){
+                    console.log(feature.properties[filterBy])
+                    return true;
+                }else{
+                    return false;
+                }
+                
+            },
             }).addTo(mymap);
             // pointLayerList.push(mumbai_hospitals);
         });
