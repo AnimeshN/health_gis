@@ -2,26 +2,6 @@
 {% load static%}
 {% block content %}
 <style>
-/* .multiselect {
-  width: 200px;
-} */
-
-/* .selectBox {
-  position: relative;
-} */
-
-/* .selectBox select {
-  width: 100%;
-  font-weight: bold;
-} */
-
-/* .overSelect {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-} */
 
 #checkboxes {
   display: none;
@@ -79,9 +59,19 @@
     font-weight: bold;
 }
 
+
 </style>
 
 <div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
+    
+    
+  <div class="mobileShow">
+   
+    <div style="text-align: center"> 
+        <button style="display: inline-block ;position: relative; background: #000; opacity: 0.60;" id="closebutton" name="closebutton" class="btn btn-secondary"><span class="fa fa-bars"></span></button> 
+    </div>
+
+ </div>   
     <div class="border">
         <table>
         <tr><h5>Indian Admin Boundaries</h5></tr>

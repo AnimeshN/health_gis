@@ -3,12 +3,12 @@ from . import views
 from django.conf.urls import url
 
 urlpatterns = [
-    path('', views.healthDash, name='health-dash'),
+    path('', views.healthDash, name='rural_health'),
     url(r'^login/', views.login_request, name='login'),
     url(r'^logout/', views.logout_request, name='logout'),
     url(r'^contribute/', views.contribute, name='contribute'),
-    url(r'^town_health/', views.townHealth, name='town_health'),
-    path('', views.trialDash, name='trail-dash'),
+    url(r'^urban_health/', views.UrbanHealth, name='urban_health'),
+    path('trail', views.trialDash, name='trail-dash'),
 
     
 ]

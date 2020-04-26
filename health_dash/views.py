@@ -11,7 +11,7 @@ def healthDash(request):
     return render(request,"health_dash/health.html")
 
 
-def townHealth(request):
+def UrbanHealth(request):
     return render(request,"health_dash/town_health.html")
  
 def trialDash(request):

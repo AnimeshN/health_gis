@@ -116,51 +116,54 @@ body {
 .header {
     height: 50px;
 }
+
+.mobileShow {display: none;}
+
+  /* Smartphone Portrait and Landscape */
+  @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px){ 
+      .mobileShow {display: inline;}
+  }
   </style>
-<div class="full-height">
 
-  <div class="row w-100 header ">
-    <div class="col">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Rural HealthGIS</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <!-- <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li> -->
-          </ul>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">HealthGIS</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-          <ul class="navbar-nav ml-auto">
-            <!-- <li class="nav-item active">
-              <a class="nav-link" href="{% url 'login'%}">Login <span class="sr-only">(current)</span></a>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item disable">
+        <a class="nav-link" href="#">Source: Census 2011 <span class="sr-only">(current)</span></a>
+      </li>
 
 
-              
-            </li> -->
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'rural_health' %}">Rural<span class="sr-only">(current)</span></a>
+    </li>
 
+    <li class="nav-item active">
+      <a class="nav-link" href="{% url 'urban_health' %}">Urban<span class="sr-only">(current)</span></a>
+  </li>
 
-            {% if user.is_authenticated %}
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'logout' %}">Logout <span class="sr-only">(current)</span></a>
-              </li>
-            {% else %}
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'login' %}">Login <span class="sr-only">(current)</span></a>
-              </li>
-            {% endif %}
-          </ul>
-          <!-- <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form> -->
-        </div>
-      </nav>
-    </div>
+      <li class="nav-item active">
+          <a class="nav-link" href="https://ee.humanitarianresponse.info/x/#URXRVsvI">Contribute<span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+
+    </ul>
+    <!-- <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form> -->
   </div>
+</nav>
+
+<div class="full-height">
   <div class="row h-100">
     <div class="container-fluid">
       <div id="mapdiv" class="col-12 h-100"></div>
