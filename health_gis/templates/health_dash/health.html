@@ -174,15 +174,15 @@
                 <option value="Yavatmal">Yavatmal</option>
                 <option value="Washim">Washim</option>
                 <option value="Aurangabad">Aurangabad</option>
-                <option value="Bid">Bid</option>
+                <option value="Beed">Beed</option>
                 <option value="Jalna">Jalna</option>
                 <option value="Osmanabad">Osmanabad</option>
                 <option value="Nanded">Nanded</option>
                 <option value="Latur">Latur</option>
                 <option value="Parbhani">Parbhani</option>
                 <option value="Hingoli">Hingoli</option>
-              <!--   <option value="Mumbai City">Mumbai City</option>
-                <option value="Mumbai Suburban">Mumbai Suburban</option> -->
+                <option value="Mumbai City">Mumbai City</option>
+                <option value="Mumbai Suburban">Mumbai Suburban</option>
                 <option value="Thane">Thane</option>
                 <option value="Palghar">Palghar</option>
                 <option value="Raigad">Raigad</option>
@@ -274,6 +274,28 @@
               </div>
            
               <button type="button" class="btn btn-primary" onclick = "GetSelected()">Display</button>
+              <div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
+    <div class="border">
+        <table>
+        <!-- <tr><h5>Selected State:Related Data</h5></tr> -->
+        <div class="text-center">
+            <div class="checkbox" id="stboun">
+            <tr><h5>Highlight Urban Boundaries</h5></tr>	
+              <!-- <tr><tb>  <label><input type="checkbox" value="{mahadem}" onchange="getBoundaryst(this)"></tb><tb><span> Wards</span></label></tb> -->
+              	<tb>  <label><input type="checkbox" value="{mahatown}" onchange="getBoundaryru(this)"></tb><tb><span> Town</span></label></tb>
+               </tr>
+              </div>
+              <div class="checkbox">
+                <tr><h5>Highlight Rural Boundaries</h5></tr>	
+	
+               <tr> <label><input type="checkbox" value="{maharural}" onchange="getBoundaryru(this)"><span> Villages</span></label></tr>
+              </div>
+              <!-- <div class="checkbox">
+                <label><input type="checkbox" value="{mahaschool}" onchange="getBoundaryst(this)"><span> Schools (UDISE 16-17) </span></label>
+              </div> -->
+        </div>
+     </table>   
+    </div>
         </form>
  
         
@@ -349,6 +371,26 @@ function getBoundaryst(obj) {
         else 
             removeWMS("geonode:school_16_17_11april");
     }
+}
+
+
+function getBoundaryru(obj) {
+    let boundary = obj.value;
+    if($(obj).is(":checked")){ 
+        if(boundary == "{mahatown}")
+            putWMSru("geonode:townhealth_centroid");
+        else if(boundary== "{maharural}")
+            putWMSru("geonode:maha_village_polygon_29mar");
+    
+    }else{
+        if(boundary== "{mahatown}")
+            removeWMS("geonode:townhealth_centroid");
+        else if(boundary== "{maharural}")
+            removeWMS("geonode:maha_village_polygon_29mar");
+   
+    };
+    
+
 }
 
 
@@ -458,10 +500,10 @@ function queryFeatures(currentPos, numResults) {
 
     let listDistrict = {'Akola':['Akola',20.7002, 77.0082],'Amravati':['Amravati',20.9374,77.7796],
     'Buldana':['Buldana',20.4561,76.3637],'Yavatmal':['Yavatmal',20.3888,78.1204],'Washim':['Washim',20.139,77.1025],
-    'Aurangabad':['Aurangabad',19.8762,75.3433],'Bid':['Bid',18.9891,75.7601],'Jalna':['Jalna',19.8297,75.88],
+    'Aurangabad':['Aurangabad',19.8762,75.3433],'Beed':['Beed',18.9891,75.7601],'Jalna':['Jalna',19.8297,75.88],
     'Osmanabad':['Osmanabad',18.207,76.1784],'Nanded':['Nanded',19.1383,77.321],'Latur':['Latur',18.4088,76.5604],
     'Parbhani':['Parbhani',19.2644,76.6413],'Hingoli':['Hingoli',19.5781,77.1025],'Thane':['Thane',19.2183,72.9781],
-    'Palghar':['Palghar',19.6936,72.7655],'Raigad':['Raigad',18.5158,73.1822],'Ratnagiri':['Ratnagiri',16.9902,73.312],'Sindhudurg':['Sindhudurg',16.3492,73.5594],'Bhandara':['Bhandara',21.0736,79.8297],
+    'Palghar':['Palghar',19.6936,72.7655],'Raigad':['Raigad',18.5158,73.1822],'Ratnagiri':['Ratnagiri',16.9902,73.312],'Sindhudurg':['Sindhudurg',16.3492,73.5594],'Bhandara':['Bhandara',21.0736,79.8297],'Mumbai City':['Mumbai City',18.942,72.816], 'Mumbai Suburban':['Mumbai Suburban',19.118,72.905],
     'Gadchiroli':['Gadchiroli',19.4969,80.2767],'Chandrapur':['Chandrapur',19.9615,79.2961],
     'Gondia':['Gondia',21.4624,80.221],'Nagpur':['Nagpur',21.1458,79.0882],'Wardha':['Wardha',20.7453,78.6022],
     'Ahmadnagar':['Ahmadnagar',19.0948,74.748],'Dhule':['Dhule',20.9042,74.7749],'Jalgaon':['Jalgaon',21.0077,75.5626],
@@ -637,23 +679,23 @@ function putWMSLayer(){
              var aspiD = document.getElementById('district').value;
              var distLayerLatLong= listDistrict[aspiD];
              //clear_layer();
-             console.log('kk',distLayerLatLong);
+             //console.log('kk',distLayerLatLong);
             var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-            layers: 'geonode:maha_village_polygon_29mar',
+            layers: 'geonode:maha_taluka_15apr2020',
             format: 'image/png',
             transparent:'true',
             tiled:true,
-            tilesorigin:,
+           
             //opacity:0.5,
             // version: '1.3.0',
-            cql_filter:"district_n='"+distLayerLatLong[0]+"'",
+            cql_filter:"distname='"+distLayerLatLong[0]+"'",
             style:""});
             clear_layer();
             clearpoint_layer();
             wms_layer.addTo(mymap);
         	mymap.setView([distLayerLatLong[1],distLayerLatLong[2]],9);
 
-            console.log(wms_layer);
+            //console.log(wms_layer);
             LayerList.push(wms_layer);
             // addWMSLegend(layer);
             
@@ -662,7 +704,7 @@ function putWMSLayer(){
 
 function putWMSLayerst(){
              var indstate = document.getElementById('indstate').value;
-             console.log(indstate);
+             //console.log(indstate);
              var stLayerLatLong= listState[indstate];
             
             var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
@@ -691,6 +733,29 @@ function putWMS(layer){
     wms_layer.addTo(mymap);
     newLayerList.push(wms_layer);
 }
+
+
+function putWMSru(layer){
+	var aspiD = document.getElementById('district').value;
+    var distLayerLatLong= listDistrict[aspiD];
+             //clear_layer();
+    console.log('kk',distLayerLatLong);
+    let district= distLayerLatLong[0];
+    if(layer=="geonode:townhealth_centroid")
+    	district=distLayerLatLong[0].toUpperCase();
+    console.log(district);
+
+    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+        layers: layer,
+        format: 'image/png',
+        transparent:'true',
+        cql_filter:"district_n='"+district+"'"
+    });
+    wms_layer.addTo(mymap);
+    newLayerList.push(wms_layer);
+    console.log(wms_layer);
+}
+
 
 function displayPolygon(param){
 // clear_layer();
@@ -774,7 +839,7 @@ function addSearchControl(layer,propertyName){
     marker: false,
     moveToLocation: function(latlng, title, mymap) {
         //mymap.fitBounds( latlng.layer.getBounds() );
-        console.log(latlng);
+        //console.log(latlng);
         var zoom = mymap.getBoundsZoom(latlng.layer.getBounds());
         mymap.setView(latlng, zoom); // access the zoom
     }
@@ -833,7 +898,7 @@ L.Map.include({
         selected.forEach(sel => {
             var aspiD = document.getElementById('district').value;
             var distLayerLatLong= listDistrict[aspiD];
-            console.log(distLayerLatLong[0]);
+            //console.log(distLayerLatLong[0]);
 
             let newurl =`https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar&cql_filter=district_n='${distLayerLatLong[0]}' AND ${listFacility[sel]}>0`
             clearpoint_layer();
