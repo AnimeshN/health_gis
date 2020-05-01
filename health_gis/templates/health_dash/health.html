@@ -110,7 +110,7 @@ tr:hover {
         <select class='form-control' id="indstate" name="indstate">
             <option value="All">Select State</option>
             <optgroup label="States"> 
-            	<option value="Maharashtra" onclick="mymap.setView(new L.LatLng(19.7515,75.7139),7);"; >Maharashtra</option>
+              <option value="Maharashtra" onclick="mymap.setView(new L.LatLng(19.7515,75.7139),7);"; >Maharashtra</option>
 
                 <option value="" disabled>Andhra Pradesh</option>
                 <option value="" disabled>Arunachal Pradesh</option>
@@ -243,16 +243,16 @@ tr:hover {
 
                 <div id="checkboxes">
                   <div id="ru" value="ru">Rural-Census 2011
-	                  <label for="one">
-	                    <input type="checkbox" id="val" value="{CHC}" name='Rural' onchange="GetSelectedfac(this)"/>CHC</label>
-	                  <label for="two">
-	                    <input type="checkbox" id="phs" value="{PHC}" name='Rural' onchange="GetSelectedfac(this)"/>PHC</label>
+                    <label for="one">
+                      <input type="checkbox" id="val" value="{CHC}" name='Rural' onchange="GetSelectedfac(this)"/>CHC</label>
+                    <label for="two">
+                      <input type="checkbox" id="phs" value="{PHC}" name='Rural' onchange="GetSelectedfac(this)"/>PHC</label>
                   </div>  
                   <div id="ur" value="ur">Urban - Census 2011  
-	                  <label for="three">
-	                    <input type="checkbox" id="allo"  value="{Allo}" onchange="GetSelectedfac(this)"/>Allopathy Hospital</label>
-	                  <label for="three">
-	                    <input type="checkbox" id="alt" value="{Alt}" onchange="GetSelectedfac(this)"/>Alternate Hospital</label>
+                    <label for="three">
+                      <input type="checkbox" id="allo"  value="{Allo}" onchange="GetSelectedfac(this)"/>Allopathy Hospital</label>
+                    <label for="three">
+                      <input type="checkbox" id="alt" value="{Alt}" onchange="GetSelectedfac(this)"/>Alternate Hospital</label>
                   </div><hr>
                   <div id="kobo" value="kobo">Hospital data Collected by Community
                   <label for="three">
@@ -302,14 +302,14 @@ tr:hover {
         <!-- <tr><h5>Selected State:Related Data</h5></tr> -->
         <div class="text-center">
             <div class="checkbox" id="stboun">
-            <tr><h5>Highlight Urban Boundaries</h5></tr>	
+            <tr><h5>Highlight Urban Boundaries</h5></tr>  
               <!-- <tr><tb>  <label><input type="checkbox" value="{mahadem}" onchange="getBoundaryst(this)"></tb><tb><span> Wards</span></label></tb> -->
-              	<tb>  <label><input type="checkbox" value="{mahatown}" onchange="getBoundaryru(this)"></tb><tb><span> Town</span></label></tb>
+                <tb>  <label><input type="checkbox" value="{mahatown}" onchange="getBoundaryru(this)"></tb><tb><span> Town</span></label></tb>
                </tr>
               </div>
               <div class="checkbox">
-                <tr><h5>Highlight Rural Boundaries</h5></tr>	
-	
+                <tr><h5>Highlight Rural Boundaries</h5></tr>  
+  
                <tr> <label><input type="checkbox" value="{maharural}" onchange="getBoundaryru(this)"><span> Villages</span></label></tr>
               </div>
               <!-- <div class="checkbox">
@@ -433,7 +433,11 @@ function GetSelectedfac(obj) {
             removeWFSfac("CHC");
         else if(fac === "{PHC}")
             removeWFSfac("PHC");
-   
+        else if(fac=='{Allo}')
+            removeWFSfac("Allo"); 
+            
+       else if(fac=='{Alt}')
+            removeWFSfac("Alt"); 
     };
 }
 
@@ -557,7 +561,7 @@ function queryFeatures(currentPos, numResults) {
 }
 
 // *****************
-	let listState = {'Maharashtra':['Maharashtra',19.7515,75.7139]}
+  let listState = {'Maharashtra':['Maharashtra',19.7515,75.7139]}
 
     let listDistrict = {'Akola':['Akola',20.7002, 77.0082],'Amravati':['Amravati',20.9374,77.7796],
     'Buldana':['Buldana',20.4561,76.3637],'Yavatmal':['Yavatmal',20.3888,78.1204],'Washim':['Washim',20.139,77.1025],
@@ -757,7 +761,7 @@ function putWMSLayer(){
             clear_layer();
             clearpoint_layer();
             wms_layer.addTo(mymap);
-        	mymap.setView([distLayerLatLong[1],distLayerLatLong[2]],9);
+          mymap.setView([distLayerLatLong[1],distLayerLatLong[2]],9);
 
             //console.log(wms_layer);
             LayerList.push(wms_layer);
@@ -800,13 +804,13 @@ function putWMS(layer){
 
 
 function putWMSru(layer){
-	var aspiD = document.getElementById('district').value;
+  var aspiD = document.getElementById('district').value;
     var distLayerLatLong= listDistrict[aspiD];
              //clear_layer();
     console.log('kk',distLayerLatLong);
     let district= distLayerLatLong[0];
     if(layer=="geonode:townhealth_centroid")
-    	district=distLayerLatLong[0].toUpperCase();
+      district=distLayerLatLong[0].toUpperCase();
     console.log(district);
 
     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
@@ -928,7 +932,7 @@ L.Map.include({
 });
 
 
-let activatedHealthFacility = {'CHC':{},'PHC':{}}
+let activatedHealthFacility = {'CHC':{},'PHC':{},'Allo':{},'Alt':{}}
 let activeKoboHealthFacity={'hospital':{},'other':{}}
 function putKoboHealthFacity(facility){
     const base_url = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_hospitals_28apr';
@@ -937,8 +941,8 @@ function putKoboHealthFacity(facility){
 
     function geojsonMarkerOptions(fac) {
         let circleProp = {radius: 4,fillColor: "#",color: "#000",weight: 1,opacity: 1,fillOpacity: 0.8};
-        if(fac === 'hospital') circleProp['fillColor'] = 'red'
-        else if(fac === 'mhu') circleProp['fillColor'] = 'green'
+        if(fac === 'hospital') circleProp['fillColor'] = 'olive'
+        else if(fac === 'mhu') circleProp['fillColor'] = 'teal'
         else if(fac === 'subcenter') circleProp['fillColor'] = 'aqua'
         else if(fac === 'mhu') circleProp['fillColor'] = 'blueviolet'
         else if(fac === 'phc') circleProp['fillColor'] = 'crimson'
@@ -1017,14 +1021,37 @@ function putWFSFacility(facility) {
         fillOpacity: 0.8
     };
 
+    var geojsonMarkerOptions3 = {
+        radius:8,
+        fillColor: "#a8325a",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    };
+
+    var geojsonMarkerOptions4 = {
+        radius:5,
+        fillColor: "#143d5e",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    };
+
 
     const url = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar';
-
+    const url2='https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:townhealth_centroid_15apr';
 
     if(facility =='CHC')
         newurl= url + `&cql_filter=chc_num>0`;
     else if(facility=='PHC')
         newurl=url + `&cql_filter=phc_num>0`;
+    else if(facility=='Allo')
+        newurl=url2 + `&cql_filter=h_allo_tot>0`;
+    else if(facility=='Alt')
+        newurl=url2 + `&cql_filter=h_alt_tot>0`;
+
 
     function onEachFeatureForPoint(feature, layer) {
         if(facility === 'CHC'){
@@ -1084,7 +1111,10 @@ function putWFSFacility(facility) {
                             return L.circleMarker(latlng, geojsonMarkerOptions);
                     else if(facility === 'PHC')
                         return L.circleMarker(latlng, geojsonMarkerOptions2);
-
+                    else if(facility === 'Allo')
+                        return L.circleMarker(latlng, geojsonMarkerOptions3);
+                    else if(facility === 'Alt')
+                        return L.circleMarker(latlng, geojsonMarkerOptions4);  
                 },onEachFeature:onEachFeatureForPoint,
             }).addTo(mymap);
             activatedHealthFacility[facility] = healthFacility;
@@ -1095,7 +1125,7 @@ function putWFSFacility(facility) {
             console.log('Fetch Error :-S', err);
     });
     //})
-    };	       
+    };         
 
 </script>
 
