@@ -3,6 +3,18 @@
 {% block content %}
 <style>
 
+table, th, td {
+    border-bottom: 1px solid #ddd;
+    border-collapse: collapse;
+    padding: 2px 3px;
+    text-align: center;
+}
+th {
+    font-weight:bold;
+}
+tr:hover {
+    background-color: #c9dbe6;
+}
 #checkboxes {
   display: none;
   /* border: 1px #dadada solid; */
@@ -241,38 +253,44 @@
 	                    <input type="checkbox" id="allo"  value="{Allo}" onchange="GetSelectedfac(this)"/>Allopathy Hospital</label>
 	                  <label for="three">
 	                    <input type="checkbox" id="alt" value="{Alt}" onchange="GetSelectedfac(this)"/>Alternate Hospital</label>
-	              </div>      
+                  </div><hr>
+                  <div id="kobo" value="kobo">Hospital data Collected by Community
                   <label for="three">
-                    <input type="checkbox" id="" disabled/>Sub-District Hospital (50 Beds) </label>
-                   <label for="three">
-                    <input type="checkbox" id="" disabled/>Sub-District Hospital (100 Beds) </label>
-                   <label for="three">
-                    <input type="checkbox" id="" disabled/>District Hospital </label>
-                   <label for="three">
-                    <input type="checkbox" id="" disabled/>Super Speciality Hospital </label> 
-                   <label for="three">
-                    <input type="checkbox" id="" disabled/>Mental Health Institutes </label>   
-                   <label for="three">
-                    <input type="checkbox" id="" disabled/>Women Hospital</label>   
-                   <label for="three">
-                    <input type="checkbox" id="" disabled/>TB Hospitals</label> 
-                   <label for="three">
-                    <input type="checkbox" id="" disabled/>Other General Hospitals</label> 
-                   <label for="three">
-                    <input type="checkbox" id="" disabled/>Health & Family Welfare Training Institutions</label>
-                   <label for="three">
-                    <input type="checkbox" id="" disabled/>Primary Health Units</label> 
-                  <label for="three">
-                    <input type="checkbox" id="" disabled/>Ashram Health Units</label> 
-                  <label for="three">
-                    <input type="checkbox" id="" disabled/>Mobile Health Units</label>    
-                   <label for="three">
-                    <input type="checkbox" id="" disabled/>Mobile Medical Units</label>  
-                   <label for="three">
-                    <input type="checkbox" id="" disabled/>Dispensaries-Allopathic</label>  
-                   <label for="three">
-                    <input type="checkbox" id="" disabled/>Dispensaries-Ayurvedic</label>
-                    
+                    <input type="checkbox" value="hospital" onchange="toggleKoboFacility(this)"/>Hospital</label>
+                    <label for="three">
+                    <input type="checkbox" value="subcenter" onchange="toggleKoboFacility(this)"/>Sub center</label>
+                    <label for="three">
+                    <input type="checkbox" value="mhu" onchange="toggleKoboFacility(this)"/>Mobile Health Unit</label> 
+                    <label for="three">
+                    <input type="checkbox" value="phc" onchange="toggleKoboFacility(this)"/>Primary Health Unit</label>   
+                    <label for="three">
+                    <input type="checkbox" value="clinic" onchange="toggleKoboFacility(this)"/>Clinic</label>   
+                    <label for="three">
+                    <input type="checkbox" value="phu" onchange="toggleKoboFacility(this)"/>Primary Health Units</label>   
+                    <label for="three">
+                    <input type="checkbox" value="ashu" onchange="toggleKoboFacility(this)"/>Ashram School Health Units</label>   
+                    <label for="three">
+                    <input type="checkbox" value="mobmedu" onchange="toggleKoboFacility(this)"/>Mobile Medical Units</label>   
+                    <label for="three">
+                    <input type="checkbox" value="hfwi" onchange="toggleKoboFacility(this)"/>Health and family welfare institute</label>   
+                    <label for="three">
+                    <input type="checkbox" value="mhi" onchange="toggleKoboFacility(this)"/>Mental Health Institute</label>   
+                    <label for="three">
+                    <input type="checkbox" value="dc" onchange="toggleKoboFacility(this)"/>Diagnostic Center</label>   
+                    <label for="three">
+                    <input type="checkbox" value="phrmcy" onchange="toggleKoboFacility(this)"/>Pharmacy</label>   
+                    <label for="three">
+                    <input type="checkbox" value="optical" onchange="toggleKoboFacility(this)"/>Optical Shop</label>   
+                    <label for="three">
+                    <input type="checkbox" value="delvry" onchange="toggleKoboFacility(this)"/>Delivery Center</label>   
+                    <label for="three">
+                    <input type="checkbox" value="dropin" onchange="toggleKoboFacility(this)"/>Drop In Centre</label>   
+                    <label for="three">
+                    <input type="checkbox" value="dspnsry" onchange="toggleKoboFacility(this)"/>Dispensary</label>   
+                    <label for="three">
+                    <input type="checkbox" value="othr" onchange="toggleKoboFacility(this)"/>Other</label>
+                    <label for="three">                                                                                                                                                                                
+                 </div>   
                          
                 </div>
               </div>
@@ -404,6 +422,11 @@ function GetSelectedfac(obj) {
             putWFSFacility("CHC");
         else if(fac== "{PHC}")
             putWFSFacility("PHC");
+       else if(fac=='{Allo}')
+            putWFSFacility("Allo"); 
+            
+       else if(fac=='{Alt}')
+            putWFSFacility("Alt");   
     
     }else{
         if(fac === "{CHC}")
@@ -414,6 +437,19 @@ function GetSelectedfac(obj) {
     };
 }
 
+function toggleKoboFacility(clickedCheckBox){
+    let value = clickedCheckBox.value;
+    if($(clickedCheckBox).is(':checked')){
+        putKoboHealthFacity(value);
+    }else{
+        removeKoboHealthFacity(value);
+
+    }
+}
+
+function removeKoboHealthFacity(facility){
+        mymap.removeLayer(activeKoboHealthFacity[facility]);
+};
 
 function removeWFSfac(facility){
         mymap.removeLayer(activatedHealthFacility[facility]);
@@ -893,6 +929,74 @@ L.Map.include({
 
 
 let activatedHealthFacility = {'CHC':{},'PHC':{}}
+let activeKoboHealthFacity={'hospital':{},'other':{}}
+function putKoboHealthFacity(facility){
+    const base_url = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_hospitals_28apr';
+    const url = base_url + '&propertyName=the_geom,facltyname,facltytyp,address'
+    let cql_url= url + `&cql_filter=${facility}=1`;
+
+    function geojsonMarkerOptions(fac) {
+        let circleProp = {radius: 4,fillColor: "#",color: "#000",weight: 1,opacity: 1,fillOpacity: 0.8};
+        if(fac === 'hospital') circleProp['fillColor'] = 'red'
+        else if(fac === 'mhu') circleProp['fillColor'] = 'green'
+        else if(fac === 'subcenter') circleProp['fillColor'] = 'aqua'
+        else if(fac === 'mhu') circleProp['fillColor'] = 'blueviolet'
+        else if(fac === 'phc') circleProp['fillColor'] = 'crimson'
+        else if(fac === 'clinic') circleProp['fillColor'] = 'darkcyan'
+        else if(fac === 'phu') circleProp['fillColor'] = 'darkmagenta'
+        else if(fac === 'ashu') circleProp['fillColor'] = 'gold'
+        else if(fac === 'mobmedu') circleProp['fillColor'] = 'hotpink'
+        else if(fac === 'hfwi') circleProp['fillColor'] = 'indigo'
+        else if(fac === 'mhi') circleProp['fillColor'] = 'lightseagreen'
+        else if(fac === 'dc') circleProp['fillColor'] = 'maroon'
+        else if(fac === 'phrmcy') circleProp['fillColor'] = 'midnightblue'
+        else if(fac === 'optical') circleProp['fillColor'] = 'orangered'
+        else if(fac === 'delvry') circleProp['fillColor'] = 'palevioletred'
+        else if(fac === 'dspnsry') circleProp['fillColor'] = 'peru'
+        else if(fac === 'othr') circleProp['fillColor'] = 'purple'
+       return circleProp
+    };
+    
+    function onEachFeatureForPoint(feature, layer) {
+        const unavailable = '-';
+        const updateDate = "28 April 2020";
+        layer.bindPopup(`<table class = 'popupclass'>
+                        <tr><td>Name:</td><td> ${feature.properties.facltyname}</td></tr>
+                        <tr><td>Type:</td><td> ${feature.properties.facltytyp}</td></tr>
+                        <tr><td>Address:</td><td> ${feature.properties.address}</td></tr>
+                        <tr><td>Management:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Food Arrangement:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Website:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Last updated:</td><td> ${updateDate}</td></tr>
+                        </table>`) 
+    }
+
+    mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
+    fetch(cql_url).then(
+        function(response) {
+        if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+            return;
+        }
+        response.json().then(function(geojsonData) {
+            healthFacility = L.geoJson(geojsonData.features, {
+                pointToLayer: function (feature, latlng) {
+                            return L.circleMarker(latlng, geojsonMarkerOptions(facility));
+                },onEachFeature:onEachFeatureForPoint,
+            }).addTo(mymap);
+            mymap.spin(false);
+            activeKoboHealthFacity[facility] = healthFacility;
+        });
+
+
+    }).catch(function(err) {
+            console.log('Fetch Error :-S', err);
+    });
+
+}
 function putWFSFacility(facility) {
 
      var geojsonMarkerOptions = {
@@ -924,23 +1028,25 @@ function putWFSFacility(facility) {
 
     function onEachFeatureForPoint(feature, layer) {
         if(facility === 'CHC'){
-            layer.bindPopup(`<div class = 'text-center'>Allopathy Hospital<br>
-                            Distance Range: ${feature.properties.h_allo_dst}<br>
-                            Doctors In Position :${feature.properties.h_allo_din}<br>
-                            Doctors Total Strength :${feature.properties.h_allo_doc}<br>
-                            Total Beds :${feature.properties.h_allo_bed}<br>
-                            Para Medical Staff Total Strength : ${feature.properties.h_allo_pm}<br>
-                            Para Medical Staff In Position : ${feature.properties.h_allo_pin}
-                            </div>`) 
+            layer.bindPopup(`<div class = 'text-center'>CHC<br>
+                                Source: Census 2011<br>
+                                Village Name: ${feature.properties.village_na}<br>
+                                Distance Range: ${feature.properties.chc_distan}<br>
+                                Doctors In Position :${feature.properties.chc_doc_in}<br>
+                                Doctors Total Strength :${feature.properties.chc_doc_nu}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.chc_param_}<br>
+                                Para Medical Staff In Position : ${feature.properties.chc_para_1}
+                                </div>`) 
         }if(facility === 'PHC'){
-            layer.bindPopup(`<div class = 'text-center'>Allopathy Hospital<br>
-                            Distance Range: ${feature.properties.h_allo_dst}<br>
-                            Doctors In Position :${feature.properties.h_allo_din}<br>
-                            Doctors Total Strength :${feature.properties.h_allo_doc}<br>
-                            Total Beds :${feature.properties.h_allo_bed}<br>
-                            Para Medical Staff Total Strength : ${feature.properties.h_allo_pm}<br>
-                            Para Medical Staff In Position : ${feature.properties.h_allo_pin}
-                            </div>`) 
+            layer.bindPopup(`<div class = 'text-center'>PHC<br>
+                                Source: Census 2011<br>
+                                Village Name: ${feature.properties.village_na}<br>
+                                Distance Range: ${feature.properties.phc_distan}<br>
+                                Doctors In Position :${feature.properties.phc_doc_in}<br>
+                                Doctors Total Strength :${feature.properties.phc_doc_nu}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.phc_param_}<br>
+                                Para Medical Staff In Position : ${feature.properties.phc_para_1}fen
+                                </div>`) 
         }
         if(facility === 'Allo'){
             layer.bindPopup(`<div class = 'text-center'>Allopathy Hospital<br>
@@ -950,7 +1056,7 @@ function putWFSFacility(facility) {
                             Total Beds :${feature.properties.h_allo_bed}<br>
                             Para Medical Staff Total Strength : ${feature.properties.h_allo_pm}<br>
                             Para Medical Staff In Position : ${feature.properties.h_allo_pin}
-                            </div>`) 
+                            </div>`)
         }else if(facility === 'Alt'){
             layer.bindPopup(`<div class = 'text-center'>Alternate Hospital<br>
                 Distance Range: ${feature.properties.h_alt_dst}<br>
@@ -982,7 +1088,6 @@ function putWFSFacility(facility) {
                 },onEachFeature:onEachFeatureForPoint,
             }).addTo(mymap);
             activatedHealthFacility[facility] = healthFacility;
-            // faciLayerList.push(healthFacility);
         });
 
 
