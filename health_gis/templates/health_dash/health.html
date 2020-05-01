@@ -228,16 +228,20 @@
                     <!-- <option>Select Health Facilities</option> -->
                   <div class="overSelect"></div>
                 </div>
-                <div id="checkboxes">
 
-                  <label for="one">
-                    <input type="checkbox" id="val" value="CHC" name='facility'/>CHC</label>
-                  <label for="two">
-                    <input type="checkbox" id="phs" value="PHC" name='facility'/>PHC</label>
-                  <label for="three">
-                    <input type="checkbox" id="" disabled/>Subcentre</label>
-                  <label for="three">
-                    <input type="checkbox" id="" disabled/>Rural Hospital (30 Beds)</label>
+                <div id="checkboxes">
+                  <div id="ru" value="ru">Rural-Census 2011
+	                  <label for="one">
+	                    <input type="checkbox" id="val" value="{CHC}" name='Rural' onchange="GetSelectedfac(this)"/>CHC</label>
+	                  <label for="two">
+	                    <input type="checkbox" id="phs" value="{PHC}" name='Rural' onchange="GetSelectedfac(this)"/>PHC</label>
+                  </div>  
+                  <div id="ur" value="ur">Urban - Census 2011  
+	                  <label for="three">
+	                    <input type="checkbox" id="allo"  value="{Allo}" onchange="GetSelectedfac(this)"/>Allopathy Hospital</label>
+	                  <label for="three">
+	                    <input type="checkbox" id="alt" value="{Alt}" onchange="GetSelectedfac(this)"/>Alternate Hospital</label>
+	              </div>      
                   <label for="three">
                     <input type="checkbox" id="" disabled/>Sub-District Hospital (50 Beds) </label>
                    <label for="three">
@@ -273,8 +277,8 @@
                 </div>
               </div>
            
-              <button type="button" class="btn btn-primary" onclick = "GetSelected()">Display</button>
-              <div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
+              <!-- <button type="button" class="btn btn-primary" onclick = "GetSelected()">Display</button>
+ -->              <div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
     <div class="border">
         <table>
         <!-- <tr><h5>Selected State:Related Data</h5></tr> -->
@@ -392,6 +396,66 @@ function getBoundaryru(obj) {
     
 
 }
+
+function GetSelectedfac(obj) {
+    let fac = obj.value;
+    if($(obj).is(":checked")){ 
+        if(fac == "{CHC}")
+            putWFSFacility("CHC");
+        else if(fac== "{PHC}")
+            putWFSFacility("PHC");
+    
+    }else{
+        if(fac== "{CHC}")
+            removeWFSfac("chc_num>0");
+        else if(fac== "{PHC}")
+            removeWFSfac("phc_num>0");
+   
+    };
+    
+
+}
+
+
+function removeWFSfac(cql){
+        console.log(faciLayerList)
+        // console.log(tribLayerList);
+        
+        // var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+        //     layers: 'geonode:maha_tribal_villages_and_towns',
+        //     format: 'image/png',
+        //     transparent:'true',
+        //     tiled:'true',
+        //     opacity:0.7,
+        //     // version: '1.3.0',
+        //     cql_filter:cql,
+        //     style:""});
+        // tribLayerList.forEach((l,index) => {
+        //   fil = (l.options.cql_filter);
+        //   if(cql === fil){
+        //         mymap.removeLayer(l);
+        //         tribLayerList.splice(index, 1);
+        //   }
+          // console.log(fil)
+            // if(layer.options.layers === unlayer){
+            //   if(layer.options.cql_filter === cql){
+            //     console.log("hi");
+            //     mymap.removeLayer(layer);
+            //     tribLayerList.splice(index, 1);
+            // }
+            // }
+        };
+        // console.log(cql);
+
+      // tribLayerList.forEach(layer => mymap.removeLayer(layer));
+
+
+      
+
+
+
+
+
 
 
 // ***********FIND NEAREST FACILITY FEATURE
@@ -511,7 +575,9 @@ function queryFeatures(currentPos, numResults) {
     'Pune':['Pune',18.5204,73.8567],'Sangli':['Sangli',16.8524,74.5815],'Satara':['Satara',17.6805,74.0183],
     'Solapur':['Solapur',17.6599,74.9064]}
     
-    let listFacility = {'CHC':'chc_num','PHC':'phc_num'}
+    let listFacility= {'CHC':'chc_num','PHC':'phc_num','Allo':'h_allo_tot','Alt':'h_alt_tot'}
+    
+
     let url;
     
     function style(feature) {
@@ -539,6 +605,7 @@ function queryFeatures(currentPos, numResults) {
     var LayerList = [];
     var pointLayerList = [];
     var newLayerList = [];
+    var faciLayerList=[];
   
 
     var searchControl;
@@ -813,7 +880,7 @@ function clearpoint_layer(){
 }
 
 function removeWMS(unchecked_layer){
-        newLayerList.forEach((layer, index) => {
+    newLayerList.forEach((layer, index) => {
             if(layer.options.layers === unchecked_layer){
                 mymap.removeLayer(layer);
                 newLayerList.splice(index, 1);
@@ -821,6 +888,12 @@ function removeWMS(unchecked_layer){
         });
 }
 
+function removeWFS(unchecked_layer){
+		console.log(unchecked_layer);
+        
+        faciLayerList.forEach(layer => mymap.removeLayer(layer));
+
+}
 
 
 function style(feature) {
@@ -865,95 +938,121 @@ L.Map.include({
     }
 });
 
-    function GetSelected() {
-         var selected = new Array();
-         var projectList = document.getElementById("projectList");
-         var chks = projectList.getElementsByTagName("INPUT");
-         for (var i = 0; i < chks.length; i++) {
-             if (chks[i].checked) {
-                 selected.push(chks[i].value);
-             }
-         }
-         var geojsonMarkerOptions = {
-            radius: 10,
-            fillColor: "#ff7800",
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-        };
-
-        var geojsonMarkerOptions2 = {
-            radius: 7,
-            fillColor: "#007800",
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
-        };
 
 
-  //"dtname='"+distLayerLatLong[0]+"'"
+function putWFSFacility(facility) {
+     // var selected = new Array();
+     // var projectList = document.getElementById("projectList");
+     // var chks = projectList.getElementsByTagName("INPUT");
+     // for (var i = 0; i < chks.length; i++) {
+     //     if (chks[i].checked) {
+     //         selected.push(chks[i].value);
+     //     }
+     // }
+     var geojsonMarkerOptions = {
+        radius: 6,
+        fillColor: "#ff4800",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    };
 
-        selected.forEach(sel => {
-            var aspiD = document.getElementById('district').value;
-            var distLayerLatLong= listDistrict[aspiD];
-            //console.log(distLayerLatLong[0]);
+    var geojsonMarkerOptions2 = {
+        radius: 4,
+        fillColor: "#0004ff",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    };
 
-            let newurl =`https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar&cql_filter=district_n='${distLayerLatLong[0]}' AND ${listFacility[sel]}>0`
-            clearpoint_layer();
-            function onEachFeatureForPoint(feature, layer) {
-            if(sel === 'PHC'){
-                layer.bindPopup(`<div class = 'text-center'>PHC<br>
-                                Source: Census 2011<br>
-                                Village Name: ${feature.properties.village_na}<br>
-                                Distance Range: ${feature.properties.phc_distan}<br>
-                                Doctors In Position :${feature.properties.phc_doc_in}<br>
-                                Doctors Total Strength :${feature.properties.phc_doc_nu}<br>
-                                Para Medical Staff Total Strength : ${feature.properties.phc_param_}<br>
-                                Para Medical Staff In Position : ${feature.properties.phc_para_1}fen
+
+    let newurl;
+
+    //selected.forEach(sel => {
+        // var aspiD = document.getElementById('district').value;
+        //     var distLayerLatLong= listDistrict[aspiD];
+        //     console.log(distLayerLatLong[0]);
+
+        // console.log(distLayerLatLong)
+        if(facility=='CHC')
+        {
+        	newurl=`https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar&cql_filter=chc_num>0`;
+        }
+        else if(facility=='PHC')
+        {
+        	newurl=`https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar&cql_filter=phc_num>0`;
+        }
+        console.log(newurl);
+        function onEachFeatureForPoint(feature, layer) {
+            if(facility === 'CHC'){
+                layer.bindPopup(`<div class = 'text-center'>Allopathy Hospital<br>
+                                Distance Range: ${feature.properties.h_allo_dst}<br>
+                                Doctors In Position :${feature.properties.h_allo_din}<br>
+                                Doctors Total Strength :${feature.properties.h_allo_doc}<br>
+                                Total Beds :${feature.properties.h_allo_bed}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.h_allo_pm}<br>
+                                Para Medical Staff In Position : ${feature.properties.h_allo_pin}
                                 </div>`) 
-            }else if(sel === 'CHC'){
-                layer.bindPopup(`<div class = 'text-center'>CHC<br>
-                                Source: Census 2011<br>
-                                Village Name: ${feature.properties.village_na}<br>
-                                Distance Range: ${feature.properties.chc_distan}<br>
-                                Doctors In Position :${feature.properties.chc_doc_in}<br>
-                                Doctors Total Strength :${feature.properties.chc_doc_nu}<br>
-                                Para Medical Staff Total Strength : ${feature.properties.chc_param_}<br>
-                                Para Medical Staff In Position : ${feature.properties.chc_para_1}
+            }if(facility === 'PHC'){
+                layer.bindPopup(`<div class = 'text-center'>Allopathy Hospital<br>
+                                Distance Range: ${feature.properties.h_allo_dst}<br>
+                                Doctors In Position :${feature.properties.h_allo_din}<br>
+                                Doctors Total Strength :${feature.properties.h_allo_doc}<br>
+                                Total Beds :${feature.properties.h_allo_bed}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.h_allo_pm}<br>
+                                Para Medical Staff In Position : ${feature.properties.h_allo_pin}
                                 </div>`) 
             }
-            //clearpoint_layer();
+            if(facility === 'Allo'){
+                layer.bindPopup(`<div class = 'text-center'>Allopathy Hospital<br>
+                                Distance Range: ${feature.properties.h_allo_dst}<br>
+                                Doctors In Position :${feature.properties.h_allo_din}<br>
+                                Doctors Total Strength :${feature.properties.h_allo_doc}<br>
+                                Total Beds :${feature.properties.h_allo_bed}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.h_allo_pm}<br>
+                                Para Medical Staff In Position : ${feature.properties.h_allo_pin}
+                                </div>`) 
+            }else if(facility === 'Alt'){
+                layer.bindPopup(`<div class = 'text-center'>Alternate Hospital<br>
+                    Distance Range: ${feature.properties.h_alt_dst}<br>
+                                Doctors In Position :${feature.properties.h_alt_din}<br>
+                                Doctors Total Strength :${feature.properties.h_alt_doc}<br>
+                                Total Beds :${feature.properties.h_alt_bed}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.h_alt_pm}<br>
+                                Para Medical Staff In Position : ${feature.properties.h_alt_pin}
+                                </div>`) 
             }
-            fetch(newurl).then(
-            function(response) {
-            if (response.status !== 200) {
-                console.log('Looks like there was a problem. Status Code: ' +
-                response.status);
-                return;
-            }
-
-            response.json().then(function(geojsonData) {
-                console.log(geojsonData.features);
-                healthFacility = L.geoJson(geojsonData.features, {
-                    pointToLayer: function (feature, latlng) {
-                        if(sel === 'CHC')
+        
+        }
+        fetch(newurl).then(
+        function(response) {
+        if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+            return;
+        }
+        response.json().then(function(geojsonData) {
+            console.log(geojsonData.features);
+            healthFacility = L.geoJson(geojsonData.features, {
+                pointToLayer: function (feature, latlng) {
+                    if(facility === 'CHC')
                             return L.circleMarker(latlng, geojsonMarkerOptions);
-                        else if(sel === 'PHC')
-                            return L.circleMarker(latlng, geojsonMarkerOptions2);
+                    else if(facility === 'PHC')
+                        return L.circleMarker(latlng, geojsonMarkerOptions2);
 
-                    },onEachFeature:onEachFeatureForPoint,
-                }).addTo(mymap);
-                pointLayerList.push(healthFacility);
-            });
-
-
-        }).catch(function(err) {
-                console.log('Fetch Error :-S', err);
+                },onEachFeature:onEachFeatureForPoint,
+            }).addTo(mymap);
+            faciLayerList.push(healthFacility);
         });
-        })
-        };  
+
+
+    }).catch(function(err) {
+            console.log('Fetch Error :-S', err);
+    });
+    //})
+    };	       
 
 </script>
 
