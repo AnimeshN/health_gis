@@ -236,7 +236,7 @@ tr:hover {
              <form>
               <div class="multiselect">
                 <div class="selectBox" onclick="showCheckboxes()">
-                    <button type="button" class="btn btn-outline-dark">Select Health Facilies</button>
+                    <button type="button" class="btn btn-outline-dark">Select Health Facilities</button>
                     <!-- <option>Select Health Facilities</option> -->
                   <div class="overSelect"></div>
                 </div>
@@ -254,7 +254,7 @@ tr:hover {
                     <label for="three">
                       <input type="checkbox" id="alt" value="{Alt}" onchange="GetSelectedfac(this)"/>Alternate Hospital</label>
                   </div><hr>
-                  <div id="kobo" value="kobo">Hospital data Collected by Community
+                  <div id="kobo" value="kobo">Health Facilities(Crowd Sourced)
                   <label for="three">
                     <input type="checkbox" value="hospital" onchange="toggleKoboFacility(this)"/>Hospital</label>
                     <label for="three">
@@ -400,13 +400,13 @@ function getBoundaryru(obj) {
     let boundary = obj.value;
     if($(obj).is(":checked")){ 
         if(boundary == "{mahatown}")
-            putWMSru("geonode:townhealth_centroid");
+            putWMSru("geonode:TownHealth0");
         else if(boundary== "{maharural}")
             putWMSru("geonode:maha_village_polygon_29mar");
     
     }else{
         if(boundary== "{mahatown}")
-            removeWMS("geonode:townhealth_centroid");
+            removeWMS("geonode:TownHealth0");
         else if(boundary== "{maharural}")
             removeWMS("geonode:maha_village_polygon_29mar");
    
@@ -809,7 +809,7 @@ function putWMSru(layer){
              //clear_layer();
     console.log('kk',distLayerLatLong);
     let district= distLayerLatLong[0];
-    if(layer=="geonode:townhealth_centroid")
+    if(layer=="geonode:TownHealth0")
       district=distLayerLatLong[0].toUpperCase();
     console.log(district);
 
