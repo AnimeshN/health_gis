@@ -863,7 +863,7 @@ function queryFeatures(currentPos, numResults) {
     // })
 
 
-$('#indstate').on('click',function(){
+$('#indstate').on('change',function(){
         clear_layer();
         clearpoint_layer();
 
@@ -875,7 +875,7 @@ $('#indstate').on('click',function(){
         //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
      })
 
-$('#district').on('click',function(){
+$('#district').on('change',function(){
         //clear_layer();
         clearpoint_layer();
 
@@ -888,7 +888,7 @@ $('#district').on('click',function(){
      })
 
 
-$('#pincode').on('click',function(){
+$('#pincode').on('change',function(){
         
         clearpoint_layer();
 
@@ -1018,9 +1018,11 @@ function putWMS(layer){
     newLayerList.push(wms_layer);
 }
 
-
+let area = null;
 function setView(layerName,selectedBoundary){
-
+    if(area){
+        mymap.removeLayer(area);
+    }
     let rootUrl = '{{site_url}}geoserver/geonode/ows';
 
     let options = {
@@ -1408,7 +1410,7 @@ function putWFSFacility(facility) {
             return;
         }
         response.json().then(function(geojsonData) {
-            console.log(geojsonData.features);
+            // console.log(geojsonData.features);
             healthFacility = L.geoJson(geojsonData.features, {
                 pointToLayer: function (feature, latlng) {
                     if(facility === 'CHC')
