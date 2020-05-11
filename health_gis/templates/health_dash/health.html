@@ -484,6 +484,7 @@ function filterCSV2(csv, key, value)
   
     if(val[key] == value){
 
+
       if( !unique[val.pincode]){
       console.log(val.pincode);
       
@@ -518,19 +519,11 @@ function filterCSV3(csv, key, value)
 
 
 
-d3.csv("{% static 'st_dist_pin.csv' %}",function(data){
-  
-  
-    //console.log(data);
+
+d3.csv("{% static 'data/healthdash/st_dist_pin.csv' %}",function(data){
     $('#indstate').on("change", function(d) {
        var val = d3.select(this).property("value");
-     	
-     
      $('#district').find('option').not(':first').remove();
-     
-     
-
-
     var data_1 = filterCSV(data, 'statename', val);
      var select = document.getElementById("district");
      for (var i=0; i < data_1.length; i++) {
@@ -541,9 +534,6 @@ d3.csv("{% static 'st_dist_pin.csv' %}",function(data){
         select.appendChild(el);         
             }
         $('#districtd3').val("");
-
-
-
 
       });
       
@@ -1036,9 +1026,38 @@ function putWMS(layer){
 
 
 
+function setView(layerName,selectedBoundary){
+
+    let rootUrl = '{{site_url}}geoserver/geonode/ows';
+
+    let options = {
+    service: 'WFS',
+    version: '1.0.0',
+    request: 'GetFeature',
+    outputFormat: 'application/json',
+    typeName:layerName,
+    cql_filter:`pincode='${selectedBoundary}'`,
+    propertyName:'the_geom'
+    };
+    let parameters = L.Util.extend(options);
+    layer_url = rootUrl + L.Util.getParamString(parameters)
+    fetch(layer_url).then(
+        function(response) {
+        if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+            return;
+        }
+        response.json().then(function(geojsonData) {
+            area = L.geoJson(geojsonData.features).addTo(mymap)
+            mymap.fitBounds(area.getBounds())
+        });
+    }).catch(function(err) {
+            console.log('Fetch Error :-S', err);
+    });
+}
 function putWMSLayerpincode(pincode){
     clear_pinlayer();
-    //console.log(pincode);
     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
         layers:"geonode:india_pincodes_10may",
         cql_filter:"pincode='"+pincode+"'",
@@ -1046,6 +1065,9 @@ function putWMSLayerpincode(pincode){
         transparent:'true',
     });
     wms_layer.addTo(mymap);
+
+    setView('geonode:india_pincodes_10may',pincode);
+
     pinLayerList.push(wms_layer);
 
     // $.ajax('https://makerghat.urbansciences.in/geoserver/wfs',{
