@@ -20,6 +20,17 @@ tr:hover {
   /* border: 1px #dadada solid; */
 }
 
+#checkboxes3 label {
+  display: block;
+  text-align: left;
+  margin: 10px;
+}
+
+#checkboxes3 {
+  display: none;
+  /* border: 1px #dadada solid; */
+}
+
 #checkboxes label {
   display: block;
   text-align: left;
@@ -71,6 +82,10 @@ tr:hover {
     font-weight: bold;
 }
 
+h6 {
+  color:blue;
+}
+
 
 </style>
 
@@ -86,7 +101,7 @@ tr:hover {
  </div>   
     <div class="border">
         <table>
-        <tr><h5>Indian Admin Boundaries</h5></tr>
+        <tr><h6>Indian Admin Boundaries</h6></tr>
         <div class="text-center">
             <div class="checkbox" id="boundary">
               <tr><tb>  <label><input type="checkbox" value="{state}" onchange="getBoundary(this)"></tb><tb><span> State </span></label></tb> </tr>
@@ -106,80 +121,110 @@ tr:hover {
         </div>
      </table>   
     </div>
-    <div class="tooltips" title="Please select the State">
+   
+     <!--these two dropdowns are dependent-->
+      <div class="tooltips" title="Please select the State">
         <select class='form-control' id="indstate" name="indstate">
             <option value="All">Select State</option>
             <optgroup label="States"> 
-              <option value="Maharashtra" onclick="mymap.setView(new L.LatLng(19.7515,75.7139),7);"; >Maharashtra</option>
+              <option value="Andaman & Nicobar Island">Andaman & Nicobar Island</option>
 
-                <option value="" disabled>Andhra Pradesh</option>
-                <option value="" disabled>Arunachal Pradesh</option>
-                 <option value="" disabled>Assam </option>
-                <option value="" disabled>Bihar</option>
-                <option value="" disabled>Chhattisgarh</option>
-                <option value="" disabled>Goa</option>
-                <option value="" disabled>Gujarat</option>
-                <option value="" disabled>Haryana</option>
-                <option value="" disabled>Himachal Pradesh</option>
-                <option value="" disabled>Jharkhan</option>
-                <option value="" disabled>Karnataka</option>
-                <option value="" disabled>Kerala</option>
-                <option value="" disabled>Madhya Pradesh</option>
-              
-                <option value="" disabled>Manipur</option>
-                <option value="" disabled>Meghalya</option>
-                <option value="" disabled>Mizoram</option>
-                <option value="" disabled>Nagaland</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Arunachal Pradesh" >Arunachal Pradesh</option>
+                 <option value="Assam" >Assam </option>
+                <option value="Bihar" >Bihar</option>
+                <option value="Chhattisgarh" >Chhattisgarh</option>
+                <option value="Goa" >Goa</option>
+                <option value="Gujarat" >Gujarat</option>
+                <option value="Haryana" >Haryana</option>
+                <option value="Himachal Pradesh" >Himachal Pradesh</option>
+                <option value="Jharkhand" >Jharkhand</option>
+                <option value="Karnataka" >Karnataka</option>
+                <option value="Kerala" >Kerala</option>
+                <option value="Madhya Pradesh" >Madhya Pradesh</option>
+                <option value="Maharashtra" >Maharashtra</option>
+                <option value="Manipur" >Manipur</option>
+                <option value="Meghalaya" >Meghalaya</option>
+                <option value="Mizoram" >Mizoram</option>
+                <option value="Nagaland" >Nagaland</option>
            
   
-                <option value="" disabled>Odisha</option>
-                <option value="" disabled>Punjab</option>
-                <option value="" disabled>Rajasthan</option>
-                <option value="" disabled>Sikkim</option>
-                <option value="" disabled>Tamil Nadu</option>
-                <option value="" disabled>Telangana</option>
+                <option value="Odisha" >Odisha</option>
+                <option value="Punjab" >Punjab</option>
+                <option value="Rajasthan" >Rajasthan</option>
+                <option value="Sikkim" >Sikkim</option>
+                <option value="Tamil Nadu" >Tamil Nadu</option>
+                <option value="Telangana" >Telangana</option>
            
   
-                <option value="" disabled>Tripura</option>
-                <option value="" disabled>Uttar Pradesh</option>
-                <option value="" disabled>Uttrakhand</option>
-                <option value="" disabled>West Bengal</option>
-            <optgroup label="Union Territories"> 
+                <option value="Tripura" >Tripura</option>
+                <option value="Uttar Pradesh" >Uttar Pradesh</option>
+                <option value="Uttarakhand" >Uttarakhand</option>
+                <option value="West Bengal" >West Bengal</option>
+                <optgroup label="Union Territories"> 
 
-                <option value="" disabled>Andaman and Nicobar Islands</option>
-                <option value="" disabled>Chandigarh</option>
-                <option value="" disabled>Dadra and Nagar Haveli and Daman and Diu</option>
-                <option value="" disabled>National Capital Territory of Delhi</option>
-                <option value="" disabled>Jammu & Kashmir</option>
-                <option value="" disabled>Ladakh</option>
-                <option value="" disabled>Lakshadweep</option>
-                <option value="" disabled>Puducherry</option>
+                <option value="Andaman & Nicobar Islands" >Andaman & Nicobar Islands</option>
+                <option value="Chandigarh" >Chandigarh</option>
+                <option value="Dadra & Nagar Havelli" >Dadra & Nagar Havelli</option>
+                <option value="Daman & Diu" >Daman & Diu</option>
+                <option value="Delhi" >Delhi</option>
+                <option value="Jammu & Kashmir" >Jammu & Kashmir</option>
+                <option value="Ladakh" >Ladakh</option>
+                <option value="Lakshadweep" >Lakshadweep</option>
+                <option value="Puducherry" >Puducherry</option>
            
     
           </select> 
      </div>  
+   <hr>
+      <div class="tooltips" title="Please select the District">
+            <select class='form-control' id = "district">
+              <option value=""> Select District</option>
+             </select>
+      </div> 
+
+       <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="block">
+        &nbsp;&nbsp;
+            <select class='form-control' id="block_s">
+              <option value=""> Select Block </option>
+             </select>
+      </div> 
+
+        <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumwards">
+            &nbsp;&nbsp;
+            <select class='form-control'>
+              <option value=""> Select Wards </option>
+             </select>
+      </div> 
+
+  <hr>
+      <div class="tooltips" title="Please select the Pincode">
+            <select class='form-control' id = "pincode">
+              <option value=""> Select Pincode</option>
+             </select>
+      </div> 
 <hr>
 <div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
     <div class="border">
         <table>
-        <tr><h5>Selected State:Related Data</h5></tr>
+        <tr><h6>State Related Data</h6></tr>
         <div class="text-center">
             <div class="checkbox" id="stboun">
-              <tr><tb>  <label><input type="checkbox" value="{mahadem}" onchange="getBoundaryst(this)"></tb><tb><span> Demography </span></label></tb> </tr>
+              <tr><tb>  <label><input type="checkbox" value="{mahadem}" onchange="getBoundaryst(this)"></tb><tb><span> Demography (Maharashtra's only as for now) </span></label></tb> </tr>
               </div>
               <div class="checkbox">
-                <label><input type="checkbox" value="{maharoad}" onchange="getBoundaryst(this)"><span> Road Network </span></label>
+                <label><input type="checkbox" value="{maharoad}" onchange="getBoundaryst(this)"><span>  Road Network (Maharashtra's only as for now)</span></label>
               </div>
               <div class="checkbox">
-                <label><input type="checkbox" value="{mahaschool}" onchange="getBoundaryst(this)"><span> Schools (UDISE 16-17) </span></label>
+                <label><input type="checkbox" value="{mahaschool}" onchange="getBoundaryst(this)"><span> Schools (Maharashtra's only as for now) </span></label>
               </div>
         </div>
      </table>   
     </div>
-    <div class="tooltips" title="Please select the District">
+    <!-- <div class="tooltips" title="Please select the District">
         <select class='form-control' id="district" name="district">
             <option value="All">Select Maharashtra District</option>
-            <!-- <optgroup label="Vidarbh(East)"> -->
+            <optgroup label="Vidarbh(East)"> 
                 <option value="Akola">Akola</option>
                 <option value="Amravati">Amrawati</option>
                  <option value="Buldana">Buldana</option>
@@ -226,17 +271,17 @@ tr:hover {
     
           </select> 
      </div>  
-
+ -->
      <hr>
      <div class="text-center">
        
 
         <form id="projectList" class='border'>
-            <h5>Explore Health Care</h5>
+            <h6>Explore Health Care</h6>
              <form>
               <div class="multiselect">
                 <div class="selectBox" onclick="showCheckboxes()">
-                    <button type="button" class="btn btn-outline-dark">Select Health Facilities</button>
+                    <button type="button" style="width: 90%;" class="btn btn-outline-dark">Select Health Facilies</button>
                     <!-- <option>Select Health Facilities</option> -->
                   <div class="overSelect"></div>
                 </div>
@@ -254,7 +299,7 @@ tr:hover {
                     <label for="three">
                       <input type="checkbox" id="alt" value="{Alt}" onchange="GetSelectedfac(this)"/>Alternate Hospital</label>
                   </div><hr>
-                  <div id="kobo" value="kobo">Health Facilities(Crowd Sourced)
+                  <div id="kobo" value="kobo">Hospital data Collected by Community
                   <label for="three">
                     <input type="checkbox" value="hospital" onchange="toggleKoboFacility(this)"/>Hospital</label>
                     <label for="three">
@@ -297,18 +342,51 @@ tr:hover {
            
               <!-- <button type="button" class="btn btn-primary" onclick = "GetSelected()">Display</button>
  -->              <div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
+  <div class="text-center">
+       
+
+        <form id="projectList" style="width: 100%">
+            <h6>COVID-19 Lockdown Zones</h6>
+             <form>
+              <div class="multiselect">
+                <div class="selectBox" onclick="showCheckboxes3()">
+                    <button type="button" class="btn btn-outline-dark" style="width: 90%;font-size:12px; ">Select Zone</button>
+                    <!-- <option>Select Health Facilities</option> -->
+                  <div class="overSelect"></div>
+                </div>
+                <div id="checkboxes3">
+                      <div class="checkbox" id="boundary">
+                        <label><button type="button" class="btn btn-outline-dark" value="{at}" onchange="" style="background-color:green;width:90%;font-size:14px;" disabled><span>Green Zone</span></label>
+                      </div>
+                      <div class="checkbox">
+                        <label><button class="btn btn-outline-dark" type="button" value="{m}" onchange="" style="background-color:orange;width:90%;font-size:14px;" disabled><span>Orange Zone</span></label>
+                      </div>
+                       <div class="checkbox">
+                        <label><button type="button" class="btn btn-outline-dark" value="{mm}" onchange="" style="background-color:red;width:90%;font-size:14px;" disabled><span>Red Zone</span></label>
+                      </div>
+                     
+                       
+                  
+
+                  
+              
+                         
+                </div>
+              </div>
+     <hr>
+
     <div class="border">
         <table>
         <!-- <tr><h5>Selected State:Related Data</h5></tr> -->
         <div class="text-center">
             <div class="checkbox" id="stboun">
-            <tr><h5>Highlight Urban Boundaries</h5></tr>  
+            <tr><h6>Highlight Urban Boundaries</h6></tr>  
               <!-- <tr><tb>  <label><input type="checkbox" value="{mahadem}" onchange="getBoundaryst(this)"></tb><tb><span> Wards</span></label></tb> -->
                 <tb>  <label><input type="checkbox" value="{mahatown}" onchange="getBoundaryru(this)"></tb><tb><span> Town</span></label></tb>
                </tr>
               </div>
               <div class="checkbox">
-                <tr><h5>Highlight Rural Boundaries</h5></tr>  
+                <tr><h6>Highlight Rural Boundaries</h6></tr>  
   
                <tr> <label><input type="checkbox" value="{maharural}" onchange="getBoundaryru(this)"><span> Villages</span></label></tr>
               </div>
@@ -340,9 +418,158 @@ tr:hover {
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
+<script  src="https://d3js.org/d3.v4.min.js"></script>
 
 
 <script>
+
+
+$(document).ready(function(){
+    $('#indstate').on('change', function() {
+      if ( this.value == 'Maharashtra')
+      {
+        $("#block").show();
+      }
+      else
+      {
+        $("#block").hide();
+      }
+    });
+});
+
+
+$(document).ready(function(){
+    $('#district').on('change', function() {
+      if ( this.value == 'Mumbai City')
+      {
+        $("#mumwards").show();
+      }
+      else if(this.value =='Mumbai Suburban'){
+      	$("#mumwards").show();
+      }
+      else
+      {
+        $("#mumwards").hide();
+      }
+    });
+});
+
+
+//code for dependent dropdown start    
+  function filterCSV(csv, key, value) 
+  {
+    var result = [];
+    var unique = [];
+
+    csv.forEach(function(val,idx,arr){
+  
+    if(val[key] == value){
+    //console.log(val.pincode);
+      if( !unique[val.Districtname]){
+      result.push(val.Districtname)
+      unique[val.Districtname] = 1;
+     } 
+    }
+    })
+      return result;
+  }
+
+
+function filterCSV2(csv, key, value) 
+  {
+    var result = [];
+    var unique = [];
+
+    csv.forEach(function(val,idx,arr){
+  
+    if(val[key] == value){
+      if( !unique[val.pincode]){
+      result.push(val.pincode)
+      unique[val.pincode] = 1;
+    }
+    }
+    })
+      return result;
+  }
+
+
+function filterCSV3(csv, key, value) 
+  {
+    var result = [];
+    var unique = [];
+
+    csv.forEach(function(val,idx,arr){
+  
+    if(val[key] == value){
+
+      if( !unique[val.block]){
+      console.log(val.block);
+      
+      result.push(val.block)
+      unique[val.block] = 1;
+    }
+    }
+    })
+      return result;
+  }
+
+
+
+d3.csv("{% static 'data/healthdash/st_dist_pin.csv' %}",function(data){
+    $('#indstate').on("change", function(d) {
+       var val = d3.select(this).property("value");
+     $('#district').find('option').not(':first').remove();
+    var data_1 = filterCSV(data, 'statename', val);
+     var select = document.getElementById("district");
+     for (var i=0; i < data_1.length; i++) {
+        var opt = data_1[i];
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        select.appendChild(el);         
+            }
+        $('#districtd3').val("");
+      });
+      
+    $('#district').on("change", function(d) {
+       
+       var val = d3.select(this).property("value");
+       $('#pincode').find('option').not(':first').remove();
+
+       var data_2=filterCSV2(data,'Districtname',val);
+       var select=document.getElementById("pincode");
+       for (var i=0; i < data_2.length; i++) {
+        var opt = data_2[i];
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        select.appendChild(el);         
+            }
+        $('#pincoded3').val("");
+
+
+        $('#block_s').find('option').not(':first').remove();
+        var data_3=filterCSV3(data,'Districtname',val);
+       var select=document.getElementById("block_s");
+       for (var i=0; i < data_3.length; i++) {
+        var opt = data_3[i];
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        select.appendChild(el);         
+            }
+        $('#block_sd3').val("");
+
+
+   });
+
+
+
+
+  });
+
+
+
 
  var expanded = false;
 
@@ -355,6 +582,17 @@ function showCheckboxes() {
     checkboxes.style.display = "none";
     expanded = false;
   }
+}  
+
+function showCheckboxes3() {
+  var checkboxes = document.getElementById("checkboxes3");
+  if (!expanded) {
+    checkboxes3.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes3.style.display = "none";
+    expanded = false;
+  }
 }   
 
 function getBoundary(obj) {
@@ -363,14 +601,14 @@ function getBoundary(obj) {
         if(boundary == "{state}")
             putWMS("geonode:states_in_india");
         else if(boundary== "{district}")
-            putWMS("geonode:all_india_districts_27march2020");
+            putWMS("geonode:all_india_districts_10may2020");
         else
             putWMS("geonode:maha_demography_with_mumbai");
     }else{
         if(boundary== "{state}")
             removeWMS("geonode:states_in_india");
         else if(boundary== "{district}")
-            removeWMS("geonode:all_india_districts_27march2020");
+            removeWMS("geonode:all_india_districts_10may2020");
         else 
             removeWMS("geonode:maha_demography_with_mumbai");
     }
@@ -561,7 +799,8 @@ function queryFeatures(currentPos, numResults) {
 }
 
 // *****************
-  let listState = {'Maharashtra':['Maharashtra',19.7515,75.7139]}
+  let listState = {'Uttarakhand':['Uttarakhand',30.0668, 79.0193],'Ladakh':['Ladakh',34.152588,77.577049],'Daman & Diu':['Daman & Diu',20.4283, 72.8397],'Telangana':['Telangana',18.1124, 79.0193],'Odisha':['Odisha',20.9517, 85.0985],'Gujarat':['Gujarat',22.2587, 71.1924],'Andaman & Nicobar Island':['Andaman & Nicobar Island',11.7401, 92.6586],'Maharashtra':['Maharashtra',19.7515,75.7139],'Andhra Pradesh':['Andhra Pradesh',15.91,79.7439],'Arunachal Pradesh':['Arunachal Pradesh',27.10039878 ,93.61660071],'Assam':['Assam',26.7499809,94.21666744],'Bihar':['Bihar',25.78541445,87.4799727],
+    'Chandigarh':['Chandigarh',30.71999697,76.78000565],'Chhattisgarh':['Chhattisgarh',22.09042035,82.15998734],'Dadra & Nagar Havelli':['Dadra & Nagar Havelli',20.26657819,73.0166178],'Delhi':['Delhi',28.6699929,77.23000403],'Goa':['Goa',15.491997,73.81800065],'Haryana':['Haryana',28.45000633,77.01999101],'Himachal Pradesh':['Himachal Pradesh',31.10002545,77.16659704],'Jammu & Kashmir':['Jammu & Kashmir',34.29995933,74.46665849],'Jharkhand':['Jharkhand',23.80039349,86.41998572],'Karnataka':['Karnataka',12.57038129,76.91999711],'Kerala':['Kerala', 8.900372741,76.56999263],'Lakshadweep':['Lakshadweep',10.56257331,72.63686717],'Madhya Pradesh':['Madhya Pradesh',21.30039105,76.13001949],'Manipur':['Manipur',24.6637, 93.9063],'Meghalaya':['Meghalaya',25.57049217,91.8800142],'Mizoram':['Mizoram',23.71039899,92.72001461],'Nagaland':['Nagaland',  25.6669979,94.11657019],'Orissa':['Orissa',19.82042971,85.90001746],'Puducherry':['Puducherry', 11.93499371,79.83000037],'Punjab':['Punjab',31.51997398, 75.98000281],'Rajasthan':['Rajasthan',26.44999921,  74.63998124],'Sikkim':['Sikkim',27.3333303,88.6166475],'Tamil Nadu':['Tamil Nadu',12.92038576,79.15004187],'Tripura':['Tripura',  23.83540428,91.27999914],'Uttar Pradesh':['Uttar Pradesh',27.59998069,78.05000565],',Uttaranchal':['Uttaranchal',30.32040895,78.05000565],'West Bengal':['West Bengal',22.58039044,88.32994665]}
 
     let listDistrict = {'Akola':['Akola',20.7002, 77.0082],'Amravati':['Amravati',20.9374,77.7796],
     'Buldana':['Buldana',20.4561,76.3637],'Yavatmal':['Yavatmal',20.3888,78.1204],'Washim':['Washim',20.139,77.1025],
@@ -607,94 +846,21 @@ function queryFeatures(currentPos, numResults) {
     var pointLayerList = [];
     var newLayerList = [];
     var faciLayerList=[];
-  
-
+    var pinLayerList=[];
+    var distLayerList=[];
     var searchControl;
 
-    $('#district').on('click',function(){
-        clear_layer();
-        clearpoint_layer();
+    // $('#district').on('click',function(){
+    //     clear_layer();
+    //     clearpoint_layer();
 
-        // let district = document.getElementById('district').value;
+    //     // let district = document.getElementById('district').value;
 
-        putWMSLayer();
-         // tempParameter = defaultParameters;
-         // tempParameter.typeName = 'geonode:maha_taluka_15apr2020'; 
-         //tempParameter.propertyName="the_geom,ipname";
-         // var aspiD = document.getElementById('district').value;
-         // var distLayerLatLong= listDistrict[aspiD];
-        // tempParameter.cql_filter = "distname='"+distLayerLatLong[0]+"'";
-        // mymap.setView([distLayerLatLong[1],distLayerLatLong[2]],9);
-
-        // switch(district){
-        // case 'Akola': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Akola'&propertyName=the_geom";break;
-        // case 'Amravati': url = "https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_blocks_30mar&cql_filter=dtname='Amravati'&propertyName=the_geom";break;
-        // }
-
-        //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
-    //     fetch(url).then(
-    //     function(response) {
-    //     if (response.status !== 200) {
-    //         console.log('Looks like there was a problem. Status Code: ' +
-    //         response.status);
-    //         return;
-    //     }
-    //     response.json().then(function(geojsonData) {
-    //         console.log(geojsonData.features);
-    //         mymap.setView([lat, long], 9);
-    //         geojson = L.geoJson(geojsonData.features, {
-    //         // style : style,
-    //         // onEachFeature: onEachFeature
-    //     }).addTo(mymap);
-    //         // LayerList.push(geojson);
-    //          mymap.spin(false);
-    //     });
+    //     putWMSLayer();
+       
 
 
-    //     }
-    // )
-    // .catch(function(err) {
-    //     console.log('Fetch Error :-S', err);
-    // });
-
-    //     mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
-    //     fetch(url).then(
-    //     function(response) {
-    //     if (response.status !== 200) {
-    //         console.log('Looks like there was a problem. Status Code: ' +
-    //         response.status);
-    //         return;
-    //     }
-    //     response.json().then(function(geojsonData) {
-    //         console.log(geojsonData.features);
-    //         mymap.setView([lat, long], 9);
-    //         geojson = L.geoJson(geojsonData.features, {
-    //         style : style
-    //         // onEachFeature: onEachFeature
-    //     }).addTo(mymap);
-    //         // LayerList.push(geojson);
-    //          mymap.spin(false);
-    //     });
-
-
-    //     }
-    // )
-    // .catch(function(err) {
-    //     console.log('Fetch Error :-S', err);
-    // });
-
-
-    // blockLayer = new L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/geonode/ows', {
-    //     layers: 'geonode:maha_map_06feb2020',
-    //     format: 'image/png',
-    //     version: '1.3.0',
-    //     transparent: true,
-    // });
-    // console.log(blockLayer);
-    // blockLayer.addTo(mymap);
-
-
-    })
+    // })
 
 
 $('#indstate').on('click',function(){
@@ -704,6 +870,31 @@ $('#indstate').on('click',function(){
         let indstate = document.getElementById('indstate').value;
 
         putWMSLayerst();
+       
+
+        //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+     })
+
+$('#district').on('click',function(){
+        //clear_layer();
+        clearpoint_layer();
+
+        let district = document.getElementById('district').value;
+
+        putWMSLayerdist();
+       
+
+        //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+     })
+
+
+$('#pincode').on('click',function(){
+        
+        clearpoint_layer();
+
+        let pincode = document.getElementById('pincode').value;
+
+        putWMSLayerpincode(pincode);
        
 
         //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
@@ -783,14 +974,39 @@ function putWMSLayerst(){
             cql_filter: "state='"+stLayerLatLong[0]+"'",
             style:""});
             clear_layer();
+            clear_distlayer();
             clearpoint_layer();
             wms_layer.addTo(mymap);
-
+            mymap.setView([stLayerLatLong[1],stLayerLatLong[2]],8);
             LayerList.push(wms_layer);
             // addWMSLegend(layer);
             
 
          }
+
+
+function putWMSLayerdist(){
+             var dist = document.getElementById('district').value;
+             //console.log(indstate);
+             //var stLayerLatLong= listState[indstate];
+            clear_distlayer();
+            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+            layers: 'geonode:india_pincodes_10may',
+            format: 'image/png',
+            transparent:'true',
+            // version: '1.3.0',
+            cql_filter: "district='"+dist+"'",
+            style:""});
+            //clear_layer();
+            //clearpoint_layer();
+            wms_layer.addTo(mymap);
+            //mymap.setView([stLayerLatLong[1],stLayerLatLong[2]],8);
+            distLayerList.push(wms_layer);
+            // addWMSLegend(layer);
+            
+
+         }
+
 //this function is for state boundary
 function putWMS(layer){
     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
@@ -803,15 +1019,86 @@ function putWMS(layer){
 }
 
 
+function setView(layerName,selectedBoundary){
+
+    let rootUrl = '{{site_url}}geoserver/geonode/ows';
+
+    let options = {
+    service: 'WFS',
+    version: '1.0.0',
+    request: 'GetFeature',
+    outputFormat: 'application/json',
+    typeName:layerName,
+    cql_filter:`pincode='${selectedBoundary}'`,
+    propertyName:'the_geom'
+    };
+    let parameters = L.Util.extend(options);
+    layer_url = rootUrl + L.Util.getParamString(parameters)
+    fetch(layer_url).then(
+        function(response) {
+        if (response.status !== 200) {
+            console.log('Looks like there was a problem. Status Code: ' +
+            response.status);
+            return;
+        }
+        response.json().then(function(geojsonData) {
+            area = L.geoJson(geojsonData.features).addTo(mymap)
+            mymap.fitBounds(area.getBounds())
+        });
+    }).catch(function(err) {
+            console.log('Fetch Error :-S', err);
+    });
+}
+function putWMSLayerpincode(pincode){
+    clear_pinlayer();
+    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+        layers:"geonode:india_pincodes_10may",
+        cql_filter:"pincode='"+pincode+"'",
+        format: 'image/png',
+        transparent:'true',
+    });
+    wms_layer.addTo(mymap);
+    setView('geonode:india_pincodes_10may',pincode);
+
+    pinLayerList.push(wms_layer);
+
+    // $.ajax('https://makerghat.urbansciences.in/geoserver/wfs',{
+    //     type: 'GET',
+    //     data: {
+    //         service: 'WFS',
+    //         version: '1.1.0',
+    //         request: 'GetFeature',
+    //         typename: 'geonode:india_pincodes_7may',
+    //         CQL_FILTER: "pincode='"+pincode+"'",
+    //         srsname: 'EPSG:4326',
+    //         outputFormat: 'text/javascript',
+    //         },
+    //     dataType: 'jsonp',
+    //     jsonpCallback:'callback:handleJson',
+    //     jsonp:'format_options'
+    // });
+
+
+
+
+}
+
+
+// function handleJson(data) {
+//     //var requiredArea = L.geoJson(data).addTo(map);
+//     map.fitBounds(requiredArea.getBounds())
+// }
+
+
 function putWMSru(layer){
   var aspiD = document.getElementById('district').value;
     var distLayerLatLong= listDistrict[aspiD];
              //clear_layer();
-    console.log('kk',distLayerLatLong);
+    //console.log('kk',distLayerLatLong);
     let district= distLayerLatLong[0];
     if(layer=="geonode:TownHealth0")
       district=distLayerLatLong[0].toUpperCase();
-    console.log(district);
+    //console.log(district);
 
     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
         layers: layer,
@@ -821,7 +1108,7 @@ function putWMSru(layer){
     });
     wms_layer.addTo(mymap);
     newLayerList.push(wms_layer);
-    console.log(wms_layer);
+    //console.log(wms_layer);
 }
 
 
@@ -873,6 +1160,18 @@ function clear_layer(){
     LayerList.forEach(layer => mymap.removeLayer(layer));
     
 }
+
+function clear_distlayer(){
+    distLayerList.forEach(layer => mymap.removeLayer(layer));
+    
+}
+
+
+function clear_pinlayer(){
+    pinLayerList.forEach(layer => mymap.removeLayer(layer));
+    
+}
+
 
 function clearpoint_layer(){
     //console.log(pointLayerList);
@@ -935,8 +1234,8 @@ L.Map.include({
 let activatedHealthFacility = {'CHC':{},'PHC':{},'Allo':{},'Alt':{}}
 let activeKoboHealthFacity={'hospital':{},'other':{}}
 function putKoboHealthFacity(facility){
-    const base_url = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_hospitals_28apr';
-    const url = base_url + '&propertyName=the_geom,facltyname,facltytyp,address'
+    const base_url = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:healthfacility_10may_valid_dsp';
+    const url = base_url + '&propertyName=the_geom,facltyname,facltytyp,address,state_gen,district_g,pincode_ge'
     let cql_url= url + `&cql_filter=${facility}=1`;
 
     function geojsonMarkerOptions(fac) {
@@ -963,17 +1262,22 @@ function putKoboHealthFacity(facility){
     
     function onEachFeatureForPoint(feature, layer) {
         const unavailable = '-';
-        const updateDate = "28 April 2020";
+        const updateDate = "India Hospitals";
         layer.bindPopup(`<table class = 'popupclass'>
                         <tr><td>Name:</td><td> ${feature.properties.facltyname}</td></tr>
                         <tr><td>Type:</td><td> ${feature.properties.facltytyp}</td></tr>
                         <tr><td>Address:</td><td> ${feature.properties.address}</td></tr>
+                        <tr><td>District:</td><td> ${feature.properties.district_g}</td></tr>
+                        <tr><td>State:</td><td> ${feature.properties.state_gen}</td></tr>
+                        <tr><td>Pin Code:</td><td> ${feature.properties.pincode_ge}</td></tr>
+                        <tr><td>Pin Code Accuracy (within area):</td><td> Yes</td></tr>
                         <tr><td>Management:</td><td> ${unavailable}</td></tr>
                         <tr><td>Food Arrangement:</td><td> ${unavailable}</td></tr>
                         <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
                         <tr><td>Website:</td><td> ${unavailable}</td></tr>
                         <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Last updated:</td><td> ${updateDate}</td></tr>
+                        <tr><td>Last updated:</td><td>2nd May 2020</td></tr>
+                        <tr><td>Contact for Suggestions:</td><td>jitendra@communitygis.net</td></tr>
                         </table>`) 
     }
 

@@ -4,11 +4,13 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
+from django.conf import settings
 
 # Create your views here.
 
 def healthDash(request):
-    return render(request,"health_dash/health.html")
+    context = {'site_url':settings.MY_SITE_URL}
+    return render(request,"health_dash/health.html",context)
 
 
 def UrbanHealth(request):
