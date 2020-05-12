@@ -182,19 +182,19 @@ h6 {
               <option value=""> Select District</option>
              </select>
       </div> 
-
-       <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="block">
+      <!--this dropdown gets visible only whn Maharashtra is selected-->
+      <!--  <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="block">
         &nbsp;&nbsp;
             <select class='form-control' id="block_s">
               <option value=""> Select Block </option>
              </select>
-      </div> 
-
-        <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumwards">
+      </div>  -->
             &nbsp;&nbsp;
-            <select class='form-control'>
-              <option value=""> Select Wards </option>
-             </select>
+            &nbsp;&nbsp;
+            &nbsp;&nbsp;
+        <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumwards">
+            
+            <label><input type="checkbox" value="{mumwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai City Wards </span></label>
       </div> 
 
   <hr>
@@ -486,7 +486,7 @@ function filterCSV2(csv, key, value)
 
 
       if( !unique[val.pincode]){
-      console.log(val.pincode);
+      //console.log(val.pincode);
       
       result.push(val.pincode)
       unique[val.pincode] = 1;
@@ -507,7 +507,7 @@ function filterCSV3(csv, key, value)
     if(val[key] == value){
 
       if( !unique[val.block]){
-      console.log(val.block);
+      //console.log(val.block);
       
       result.push(val.block)
       unique[val.block] = 1;
@@ -855,6 +855,7 @@ function queryFeatures(currentPos, numResults) {
     var pinLayerList=[];
     var distLayerList=[];
     var searchControl;
+    var pinzoomLayerList=[];
 
     // $('#district').on('click',function(){
     //     clear_layer();
@@ -1027,7 +1028,7 @@ function putWMS(layer){
 
 
 function setView(layerName,selectedBoundary){
-
+    
     let rootUrl = '{{site_url}}geoserver/geonode/ows';
 
     let options = {
@@ -1039,6 +1040,7 @@ function setView(layerName,selectedBoundary){
     cql_filter:`pincode='${selectedBoundary}'`,
     propertyName:'the_geom'
     };
+    clear_pinzoom();
     let parameters = L.Util.extend(options);
     layer_url = rootUrl + L.Util.getParamString(parameters)
     fetch(layer_url).then(
@@ -1051,13 +1053,20 @@ function setView(layerName,selectedBoundary){
         response.json().then(function(geojsonData) {
             area = L.geoJson(geojsonData.features).addTo(mymap)
             mymap.fitBounds(area.getBounds())
+            pinzoomLayerList.push(geojsonData.features)
         });
     }).catch(function(err) {
             console.log('Fetch Error :-S', err);
     });
+    
+
 }
+
+
+
 function putWMSLayerpincode(pincode){
     clear_pinlayer();
+    clear_pinzoom();
     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
         layers:"geonode:india_pincodes_10may",
         cql_filter:"pincode='"+pincode+"'",
@@ -1177,6 +1186,24 @@ function clear_distlayer(){
 
 function clear_pinlayer(){
     pinLayerList.forEach(layer => mymap.removeLayer(layer));
+    
+}
+
+function clear_pinzoom(){
+
+
+
+    for (var i = pinzoomLayerList.length - 1; i >= 0; i--) {
+        source.getLayer(pinzoomLayerList[i]).addTo(mymap).remove(mymap);;
+        
+    }
+
+ //LayerList.forEach(layer => mymap.removeLayer(layer));
+
+
+
+    // console.log("pinzoom",pinzoomLayerList);
+    //pinzoomLayerList.forEach(layer => mymap.removeLayer(layer));
     
 }
 
