@@ -281,7 +281,7 @@ h6 {
              <form>
               <div class="multiselect">
                 <div class="selectBox" onclick="showCheckboxes()">
-                    <button type="button" style="width: 90%;" class="btn btn-outline-dark">Select Health Facilies</button>
+                    <button type="button" style="width: 90%;font-size:12px" class="btn btn-outline-dark">Select Health Facilies</button>
                     <!-- <option>Select Health Facilities</option> -->
                   <div class="overSelect"></div>
                 </div>
@@ -445,7 +445,7 @@ $(document).ready(function(){
         $("#mumwards").show();
       }
       else if(this.value =='Mumbai Suburban'){
-      	$("#mumwards").show();
+        $("#mumwards").show();
       }
       else
       {
@@ -977,7 +977,7 @@ function putWMSLayerst(){
             clear_distlayer();
             clearpoint_layer();
             wms_layer.addTo(mymap);
-            mymap.setView([stLayerLatLong[1],stLayerLatLong[2]],8);
+            mymap.setView([stLayerLatLong[1],stLayerLatLong[2]-2],7);
             LayerList.push(wms_layer);
             // addWMSLegend(layer);
             
@@ -1237,11 +1237,11 @@ let activatedHealthFacility = {'CHC':{},'PHC':{},'Allo':{},'Alt':{}}
 let activeKoboHealthFacity={'hospital':{},'other':{}}
 function putKoboHealthFacity(facility){
     const base_url = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:healthfacility_10may_valid_dsp';
-    const url = base_url + '&propertyName=the_geom,facltyname,facltytyp,address,state_gen,district_g,pincode_ge'
+    const url = base_url + '&propertyName=the_geom,facltyname,facltytyp,address_te,state_gen,district_g,pincode_ge'
     let cql_url= url + `&cql_filter=${facility}=1`;
 
     function geojsonMarkerOptions(fac) {
-        let circleProp = {radius: 4,fillColor: "#",color: "#000",weight: 1,opacity: 1,fillOpacity: 0.8};
+        let circleProp = {radius:6,fillColor: "#",color: "#000",weight: 1,opacity: 1,fillOpacity: 0.8};
         if(fac === 'hospital') circleProp['fillColor'] = 'olive'
         else if(fac === 'mhu') circleProp['fillColor'] = 'teal'
         else if(fac === 'subcenter') circleProp['fillColor'] = 'aqua'
@@ -1268,7 +1268,7 @@ function putKoboHealthFacity(facility){
         layer.bindPopup(`<table class = 'popupclass'>
                         <tr><td>Name:</td><td> ${feature.properties.facltyname}</td></tr>
                         <tr><td>Type:</td><td> ${feature.properties.facltytyp}</td></tr>
-                        <tr><td>Address:</td><td> ${feature.properties.address}</td></tr>
+                        <tr><td>Address:</td><td> ${feature.properties.address_te}</td></tr>
                         <tr><td>District:</td><td> ${feature.properties.district_g}</td></tr>
                         <tr><td>State:</td><td> ${feature.properties.state_gen}</td></tr>
                         <tr><td>Pin Code:</td><td> ${feature.properties.pincode_ge}</td></tr>
@@ -1279,8 +1279,9 @@ function putKoboHealthFacity(facility){
                         <tr><td>Website:</td><td> ${unavailable}</td></tr>
                         <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
                         <tr><td>Last updated:</td><td>2nd May 2020</td></tr>
-                        <tr><td>Contact for Suggestions:</td><td>jitendra@communitygis.net</td></tr>
-                        </table>`) 
+                        <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedback</a></button></tr>
+                        </table>`
+                        ) 
     }
 
     mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
