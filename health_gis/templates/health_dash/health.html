@@ -176,7 +176,8 @@ h6 {
     
           </select> 
      </div>  
-   <hr>
+         &nbsp;&nbsp;&nbsp;&nbsp;
+
       <div class="tooltips" title="Please select the District">
             <select class='form-control' id = "district">
               <option value=""> Select District</option>
@@ -186,18 +187,20 @@ h6 {
        <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="block">
         &nbsp;&nbsp;
             <select class='form-control' id="block_s">
-              <option value=""> Select Block </option>
+              <option value=""> Select Taluka </option>
              </select>
       </div> 
-
+      &nbsp;&nbsp;&nbsp;&nbsp;
         <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumwards">
-            &nbsp;&nbsp;
-            <select class='form-control'>
-              <option value=""> Select Wards </option>
-             </select>
+            
+            <tr><tb>  <label><input type="checkbox" value="{mumwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai City Wards </span></label></tb> </tr>
+      </div> 
+      <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumsubwards">
+            
+            <tr><tb>  <label><input type="checkbox" value="{mumsubwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai Suburban Wards </span></label></tb> </tr>
       </div> 
 
-  <hr>
+
       <div class="tooltips" title="Please select the Pincode">
             <select class='form-control' id = "pincode">
               <option value=""> Select Pincode</option>
@@ -307,7 +310,7 @@ h6 {
                     <label for="three">
                     <input type="checkbox" value="mhu" onchange="toggleKoboFacility(this)"/>Mobile Health Unit</label> 
                     <label for="three">
-                    <input type="checkbox" value="phc" onchange="toggleKoboFacility(this)"/>Primary Health Unit</label>   
+                    <input type="checkbox" value="phc" onchange="toggleKoboFacility(this)"/>Primary Health Centre</label>   
                     <label for="three">
                     <input type="checkbox" value="clinic" onchange="toggleKoboFacility(this)"/>Clinic</label>   
                     <label for="three">
@@ -424,18 +427,18 @@ h6 {
 <script>
 
 
-$(document).ready(function(){
-    $('#indstate').on('change', function() {
-      if ( this.value == 'Maharashtra')
-      {
-        $("#block").show();
-      }
-      else
-      {
-        $("#block").hide();
-      }
-    });
-});
+// $(document).ready(function(){
+//     $('#indstate').on('change', function() {
+//       if ( this.value == 'Maharashtra')
+//       {
+//         $("#block").show();
+//       }
+//       else
+//       {
+//         $("#block").hide();
+//       }
+//     });
+// });
 
 
 $(document).ready(function(){
@@ -443,13 +446,24 @@ $(document).ready(function(){
       if ( this.value == 'Mumbai City')
       {
         $("#mumwards").show();
+        $("#mumsubwards").hide();
+        removewards();
+
+        $("#block").hide();
       }
       else if(this.value =='Mumbai Suburban'){
-        $("#mumwards").show();
+        $("#mumwards").hide();
+        removewards();
+        $("#mumsubwards").show();
+
+        $("#block").hide();
       }
       else
       {
         $("#mumwards").hide();
+        $("#mumsubwards").hide();
+        $("#block").show();
+
       }
     });
 });
@@ -503,7 +517,7 @@ function filterCSV3(csv, key, value)
     if(val[key] == value){
 
       if( !unique[val.block]){
-      console.log(val.block);
+      //console.log(val.block);
       
       result.push(val.block)
       unique[val.block] = 1;
@@ -602,6 +616,10 @@ function getBoundary(obj) {
             putWMS("geonode:states_in_india");
         else if(boundary== "{district}")
             putWMS("geonode:all_india_districts_10may2020");
+        else if(boundary=="{mumwards}")  
+            putwards("Mumbai City");
+        else if(boundary=="{mumsubwards}")  
+            putwards("Mumbai Suburban");  
         else
             putWMS("geonode:maha_demography_with_mumbai");
     }else{
@@ -609,6 +627,10 @@ function getBoundary(obj) {
             removeWMS("geonode:states_in_india");
         else if(boundary== "{district}")
             removeWMS("geonode:all_india_districts_10may2020");
+        else if(boundary=="{mumwards}")  
+            removewards();
+        else if(boundary=="{mumsubwards}")  
+            removewards();    
         else 
             removeWMS("geonode:maha_demography_with_mumbai");
     }
@@ -696,6 +718,32 @@ function removeKoboHealthFacity(facility){
 function removeWFSfac(facility){
         mymap.removeLayer(activatedHealthFacility[facility]);
 };
+
+function removewards(){
+        //  var dist = cql;
+        //  console.log(wardLayerList);
+        //  var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+        //     layers: 'geonode:corporatorwardboundary_mumbai_13may',
+        //     format: 'image/png',
+        //     transparent:'true',
+        //     // version: '1.3.0',
+        //     cql_filter:"district='"+dist+"'",
+        //     style:""});
+        //   wardLayerList.forEach((l,index) => {
+        //   fil = (l.options.cql_filter);
+        //   if(dist === fil){
+        //         mymap.removeLayer(l);
+        //         wardLayerList.splice(index, 1);
+        //   }
+         
+        // });
+            wardLayerList.forEach(layer => mymap.removeLayer(layer));
+
+      
+
+      
+
+}
 
 // ***********FIND NEAREST FACILITY FEATURE
 let healthFacility,
@@ -848,6 +896,7 @@ function queryFeatures(currentPos, numResults) {
     var faciLayerList=[];
     var pinLayerList=[];
     var distLayerList=[];
+    var wardLayerList=[];
     var searchControl;
 
     // $('#district').on('click',function(){
@@ -991,7 +1040,7 @@ function putWMSLayerdist(){
              //var stLayerLatLong= listState[indstate];
             clear_distlayer();
             var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-            layers: 'geonode:india_pincodes_12may',
+            layers: 'geonode:india_pincodes_13may',
             format: 'image/png',
             transparent:'true',
             // version: '1.3.0',
@@ -1006,6 +1055,31 @@ function putWMSLayerdist(){
             
 
          }
+
+
+
+function putwards(cql){
+             var dist = cql;
+             //console.log(dist);
+             //var stLayerLatLong= listState[indstate];
+            //clear_distlayer();
+            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+            layers: 'geonode:corporatorwardboundary_mumbai_13may',
+            format: 'image/png',
+            transparent:'true',
+            // version: '1.3.0',
+            cql_filter: "district='"+dist+"'",
+            style:""});
+            //clear_layer();
+            //clearpoint_layer();
+            wms_layer.addTo(mymap);
+            //mymap.setView([stLayerLatLong[1],stLayerLatLong[2]],8);
+            wardLayerList.push(wms_layer);
+            // addWMSLegend(layer);
+            
+
+         }
+       
 
 //this function is for state boundary
 function putWMS(layer){
@@ -1272,16 +1346,14 @@ function putKoboHealthFacity(facility){
                         <tr><td>District:</td><td> ${feature.properties.district_g}</td></tr>
                         <tr><td>State:</td><td> ${feature.properties.state_gen}</td></tr>
                         <tr><td>Pin Code:</td><td> ${feature.properties.pincode_ge}</td></tr>
-                        <tr><td>Total Bed Count:</td><td> ${feature.properties.totbed}</td></tr>
+                        <tr><td>Total Bed Count:</td><td> ${unavailable}</td></tr>
                         <tr><td>Pin Code Accuracy (within area):</td><td> Yes</td></tr>
-                        <tr><td>Total Bed count:</td><td> Yes</td></tr>
-                        
                         <tr><td>Management:</td><td> ${unavailable}</td></tr>
                         <tr><td>Food Arrangement:</td><td> ${unavailable}</td></tr>
                         <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
                         <tr><td>Website:</td><td> ${unavailable}</td></tr>
                         <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Last updated:</td><td>12th May 2020</td></tr>
+                        <tr><td>Last updated:</td><td> 12th May 2020</td></tr>
                         <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedback</a></button></tr>
                         </table>`
                         ) 
