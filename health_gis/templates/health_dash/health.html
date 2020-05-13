@@ -281,7 +281,7 @@ h6 {
              <form>
               <div class="multiselect">
                 <div class="selectBox" onclick="showCheckboxes()">
-                    <button type="button" style="width: 90%;" class="btn btn-outline-dark">Select Health Facilies</button>
+                    <button type="button" style="width: 90%;font-size:12px" class="btn btn-outline-dark">Select Health Facilies</button>
                     <!-- <option>Select Health Facilities</option> -->
                   <div class="overSelect"></div>
                 </div>
@@ -445,7 +445,7 @@ $(document).ready(function(){
         $("#mumwards").show();
       }
       else if(this.value =='Mumbai Suburban'){
-      	$("#mumwards").show();
+        $("#mumwards").show();
       }
       else
       {
@@ -863,7 +863,7 @@ function queryFeatures(currentPos, numResults) {
     // })
 
 
-$('#indstate').on('click',function(){
+$('#indstate').on('change',function(){
         clear_layer();
         clearpoint_layer();
 
@@ -875,7 +875,7 @@ $('#indstate').on('click',function(){
         //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
      })
 
-$('#district').on('click',function(){
+$('#district').on('change',function(){
         //clear_layer();
         clearpoint_layer();
 
@@ -888,7 +888,7 @@ $('#district').on('click',function(){
      })
 
 
-$('#pincode').on('click',function(){
+$('#pincode').on('change',function(){
         
         clearpoint_layer();
 
@@ -977,7 +977,7 @@ function putWMSLayerst(){
             clear_distlayer();
             clearpoint_layer();
             wms_layer.addTo(mymap);
-            mymap.setView([stLayerLatLong[1],stLayerLatLong[2]],8);
+            mymap.setView([stLayerLatLong[1],stLayerLatLong[2]-2],7);
             LayerList.push(wms_layer);
             // addWMSLegend(layer);
             
@@ -991,7 +991,7 @@ function putWMSLayerdist(){
              //var stLayerLatLong= listState[indstate];
             clear_distlayer();
             var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-            layers: 'geonode:india_pincodes_10may',
+            layers: 'geonode:india_pincodes_12may',
             format: 'image/png',
             transparent:'true',
             // version: '1.3.0',
@@ -1018,9 +1018,11 @@ function putWMS(layer){
     newLayerList.push(wms_layer);
 }
 
-
+let area = null;
 function setView(layerName,selectedBoundary){
-
+    if(area){
+        mymap.removeLayer(area);
+    }
     let rootUrl = '{{site_url}}geoserver/geonode/ows';
 
     let options = {
@@ -1052,13 +1054,13 @@ function setView(layerName,selectedBoundary){
 function putWMSLayerpincode(pincode){
     clear_pinlayer();
     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-        layers:"geonode:india_pincodes_10may",
+        layers:"geonode:india_pincodes_12may",
         cql_filter:"pincode='"+pincode+"'",
         format: 'image/png',
         transparent:'true',
     });
     wms_layer.addTo(mymap);
-    setView('geonode:india_pincodes_10may',pincode);
+    setView('geonode:india_pincodes_12may',pincode);
 
     pinLayerList.push(wms_layer);
 
@@ -1234,12 +1236,12 @@ L.Map.include({
 let activatedHealthFacility = {'CHC':{},'PHC':{},'Allo':{},'Alt':{}}
 let activeKoboHealthFacity={'hospital':{},'other':{}}
 function putKoboHealthFacity(facility){
-    const base_url = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:healthfacility_10may_valid_dsp';
-    const url = base_url + '&propertyName=the_geom,facltyname,facltytyp,address,state_gen,district_g,pincode_ge'
+    const base_url = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:health_facility_12may2020';
+    const url = base_url + '&propertyName=the_geom,facltyname,facltytyp,address_te,state_gen,district_g,pincode_ge,totbed'
     let cql_url= url + `&cql_filter=${facility}=1`;
 
     function geojsonMarkerOptions(fac) {
-        let circleProp = {radius: 4,fillColor: "#",color: "#000",weight: 1,opacity: 1,fillOpacity: 0.8};
+        let circleProp = {radius:6,fillColor: "#",color: "#000",weight: 1,opacity: 1,fillOpacity: 0.8};
         if(fac === 'hospital') circleProp['fillColor'] = 'olive'
         else if(fac === 'mhu') circleProp['fillColor'] = 'teal'
         else if(fac === 'subcenter') circleProp['fillColor'] = 'aqua'
@@ -1266,19 +1268,23 @@ function putKoboHealthFacity(facility){
         layer.bindPopup(`<table class = 'popupclass'>
                         <tr><td>Name:</td><td> ${feature.properties.facltyname}</td></tr>
                         <tr><td>Type:</td><td> ${feature.properties.facltytyp}</td></tr>
-                        <tr><td>Address:</td><td> ${feature.properties.address}</td></tr>
+                        <tr><td>Address:</td><td> ${feature.properties.address_te}</td></tr>
                         <tr><td>District:</td><td> ${feature.properties.district_g}</td></tr>
                         <tr><td>State:</td><td> ${feature.properties.state_gen}</td></tr>
                         <tr><td>Pin Code:</td><td> ${feature.properties.pincode_ge}</td></tr>
+                        <tr><td>Total Bed Count:</td><td> ${feature.properties.totbed}</td></tr>
                         <tr><td>Pin Code Accuracy (within area):</td><td> Yes</td></tr>
+                        <tr><td>Total Bed count:</td><td> Yes</td></tr>
+                        
                         <tr><td>Management:</td><td> ${unavailable}</td></tr>
                         <tr><td>Food Arrangement:</td><td> ${unavailable}</td></tr>
                         <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
                         <tr><td>Website:</td><td> ${unavailable}</td></tr>
                         <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Last updated:</td><td>2nd May 2020</td></tr>
-                        <tr><td>Contact for Suggestions:</td><td>jitendra@communitygis.net</td></tr>
-                        </table>`) 
+                        <tr><td>Last updated:</td><td>12th May 2020</td></tr>
+                        <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedback</a></button></tr>
+                        </table>`
+                        ) 
     }
 
     mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
@@ -1408,7 +1414,7 @@ function putWFSFacility(facility) {
             return;
         }
         response.json().then(function(geojsonData) {
-            console.log(geojsonData.features);
+            // console.log(geojsonData.features);
             healthFacility = L.geoJson(geojsonData.features, {
                 pointToLayer: function (feature, latlng) {
                     if(facility === 'CHC')
