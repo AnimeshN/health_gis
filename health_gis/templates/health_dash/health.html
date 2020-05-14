@@ -109,15 +109,7 @@ h6 {
               <div class="checkbox">
                 <label><input type="checkbox" value="{district}" onchange="getBoundary(this)"><span> District </span></label>
               </div>
-             <!--  <div class="checkbox">
-                <label><input type="checkbox" value="{marhadem}" onchange="getBoundary(this)"><span> Road Network </span></label>
-              </div> -->
-             <!--  <div class="checkbox disabled">
-                <label><input type="checkbox" value="taluka" disabled>Taluka</label>
-              </div>
-              <div class="checkbox disabled">
-                <label><input type="checkbox" value="village" disabled>Village</label>
-              </div> -->
+             
         </div>
      </table>   
     </div>
@@ -224,57 +216,7 @@ h6 {
         </div>
      </table>   
     </div>
-    <!-- <div class="tooltips" title="Please select the District">
-        <select class='form-control' id="district" name="district">
-            <option value="All">Select Maharashtra District</option>
-            <optgroup label="Vidarbh(East)"> 
-                <option value="Akola">Akola</option>
-                <option value="Amravati">Amrawati</option>
-                 <option value="Buldana">Buldana</option>
-                <option value="Yavatmal">Yavatmal</option>
-                <option value="Washim">Washim</option>
-                <option value="Aurangabad">Aurangabad</option>
-                <option value="Beed">Beed</option>
-                <option value="Jalna">Jalna</option>
-                <option value="Osmanabad">Osmanabad</option>
-                <option value="Nanded">Nanded</option>
-                <option value="Latur">Latur</option>
-                <option value="Parbhani">Parbhani</option>
-                <option value="Hingoli">Hingoli</option>
-                <option value="Mumbai City">Mumbai City</option>
-                <option value="Mumbai Suburban">Mumbai Suburban</option>
-                <option value="Thane">Thane</option>
-                <option value="Palghar">Palghar</option>
-                <option value="Raigad">Raigad</option>
-                <option value="Ratnagiri">Ratnagiri</option>
-                <option value="Sindhudurg">Sindhudurg</option>
-           
-  
-                <option value="Bhandara">Bhandara</option>
-                <option value="Gadchiroli">Gadchiroli</option>
-                <option value="Chandrapur">Chandrapur</option>
-                <option value="Gondia">Gondia</option>
-                <option value="Nagpur">Nagpur</option>
-                <option value="Wardha">Wardha</option>
-           
-  
-                <option value="Ahmadnagar">Ahmednagar</option>
-                <option value="Dhule">Dhule</option>
-                <option value="Jalgaon">Jalgaon</option>
-                <option value="Nandurbar">Nandurbar</option>
-                <option value="Nashik">Nashik</option>
-           
-  
-          
-                <option value="Kolhapur">Kolhapur</option>
-                <option value="Pune">Pune</option>
-                <option value="Sangli">Sangli</option>
-                <option value="Satara">Satara</option>
-                <option value="Solapur">Solapur</option>
-    
-          </select> 
-     </div>  
- -->
+
      <hr>
      <div class="text-center">
        
@@ -342,9 +284,8 @@ h6 {
                          
                 </div>
               </div>
-           
-              <!-- <button type="button" class="btn btn-primary" onclick = "GetSelected()">Display</button>
- -->              <div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
+             <div id="side-bar" style="background-color: rgba(255, 255, 255);">             
+                <!-- side-bar container -->
   <div class="text-center">
        
 
@@ -393,9 +334,7 @@ h6 {
   
                <tr> <label><input type="checkbox" value="{maharural}" onchange="getBoundaryru(this)"><span> Villages</span></label></tr>
               </div>
-              <!-- <div class="checkbox">
-                <label><input type="checkbox" value="{mahaschool}" onchange="getBoundaryst(this)"><span> Schools (UDISE 16-17) </span></label>
-              </div> -->
+              
         </div>
      </table>   
     </div>
@@ -427,18 +366,7 @@ h6 {
 <script>
 
 
-// $(document).ready(function(){
-//     $('#indstate').on('change', function() {
-//       if ( this.value == 'Maharashtra')
-//       {
-//         $("#block").show();
-//       }
-//       else
-//       {
-//         $("#block").hide();
-//       }
-//     });
-// });
+
 
 
 $(document).ready(function(){
@@ -720,23 +648,7 @@ function removeWFSfac(facility){
 };
 
 function removewards(){
-        //  var dist = cql;
-        //  console.log(wardLayerList);
-        //  var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-        //     layers: 'geonode:corporatorwardboundary_mumbai_13may',
-        //     format: 'image/png',
-        //     transparent:'true',
-        //     // version: '1.3.0',
-        //     cql_filter:"district='"+dist+"'",
-        //     style:""});
-        //   wardLayerList.forEach((l,index) => {
-        //   fil = (l.options.cql_filter);
-        //   if(dist === fil){
-        //         mymap.removeLayer(l);
-        //         wardLayerList.splice(index, 1);
-        //   }
-         
-        // });
+       
             wardLayerList.forEach(layer => mymap.removeLayer(layer));
 
       
@@ -899,18 +811,7 @@ function queryFeatures(currentPos, numResults) {
     var wardLayerList=[];
     var searchControl;
 
-    // $('#district').on('click',function(){
-    //     clear_layer();
-    //     clearpoint_layer();
-
-    //     // let district = document.getElementById('district').value;
-
-    //     putWMSLayer();
-       
-
-
-    // })
-
+    
 
 $('#indstate').on('change',function(){
         clear_layer();
@@ -1060,9 +961,7 @@ function putWMSLayerdist(){
 
 function putwards(cql){
              var dist = cql;
-             //console.log(dist);
-             //var stLayerLatLong= listState[indstate];
-            //clear_distlayer();
+            
             var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
             layers: 'geonode:corporatorwardboundary_mumbai_13may',
             format: 'image/png',
@@ -1138,32 +1037,12 @@ function putWMSLayerpincode(pincode){
 
     pinLayerList.push(wms_layer);
 
-    // $.ajax('https://makerghat.urbansciences.in/geoserver/wfs',{
-    //     type: 'GET',
-    //     data: {
-    //         service: 'WFS',
-    //         version: '1.1.0',
-    //         request: 'GetFeature',
-    //         typename: 'geonode:india_pincodes_7may',
-    //         CQL_FILTER: "pincode='"+pincode+"'",
-    //         srsname: 'EPSG:4326',
-    //         outputFormat: 'text/javascript',
-    //         },
-    //     dataType: 'jsonp',
-    //     jsonpCallback:'callback:handleJson',
-    //     jsonp:'format_options'
-    // });
-
+  
 
 
 
 }
 
-
-// function handleJson(data) {
-//     //var requiredArea = L.geoJson(data).addTo(map);
-//     map.fitBounds(requiredArea.getBounds())
-// }
 
 
 function putWMSru(layer){
