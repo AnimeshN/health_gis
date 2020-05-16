@@ -41,6 +41,17 @@ tr:hover {
   background-color: #1e90ff;
 } */
 
+#checkboxes2 label {
+  display: block;
+  text-align: left;
+  margin: 10px;
+}
+
+#checkboxes2 {
+  display: none;
+  /* border: 1px #dadada solid; */
+}
+
 .btn{
     margin:10px;
 }
@@ -113,7 +124,77 @@ h6 {
         </div>
      </table>   
     </div>
-   
+  <div class="tooltips" id="view">
+      
+            <select class='form-control' id="view_s">
+              <option value="All"> Select Health Facility View </option>
+              <option value="All India View">All India View</option>
+              <option value="Navigated Area View">Navigated Area View</option>
+             </select>
+      </div> 
+       &nbsp;&nbsp;
+<!--Starting of India View div--->
+  <div id="indiaview" style="display: none;">
+    <div class="text-center">
+       
+
+        <form id="projectList" class='border'>
+            <h6>Explore Health Care</h6>
+             <form>
+              <div class="multiselect">
+                <div class="selectBox" onclick="showCheckboxes2()">
+                    <button type="button" style="width: 90%;font-size:12px" class="btn btn-outline-dark">Select Health Facilies</button>
+                    
+                  <div class="overSelect"></div>
+                </div>
+
+                <div id="checkboxes2">
+                    
+                  
+                  <div id="kobo" value="kobo">Community Volunteered Hospital Data
+                  <label for="three">
+                    <input type="checkbox" value="hospital" onchange="toggleKoboFacilitywms(this)"/>Hospital</label>
+                    <label for="three">
+                    <input type="checkbox" value="subcenter" onchange="toggleKoboFacilitywms(this)"/>Sub center</label>
+                    <label for="three">
+                    <input type="checkbox" value="mhu" onchange="toggleKoboFacilitywms(this)"/>Mobile Health Unit</label> 
+                    <label for="three">
+                    <input type="checkbox" value="phc" onchange="toggleKoboFacilitywms(this)"/>Primary Health Centre</label>   
+                    <label for="three">
+                    <input type="checkbox" value="clinic" onchange="toggleKoboFacilitywms(this)"/>Clinic</label>   
+                    <label for="three">
+                    <input type="checkbox" value="phu" onchange="toggleKoboFacilitywms(this)"/>Primary Health Units</label>   
+                    <label for="three">
+                    <input type="checkbox" value="ashu" onchange="toggleKoboFacilitywms(this)"/>Ashram School Health Units</label>   
+                    <label for="three">
+                    <input type="checkbox" value="mobmedu" onchange="toggleKoboFacilitywms(this)"/>Mobile Medical Units</label>   
+                    <label for="three">
+                    <input type="checkbox" value="hfwi" onchange="toggleKoboFacilitywms(this)"/>Health and family welfare institute</label>   
+                    <label for="three">
+                    <input type="checkbox" value="mhi" onchange="toggleKoboFacilitywms(this)"/>Mental Health Institute</label>   
+                    <label for="three">
+                    <input type="checkbox" value="dc" onchange="toggleKoboFacilitywms(this)"/>Diagnostic Center</label>   
+                    <label for="three">
+                    <input type="checkbox" value="phrmcy" onchange="toggleKoboFacilitywms(this)"/>Pharmacy</label>   
+                    <label for="three">
+                    <input type="checkbox" value="optical" onchange="toggleKoboFacilitywms(this)"/>Optical Shop</label>   
+                    <label for="three">
+                    <input type="checkbox" value="delvry" onchange="toggleKoboFacilitywms(this)"/>Delivery Center</label>   
+                    <label for="three">
+                    <input type="checkbox" value="dropin" onchange="toggleKoboFacilitywms(this)"/>Drop In Centre</label>   
+                    <label for="three">
+                    <input type="checkbox" value="dspnsry" onchange="toggleKoboFacilitywms(this)"/>Dispensary</label>   
+                    <label for="three">
+                    <input type="checkbox" value="othr" onchange="toggleKoboFacilitywms(this)"/>Other</label>
+                    <label for="three">                                                                                                                                                                                
+                 </div>   
+                         
+                </div>
+              </div>
+  </div> 
+</div><!--Ending of India VIew div--->
+   <!--Creating div for navigated area view it is ending after highlight rural boundaries of maharashtra--->
+   <div id="navigatedarea" style="display:none;">
      <!--these two dropdowns are dependent-->
       <div class="tooltips" title="Please select the State">
         <select class='form-control' id="indstate" name="indstate">
@@ -244,7 +325,7 @@ h6 {
                     <label for="three">
                       <input type="checkbox" id="alt" value="{Alt}" onchange="GetSelectedfac(this)"/>Alternate Hospital</label>
                   </div><hr>
-                  <div id="kobo" value="kobo">Hospital data Collected by Community
+                  <div id="kobo" value="kobo">Community Volunteered Hospital Data
                   <label for="three">
                     <input type="checkbox" value="hospital" onchange="toggleKoboFacility(this)"/>Hospital</label>
                     <label for="three">
@@ -324,13 +405,13 @@ h6 {
         <!-- <tr><h5>Selected State:Related Data</h5></tr> -->
         <div class="text-center">
             <div class="checkbox" id="stboun">
-            <tr><h6>Highlight Urban Boundaries</h6></tr>  
+            <tr><h6>Highlight Maharashtra Urban Boundaries</h6></tr>  
               <!-- <tr><tb>  <label><input type="checkbox" value="{mahadem}" onchange="getBoundaryst(this)"></tb><tb><span> Wards</span></label></tb> -->
                 <tb>  <label><input type="checkbox" value="{mahatown}" onchange="getBoundaryru(this)"></tb><tb><span> Town</span></label></tb>
                </tr>
               </div>
               <div class="checkbox">
-                <tr><h6>Highlight Rural Boundaries</h6></tr>  
+                <tr><h6>Highlight Maharashtra Rural Boundaries</h6></tr>  
   
                <tr> <label><input type="checkbox" value="{maharural}" onchange="getBoundaryru(this)"><span> Villages</span></label></tr>
               </div>
@@ -338,12 +419,16 @@ h6 {
         </div>
      </table>   
     </div>
+  
         </form>
  
         
 
          </form> 
-         <!--   -->
+   </div> <!--Navigated area div ends--> 
+
+
+
          <div class="border">
             <button type="button" class="btn btn-primary" id='locate'>Your Location</button>
             <button type="button" class="btn btn-primary disable" id='setlocation'>Set Location</button>
@@ -351,11 +436,10 @@ h6 {
          </div>
 
          <div class="border row">
-            <input type="text" placeholder = "Enter facility Name" class="form-control col-7" id="usr">
-            <button type="button" class="btn btn-primary col" onclick = "searchFacilities()">Search Facility</button>
+            <input type="text" placeholder = "Enter facility Name" disabled="" class="form-control col-7" id="usr">
+            <button type="button" class="btn btn-primary col" onclick = "searchFacilities()" disabled="">Search Facility</button>
          </div>
-     </div>
-
+     
 
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -394,6 +478,25 @@ $(document).ready(function(){
 
       }
     });
+
+
+
+    $('#view_s').on('change', function() {
+      if (this.value == 'All India View')
+      {
+        $("#indiaview").show();
+        $("#navigatedarea").hide();
+        
+        
+      }
+      else if (this.value == 'Navigated Area View'){
+        
+        
+        $("#indiaview").hide();
+        $("#navigatedarea").show();
+      }
+
+   });
 });
 
 
@@ -526,6 +629,17 @@ function showCheckboxes() {
   }
 }  
 
+function showCheckboxes2() {
+  var checkboxes = document.getElementById("checkboxes2");
+  if (!expanded) {
+    checkboxes2.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes2.style.display = "none";
+    expanded = false;
+  }
+}  
+
 function showCheckboxes3() {
   var checkboxes = document.getElementById("checkboxes3");
   if (!expanded) {
@@ -639,9 +753,44 @@ function toggleKoboFacility(clickedCheckBox){
     }
 }
 
+
+function toggleKoboFacilitywms(clickedCheckBox){
+    let value = clickedCheckBox.value;
+    if($(clickedCheckBox).is(':checked')){
+        putKoboHealthFacitywms(value);
+    }else{
+        removeKoboHealthFacitywms(value);
+
+    }
+}
+
+
 function removeKoboHealthFacity(facility){
         mymap.removeLayer(activeKoboHealthFacity[facility]);
 };
+
+
+
+function removeKoboHealthFacitywms(facility){
+        cqln=""+facility+"=1";
+        
+        wmshealthLayerList.forEach((l,index) => {
+          fil = (l.options.cql_filter);//this consoleisnt working control isnt entering here
+          // console.log(fil);
+          if(cqln === fil){
+                mymap.removeLayer(l);
+                wmshealthLayerList.splice(index, 1);
+          }
+         
+        });
+        
+
+      // if(wms_legend){
+      //    mymap.removeControl(wms_legend);
+      // } 
+ 
+
+}
 
 function removeWFSfac(facility){
         mymap.removeLayer(activatedHealthFacility[facility]);
@@ -809,18 +958,22 @@ function queryFeatures(currentPos, numResults) {
     var pinLayerList=[];
     var distLayerList=[];
     var wardLayerList=[];
+    var wmshealthLayerList=[];
+
     var searchControl;
 
     
 
 $('#indstate').on('change',function(){
+        
+        
         clear_layer();
         clearpoint_layer();
 
         let indstate = document.getElementById('indstate').value;
 
         putWMSLayerst();
-       
+        
 
         //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
      })
@@ -1046,20 +1199,20 @@ function putWMSLayerpincode(pincode){
 
 
 function putWMSru(layer){
-  var aspiD = document.getElementById('district').value;
-    var distLayerLatLong= listDistrict[aspiD];
+  //var aspiD = document.getElementById('district').value;
+    //var distLayerLatLong= listDistrict[aspiD];
              //clear_layer();
     //console.log('kk',distLayerLatLong);
-    let district= distLayerLatLong[0];
-    if(layer=="geonode:TownHealth0")
-      district=distLayerLatLong[0].toUpperCase();
+    // let district= distLayerLatLong[0];
+    // if(layer=="geonode:TownHealth0")
+    //   district=distLayerLatLong[0].toUpperCase();
     //console.log(district);
 
     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
         layers: layer,
         format: 'image/png',
         transparent:'true',
-        cql_filter:"district_n='"+district+"'"
+        //cql_filter:"district_n='"+district+"'"
     });
     wms_layer.addTo(mymap);
     newLayerList.push(wms_layer);
@@ -1188,10 +1341,51 @@ L.Map.include({
 
 let activatedHealthFacility = {'CHC':{},'PHC':{},'Allo':{},'Alt':{}}
 let activeKoboHealthFacity={'hospital':{},'other':{}}
+
+function putKoboHealthFacitywms(facility){
+            //console.log(cql);
+            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
+            layers: 'geonode:cumulative_healthfacility_14may',
+            format: 'image/png',
+            transparent:'true',
+            tiled:'true',
+            opacity:0.7,
+            // version: '1.3.0',
+            cql_filter:""+facility+"=1",
+            style:""});
+           
+
+            wms_layer.addTo(mymap);
+            console.log(wms_layer);
+            TRIBLAYER="https://makerghat.urbansciences.in/geoserver/geonode/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS="+wms_layer.options.layers+"&QUERY_LAYERS="+wms_layer.options.layers;
+            wmshealthLayerList.push(wms_layer);
+            // if(wms_legend){
+            //     mymap.removeControl(wms_legend);
+            //   }
+            // addWMSLegend(layer);
+
+
+           
+         }  
+
+
+
 function putKoboHealthFacity(facility){
-    const base_url = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:health_facility_12may2020';
-    const url = base_url + '&propertyName=the_geom,facltyname,facltytyp,address_te,state_gen,district_g,pincode_ge,totbed'
-    let cql_url= url + `&cql_filter=${facility}=1`;
+  let indstate = document.getElementById('indstate').value;
+  let rootUrl = '{{site_url}}geoserver/geonode/ows';
+
+    let options = {
+    service: 'WFS',
+    version: '1.0.0',
+    request: 'GetFeature',
+    outputFormat: 'application/json',
+    typeName:'geonode:cumulative_healthfacility_14may',
+    cql_filter:`${facility}=1 AND state_gen='${indstate}'`,
+    propertyName:'the_geom,facltyname,facltytyp,address_te,state_gen,district_g,pincode_ge,totbed,state_gen'
+    };
+    let parameters = L.Util.extend(options);
+    cql_url = rootUrl + L.Util.getParamString(parameters)
+    console.log(cql_url);
 
     function geojsonMarkerOptions(fac) {
         let circleProp = {radius:6,fillColor: "#",color: "#000",weight: 1,opacity: 1,fillOpacity: 0.8};
@@ -1253,6 +1447,7 @@ function putKoboHealthFacity(facility){
                 },onEachFeature:onEachFeatureForPoint,
             }).addTo(mymap);
             mymap.spin(false);
+            LayerList.push(healthFacility);
             activeKoboHealthFacity[facility] = healthFacility;
         });
 
