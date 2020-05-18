@@ -98,6 +98,22 @@ h6 {
 }
 
 
+.select {
+    background-color: rgb(116, 109, 109);
+
+    width: 40%;
+    margin-left: 100px;;
+    color: white;
+
+    
+    
+}
+.select.highlight {
+    background:rgb(0, 0, 0);
+    color:white;
+}
+
+
 </style>
 
 <div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
@@ -266,11 +282,14 @@ h6 {
       &nbsp;&nbsp;&nbsp;&nbsp;
         <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumwards">
             
-            <tr><tb>  <label><input type="checkbox" value="{mumwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai City Wards </span></label></tb> </tr>
+            <tr><tb>  <label><input type="checkbox" value="{mumwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai City Corporator Wards </span></label></tb> </tr>
+            <tr><tb>  <label><input type="checkbox" value="{mumadm}" onchange="getBoundary(this)"></tb><tb><span> Mumbai City Admin Wards </span></label></tb> </tr>
+
       </div> 
       <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumsubwards">
             
             <tr><tb>  <label><input type="checkbox" value="{mumsubwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai Suburban Wards </span></label></tb> </tr>
+            <tr><tb>  <label><input type="checkbox" value="{mumadmsubwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai Suburban Admin Wards </span></label></tb> </tr>
       </div> 
 
 
@@ -484,16 +503,45 @@ $(document).ready(function(){
     $('#view_s').on('change', function() {
       if (this.value == 'All India View')
       {
+        mymap.setView([20.5937,78.9629],4);
         $("#indiaview").show();
         $("#navigatedarea").hide();
-        
+
+        distLayerList.forEach(l =>{
+          mymap.removeLayer(l);
+        })
+
+        pinLayerList.forEach(l =>{
+          mymap.removeLayer(l);
+        })
+
+      if(area){
+        mymap.removeLayer(area);
+      }
+         clear_layer();
+        clearpoint_layer();
+        removeWFSfac();
+        removeKoboHealthFacity();
+        removeKoboHealthFacitywms(facility);
+        clear_distlayer();
+        clear_pinlayer();
         
       }
       else if (this.value == 'Navigated Area View'){
+        wmshealthLayerList.forEach(l => {
+          mymap.removeLayer(l);
+        })
         
         
         $("#indiaview").hide();
         $("#navigatedarea").show();
+        clear_layer();
+        clearpoint_layer();
+        removeWFSfac();
+        removeKoboHealthFacity();
+        removeKoboHealthFacitywms(facility);
+        clear_distlayer();
+        clear_pinlayer();
       }
 
    });
@@ -659,9 +707,13 @@ function getBoundary(obj) {
         else if(boundary== "{district}")
             putWMS("geonode:all_india_districts_10may2020");
         else if(boundary=="{mumwards}")  
-            putwards("Mumbai City");
+            putwards("Mumbai City",'geonode:corporatorwardboundary_mumbai_13may');
+        else if(boundary=="{mumadm}")  
+            putwards("Mumbai City",'geonode:Mumbai_Ward_Boundary_19may2020');  
         else if(boundary=="{mumsubwards}")  
-            putwards("Mumbai Suburban");  
+            putwards("Mumbai Suburban",'geonode:corporatorwardboundary_mumbai_13may'); 
+        else if(boundary=="{mumadmsubwards}")  
+            putwards("Mumbai Suburban",'geonode:Mumbai_Ward_Boundary_19may2020');      
         else
             putWMS("geonode:maha_demography_with_mumbai");
     }else{
@@ -672,7 +724,11 @@ function getBoundary(obj) {
         else if(boundary=="{mumwards}")  
             removewards();
         else if(boundary=="{mumsubwards}")  
-            removewards();    
+            removewards();
+        else if(boundary=="{mumadmsubwards}")  
+            removewards();
+        else if(boundary=="{mumadm}")  
+            removewards();            
         else 
             removeWMS("geonode:maha_demography_with_mumbai");
     }
@@ -1090,16 +1146,22 @@ function putWMSLayerst(){
 
 function putWMSLayerdist(){
              var dist = document.getElementById('district').value;
+             var state= document.getElementById('indstate').value;
+
              //console.log(indstate);
              //var stLayerLatLong= listState[indstate];
+            if(dist=='Mumbai City' || dist=='Mumbai Suburban')
+                  mymap.setView([19.0760, 72.8777],11);
+
             clear_distlayer();
             var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
             layers: 'geonode:india_pincodes_13may',
             format: 'image/png',
             transparent:'true',
             // version: '1.3.0',
-            cql_filter: "district='"+dist+"'",
+            cql_filter: `district='${dist}' AND state='${state}'` ,
             style:""});
+            console.log(wms_layer);
             //clear_layer();
             //clearpoint_layer();
             wms_layer.addTo(mymap);
@@ -1112,11 +1174,11 @@ function putWMSLayerdist(){
 
 
 
-function putwards(cql){
+function putwards(cql,layer){
              var dist = cql;
-            
+            var layer=layer;
             var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-            layers: 'geonode:corporatorwardboundary_mumbai_13may',
+            layers:layer,
             format: 'image/png',
             transparent:'true',
             // version: '1.3.0',
@@ -1171,7 +1233,9 @@ function setView(layerName,selectedBoundary){
         }
         response.json().then(function(geojsonData) {
             area = L.geoJson(geojsonData.features).addTo(mymap)
-            mymap.fitBounds(area.getBounds())
+            lat = area.getBounds()._northEast.lat
+            lng = area.getBounds()._northEast.lng
+            mymap.setView([lat,lng-0.4],10)
         });
     }).catch(function(err) {
             console.log('Fetch Error :-S', err);
@@ -1199,15 +1263,7 @@ function putWMSLayerpincode(pincode){
 
 
 function putWMSru(layer){
-  //var aspiD = document.getElementById('district').value;
-    //var distLayerLatLong= listDistrict[aspiD];
-             //clear_layer();
-    //console.log('kk',distLayerLatLong);
-    // let district= distLayerLatLong[0];
-    // if(layer=="geonode:TownHealth0")
-    //   district=distLayerLatLong[0].toUpperCase();
-    //console.log(district);
-
+  
     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
         layers: layer,
         format: 'image/png',
@@ -1356,13 +1412,9 @@ function putKoboHealthFacitywms(facility){
            
 
             wms_layer.addTo(mymap);
-            console.log(wms_layer);
+            //console.log(wms_layer);
             TRIBLAYER="https://makerghat.urbansciences.in/geoserver/geonode/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS="+wms_layer.options.layers+"&QUERY_LAYERS="+wms_layer.options.layers;
             wmshealthLayerList.push(wms_layer);
-            // if(wms_legend){
-            //     mymap.removeControl(wms_legend);
-            //   }
-            // addWMSLegend(layer);
 
 
            
@@ -1582,6 +1634,98 @@ function putWFSFacility(facility) {
     });
     //})
     };         
+
+function Identify(e)
+{
+
+  console.log("Identify");
+// set parameters needed for GetFeatureInfo WMS request
+var sw = mymap.options.crs.project(mymap.getBounds().getSouthWest());
+var ne = mymap.options.crs.project(mymap.getBounds().getNorthEast());
+var BBOX = sw.x + "," + sw.y + "," + ne.x + "," + ne.y;
+var WIDTH = mymap.getSize().x;
+var HEIGHT = mymap.getSize().y;
+
+var X = Math.trunc(mymap.layerPointToContainerPoint(e.layerPoint).x);
+var Y = Math.trunc(mymap.layerPointToContainerPoint(e.layerPoint).y);
+
+// compose the URL for the request
+console.log(e);
+
+var URL = TRIBLAYER + '&BBOX='+BBOX+'&FEATURE_COUNT=1&HEIGHT='+HEIGHT+'&WIDTH='+WIDTH+'&INFO_FORMAT=application%2Fjson&TILED=false&CRS=EPSG%3A3857&I='+X+'&J='+Y;
+// console.log(URL);
+//send GetFeatureInfo as asynchronous HTTP request using jQuery $.ajax
+$.ajax({
+    url: URL,
+    dataType: "json",
+    type: "GET",
+    success: function(data)
+    {
+        if(data.features.length !== 0) {  // at least one feature returned in response
+        var feature = data.features[0]; // first feature from response
+        console.log(feature);
+        // Set up popup for clicked feature and open it
+        var popup = new L.Popup({
+            maxWidth: 300
+        });
+        console.log(feature.properties.facltytyp);
+        if(feature.properties.facltytyp === "at"){
+          //console.log("I reached at");
+            insti_content = "<table class = 'popupclass' ><tr><td><b>Additional TSP District</b></td><td>"+feature.properties.district+"</td></tr>"+
+               "<tr><td><b>Village Name</b></td><td>"+feature.properties.area_name+"</td></tr>"+             
+                "<tr><td><b>Total Population</b></td><td>"+feature.properties.tot_p+"</td></tr>"+
+                "<tr><td><b>Total Tribal Population</b></td><td>"+feature.properties.st_pop+"</td></tr>"+
+                "<tr><td><b>Percentage Total Tribal Population</b></td><td>"+feature.properties.percent_of+"%"+"</td></tr></table>";
+        }else if(feature.properties.category === "m"){
+            insti_content = "<table class = 'popupclass' ><tr><td><b>MADA District</b></td><td>"+feature.properties.district+"</td></tr>"+
+               "<tr><td><b>Village Name</b></td><td>"+feature.properties.area_name+"</td></tr>"+             
+                "<tr><td><b>Total Population</b></td><td>"+feature.properties.tot_p+"</td></tr>"+
+                "<tr><td><b>Total Tribal Population</b></td><td>"+feature.properties.st_pop+"</td></tr>"+
+                "<tr><td><b>Percentage Total Tribal Population</b></td><td>"+feature.properties.percent_of+"%"+"</td></tr></table>";
+        }else if(feature.properties.category === "mm"){
+            insti_content = "<table class = 'popupclass' ><tr><td><b>Mini MADA District</b></td><td>"+feature.properties.district+"</td></tr>"+
+               "<tr><td><b>Village Name</b></td><td>"+feature.properties.area_name+"</td></tr>"+             
+                "<tr><td><b>Total Population</b></td><td>"+feature.properties.tot_p+"</td></tr>"+
+                "<tr><td><b>Total Tribal Population</b></td><td>"+feature.properties.st_pop+"</td></tr>"+
+                "<tr><td><b>Percentage Total Tribal Population</b></td><td>"+feature.properties.percent_of+"%"+"</td></tr></table>";
+
+        }else if(feature.properties.category === "t"){
+             insti_content = "<table class = 'popupclass' ><tr><td><b>Tribal Sub Plan District</b></td><td>"+feature.properties.district+"</td></tr>"+
+               "<tr><td><b>Village Name</b></td><td>"+feature.properties.area_name+"</td></tr>"+             
+                "<tr><td><b>Total Population</b></td><td>"+feature.properties.tot_p+"</td></tr>"+
+                "<tr><td><b>Total Tribal Population</b></td><td>"+feature.properties.st_pop+"</td></tr>"+
+                "<tr><td><b>Percentage Total Tribal Population</b></td><td>"+feature.properties.percent_of+"%"+"</td></tr></table>";
+
+        }
+        popup.setContent(insti_content);
+        popup.setLatLng(e.latlng);
+        mymap.openPopup(popup);
+    }
+    }
+    });
+}
+
+mymap.addEventListener('click',Identify);
+   
+
+$('.select').click(function () {
+        $(this).toggleClass('highlight')
+    })
+var coll = document.getElementsByClassName("collapsible");
+var i;
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}  
+
+
 
 </script>
 
