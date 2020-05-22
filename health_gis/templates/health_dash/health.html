@@ -450,7 +450,7 @@ h6 {
 
          <div class="border">
             <button type="button" class="btn btn-primary" id='locate'>Your Location</button>
-            <button type="button" class="btn btn-primary disable" id='setlocation'>Set Location</button>
+            <button type="button" class="btn btn-primary" id='setlocation'>Set Location</button>
             <button type="button" class="btn btn-primary" id='find-nearest'>Find Nearest Facility</button>
          </div>
 
@@ -585,6 +585,25 @@ function filterCSV2(csv, key, value)
       return result;
   }
 
+function filterCSV4(csv, key1, value1, key2, value2)
+{
+
+var result = [];
+var unique = [];
+csv.forEach(function(val,idx,arr){
+
+if(val[key1] == value1 && val[key2]==value2){
+
+
+result.push(val.pincode);
+unique[val.pincode] = 1;
+
+
+}
+})
+console.log(result);
+return result;
+}
 
 function filterCSV3(csv, key, value) 
   {
@@ -608,6 +627,8 @@ function filterCSV3(csv, key, value)
 
 
 
+
+
 d3.csv("{% static 'data/healthdash/st_dist_pin.csv' %}",function(data){
     $('#indstate').on("change", function(d) {
        var val = d3.select(this).property("value");
@@ -625,11 +646,12 @@ d3.csv("{% static 'data/healthdash/st_dist_pin.csv' %}",function(data){
       });
       
     $('#district').on("change", function(d) {
-       
-       var val = d3.select(this).property("value");
+       var val1= document.getElementById("indstate").value;
+       console.log(val1);
+       var val2 = d3.select(this).property("value");
        $('#pincode').find('option').not(':first').remove();
 
-       var data_2=filterCSV2(data,'Districtname',val);
+       var data_2=filterCSV4(data,'statename',val1,'Districtname',val2);
        var select=document.getElementById("pincode");
        for (var i=0; i < data_2.length; i++) {
         var opt = data_2[i];
@@ -642,7 +664,7 @@ d3.csv("{% static 'data/healthdash/st_dist_pin.csv' %}",function(data){
 
 
         $('#block_s').find('option').not(':first').remove();
-        var data_3=filterCSV3(data,'Districtname',val);
+        var data_3=filterCSV3(data,'Districtname',val2);
        var select=document.getElementById("block_s");
        for (var i=0; i < data_3.length; i++) {
         var opt = data_3[i];
@@ -1243,9 +1265,12 @@ function setView(layerName,selectedBoundary){
 }
 function putWMSLayerpincode(pincode){
     clear_pinlayer();
+    var state = document.getElementById('indstate').value;
+
     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
         layers:"geonode:india_pincodes_12may",
         cql_filter:"pincode='"+pincode+"'",
+        cql_filter: `pincode='${pincode}' AND state='${state}'` ,
         format: 'image/png',
         transparent:'true',
     });
