@@ -838,7 +838,6 @@ function toggleKoboFacilitywms(clickedCheckBox){
         putKoboHealthFacitywms(value);
     }else{
         removeKoboHealthFacitywms(value);
-
     }
 }
 
@@ -850,24 +849,7 @@ function removeKoboHealthFacity(facility){
 
 
 function removeKoboHealthFacitywms(facility){
-        cqln=""+facility+"=1";
-        
-        wmshealthLayerList.forEach((l,index) => {
-          fil = (l.options.cql_filter);//this consoleisnt working control isnt entering here
-          // console.log(fil);
-          if(cqln === fil){
-                mymap.removeLayer(l);
-                wmshealthLayerList.splice(index, 1);
-          }
-         
-        });
-        
-
-      // if(wms_legend){
-      //    mymap.removeControl(wms_legend);
-      // } 
- 
-
+    mymap.removeLayer(activeKoboAllIndiaHealthFacity[facility]);
 }
 
 function removeWFSfac(facility){
@@ -875,13 +857,7 @@ function removeWFSfac(facility){
 };
 
 function removewards(){
-       
             wardLayerList.forEach(layer => mymap.removeLayer(layer));
-
-      
-
-      
-
 }
 
 // ***********FIND NEAREST FACILITY FEATURE
@@ -1422,6 +1398,7 @@ L.Map.include({
 
 let activatedHealthFacility = {'CHC':{},'PHC':{},'Allo':{},'Alt':{}}
 let activeKoboHealthFacity={'hospital':{},'other':{}}
+let activeKoboAllIndiaHealthFacity={}
 
 function putKoboHealthFacitywms(facility){
             //console.log(cql);
@@ -1440,9 +1417,7 @@ function putKoboHealthFacitywms(facility){
             //console.log(wms_layer);
             TRIBLAYER="https://makerghat.urbansciences.in/geoserver/geonode/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS="+wms_layer.options.layers+"&QUERY_LAYERS="+wms_layer.options.layers;
             wmshealthLayerList.push(wms_layer);
-
-
-           
+            activeKoboAllIndiaHealthFacity[facility] = wms_layer;
          }  
 
 
@@ -1469,7 +1444,6 @@ function putKoboHealthFacity(facility){
         if(fac === 'hospital') circleProp['fillColor'] = 'bluevoilet'
         else if(fac === 'mhu') circleProp['fillColor'] = 'teal'
         else if(fac === 'subcenter') circleProp['fillColor'] = 'aqua'
-        
         else if(fac === 'phc') circleProp['fillColor'] = 'crimson'
         else if(fac === 'clinic') circleProp['fillColor'] = 'darkcyan'
         else if(fac === 'phu') circleProp['fillColor'] = 'darkmagenta'
@@ -1505,7 +1479,7 @@ function putKoboHealthFacity(facility){
                         <tr><td>Website:</td><td> ${unavailable}</td></tr>
                         <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
                         <tr><td>Last updated:</td><td> 12th May 2020</td></tr>
-                        <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedback</a></button></tr>
+                        <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
                         </table>`
                         ) 
     }
@@ -1664,7 +1638,6 @@ function putWFSFacility(facility) {
 function Identify(e)
 {
 
-console.log("Identify");
 // set parameters needed for GetFeatureInfo WMS request
 var sw = mymap.options.crs.project(mymap.getBounds().getSouthWest());
 var ne = mymap.options.crs.project(mymap.getBounds().getNorthEast());
@@ -1707,7 +1680,10 @@ $.ajax({
                 "<tr><td><b>Email ID</b></td><td>"+"Unavailable"+"</td></tr>"+
                 "<tr><td><b>Website</b></td><td>"+"Unavailable"+"</td></tr>"+
                 "<tr><td><b>Phone number</b></td><td>"+"Unavailable"+"</td></tr>"+
-               "<tr><td><b>Last updated</b></td><td>"+"18 May"+"</td></tr>"+"</table>";
+               "<tr><td><b>Last updated</b></td><td>"+"18 May"+"</td></tr>"+
+               `<tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>`+
+               "</table>";
+               
         
         popup.setContent(insti_content);
         popup.setLatLng(e.latlng);
