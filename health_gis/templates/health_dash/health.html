@@ -919,7 +919,7 @@ $locate.on('click', function(e) {
 
 // SET LOCATION BUTTON
 $setlocation.on('click',function(e){
-    mymap.on('click', function(e) {
+    mymap.on('dblclick', function(e) {
         currentPos = [e.latlng.lat,e.latlng.lng];
         if(oldMarker){
             mymap.removeLayer(oldMarker);
@@ -1664,7 +1664,7 @@ function putWFSFacility(facility) {
 function Identify(e)
 {
 
-  console.log("Identify");
+console.log("Identify");
 // set parameters needed for GetFeatureInfo WMS request
 var sw = mymap.options.crs.project(mymap.getBounds().getSouthWest());
 var ne = mymap.options.crs.project(mymap.getBounds().getNorthEast());
