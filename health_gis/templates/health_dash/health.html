@@ -961,6 +961,12 @@
                                                 oldLayer = null;
                                                 facilityLayer = new L.featureGroup();
                                             }
+
+                                            if (oldhfbb){
+                                                mymap.removeLayer(oldhfbb);
+                                                oldhfbb = null;
+                                                healthFacilityInBB = null;
+                                            }
                                             marker = new L.marker(currentPos).addTo(mymap);
                                             oldMarker = marker;
                                         });
@@ -978,31 +984,58 @@
 
                                 }
                                 var circle = new L.circle();
-
+                                let healthFacilityInBB = null;
+                                let oldhfbb = null;
 
                                 $setbuffer.on('click', function(e) {
-                                    mymap.removeLayer(circle);
-
-                                    var radius = (output.innerHTML) * 1000;
-                                    var circleCenter = currentPos;
-                                    var circleOptions = {
-                                        color: 'red',
-                                        fillColor: '#f03',
-                                        fillOpacity: 0.1
-                                    }
-                                    circle = new L.circle(circleCenter, radius, circleOptions);
-
-                                    // circle.addTo(mymap);
-                                    querybuf(currentPos, radius);
+                                    console.log(oldhfbb)
+                                    if (oldhfbb){
+                                                mymap.removeLayer(oldhfbb);
+                                                oldhfbb = null;
+                                                healthFacilityInBB = null;
+                                            }
+                                    querybuf(currentPos);
 
 
                                 });
                                 var highlight = L.circleMarker()
+                                let indstate = document.getElementById('indstate').value;
 
-                                function querybuf(currentPos, numResults) {
+                               
+                                function querybuf(currentPos    ) {
 
-                                    //basic
-                                    let indstate = document.getElementById('indstate').value;
+                                    function onEachFeatureForPointBB(feature, layer) {
+                                        const unavailable = '-';
+                                        const updateDate = "India Hospitals";
+                                        layer.bindPopup(`<table class = 'popupclass'>
+                        <tr><td>Name:</td><td> ${feature.properties.facltyname}</td></tr>
+                        <tr><td>Type:</td><td> ${feature.properties.facltytyp}</td></tr>
+                         <tr><td>Amenities:</td><td> ${feature.properties.amenities}</td></tr>
+                        <tr><td>Address:</td><td> ${feature.properties.address_te1}</td></tr>
+                        <tr><td>District:</td><td> ${feature.properties.district_g}</td></tr>
+                        <tr><td>State:</td><td> ${feature.properties.state_gen}</td></tr>
+                        <tr><td>Pin Code:</td><td> ${feature.properties.pincode_ge}</td></tr>
+                        <tr><td>Total Bed Count:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Pin Code Accuracy (within area):</td><td> Yes</td></tr>
+                        <tr><td>Management:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Food Arrangement:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Website:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Last updated:</td><td> 12th May 2020</td></tr>
+                        <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
+                        </table>`)
+                                    }
+
+                                    let keys = Object.keys(activeKoboHealthFacity)
+                                    let query=''
+                                    keys.forEach((v,i) => {
+                                        query+=v+">0.0"
+                                    if (i != keys.length-1){
+                                        query+= " OR "
+                                    }
+                                    })
+
                                     let rootUrl = '{{site_url}}geoserver/geonode/ows';
                                     let bbOffset = .18;
                                     let options = {
@@ -1011,7 +1044,7 @@
                                         request: 'GetFeature',
                                         outputFormat: 'application/json',
                                         typeName: 'geonode:cumulative_healthfacility_18may',
-                                        cql_filter: `hospital>0.0 AND state_gen='Maharashtra' AND BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})`,
+                                        cql_filter: `BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset}) AND (${query})`,
                                         propertyName: 'the_geom,facltyname,facltytyp,address_te1,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
                                     };
                                     let parameters = L.Util.extend(options);
@@ -1025,58 +1058,22 @@
                                                 return;
                                             }
                                             response.json().then(function(geojsonData) {
-                                                let healthFacilityhealthFacility = L.geoJson(geojsonData.features, {
+                                                let healthFacilityInBB = L.geoJson(geojsonData.features, {
                                                     pointToLayer: function(feature, latlng) {
-                                                        return L.circleMarker(latlng,{color: "yellow", weight: 6, opacity: 1,fillOpacity: 0.8});
+                                                        return L.circleMarker(latlng,{color: "yellow", weight: 6, opacity: .1,fillOpacity: 0.8});
                                                     },
+                                                    onEachFeature: onEachFeatureForPointBB,
                                                 }).addTo(mymap);
+                                                oldhfbb = healthFacilityInBB;
                                             });
 
 
                                         }).catch(function(err) {
                                         console.log('Fetch Error :-S', err);
                                     });
+                  
                                     
-                                
-                                    //stop
-                                    // var distances = [];
-                                    // healthFacility.eachLayer(function(f) {
-                                    //     var distance = L.latLng(currentPos).distanceTo(f.getLatLng());
-                                    //     distances.push(distance);
-                                    // });
-                                    // distances.sort(function(a, b) {
-                                    //     return a - b;
-                                    // });
-                                    // facilityLayer.removeLayer(highlight);
-
-                                    // healthFacility.eachLayer(function(f) {
-                                    //     var distance = L.latLng(currentPos).distanceTo(f.getLatLng());
-                                    //     //mymap.removeLayer(facilityLayer)
-
-                                    //     if (distance < numResults) {
-                                    //         //f.bindTooltip(onEachFeatureForPoint1);
-
-                                    //         highlight = L.circleMarker(f.getLatLng(), {
-                                    //             color: 'yellow',
-                                    //             weight: 6,
-                                    //             opacity: 1,
-                                    //         })
-                                    //         highlight.addTo(facilityLayer)
-
-                                    //     }
-                                    //     //facilityLayer.remove(highlight)
-                                    // });
-                                    mymap.removeLayer(facilityLayer)
-                                    oldLayers = facilityLayer;
-                                    mymap.flyToBounds(facilityLayer.getBounds(), {
-                                        duration: 1,
-                                        easeLinearity: .1
-                                    });
-                                    mymap.on('zoomend', function() {
-                                        mymap.addLayer(facilityLayer);
-                                    })
-                                    mymap.removeLayer(flyToBounds);
-
+                                  
                                 }
 
                                 // FIND NEAREST BUTTON
@@ -1654,16 +1651,8 @@
                                 });
 
 
-                                let activatedHealthFacility = {
-                                    'CHC': {},
-                                    'PHC': {},
-                                    'Allo': {},
-                                    'Alt': {}
-                                }
-                                let activeKoboHealthFacity = {
-                                    'hospital': {},
-                                    'other': {}
-                                }
+                                let activatedHealthFacility = {}
+                                let activeKoboHealthFacity = {}
                                 let activeKoboAllIndiaHealthFacity = {}
                                 let activearogyaFacity = {}
 
