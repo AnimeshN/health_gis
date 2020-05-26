@@ -492,7 +492,7 @@
                                     <button type="button" class="btn btn-primary" id='setlocation'>Set Location</button>
                                     <button type="button" class="btn btn-primary" id='find-nearest'>Find Nearest Facility</button>
                                     <div id="slider">
-                                        <label>Set Radius</label><br>
+                                        <label>Set Range</label><br>
                                         <input type="range" min="1" max="20" value="1" class="slider" id="myRange" step="5" list="steplist">
                                         <datalist id="steplist">
                                             <option>1</option>
@@ -501,8 +501,8 @@
                                             <option>15</option>
                                             <option>20</option>
                                         </datalist>
-                                        <p>Value: <span id="demo"></span></p>
-                                        <button type="button" class="btn btn-primary" id='setbuffer'>Set Radius(in Kms)</button>
+                                        
+                                        <button type="button" class="btn btn-primary" id='setbuffer'>Health facilities within <span id="demo"></span> Km </button>
 
                                     </div>
                                 </div>
@@ -541,8 +541,6 @@
 
                                         }
                                     });
-
-
 
                                     $('#view_s').on('change', function() {
                                         if (this.value == 'All India View') {
@@ -988,7 +986,6 @@
                                 let oldhfbb = null;
 
                                 $setbuffer.on('click', function(e) {
-                                    console.log(oldhfbb)
                                     if (oldhfbb){
                                                 mymap.removeLayer(oldhfbb);
                                                 oldhfbb = null;
@@ -1008,23 +1005,23 @@
                                         const unavailable = '-';
                                         const updateDate = "India Hospitals";
                                         layer.bindPopup(`<table class = 'popupclass'>
-                        <tr><td>Name:</td><td> ${feature.properties.facltyname}</td></tr>
-                        <tr><td>Type:</td><td> ${feature.properties.facltytyp}</td></tr>
-                         <tr><td>Amenities:</td><td> ${feature.properties.amenities}</td></tr>
-                        <tr><td>Address:</td><td> ${feature.properties.address_te1}</td></tr>
-                        <tr><td>District:</td><td> ${feature.properties.district_g}</td></tr>
-                        <tr><td>State:</td><td> ${feature.properties.state_gen}</td></tr>
-                        <tr><td>Pin Code:</td><td> ${feature.properties.pincode_ge}</td></tr>
-                        <tr><td>Total Bed Count:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Pin Code Accuracy (within area):</td><td> Yes</td></tr>
-                        <tr><td>Management:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Food Arrangement:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Website:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Last updated:</td><td> 12th May 2020</td></tr>
-                        <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
-                        </table>`)
+                                        <tr><td>Name:</td><td> ${feature.properties.facltyname}</td></tr>
+                                        <tr><td>Type:</td><td> ${feature.properties.facltytyp}</td></tr>
+                                        <tr><td>Amenities:</td><td> ${feature.properties.amenities}</td></tr>
+                                        <tr><td>Address:</td><td> ${feature.properties.address_te1}</td></tr>
+                                        <tr><td>District:</td><td> ${feature.properties.district_g}</td></tr>
+                                        <tr><td>State:</td><td> ${feature.properties.state_gen}</td></tr>
+                                        <tr><td>Pin Code:</td><td> ${feature.properties.pincode_ge}</td></tr>
+                                        <tr><td>Total Bed Count:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Pin Code Accuracy (within area):</td><td> Yes</td></tr>
+                                        <tr><td>Management:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Food Arrangement:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Website:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Last updated:</td><td> 12th May 2020</td></tr>
+                                        <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
+                                        </table>`)
                                     }
 
                                     let keys = Object.keys(activeKoboHealthFacity)
@@ -1037,7 +1034,7 @@
                                     })
 
                                     let rootUrl = '{{site_url}}geoserver/geonode/ows';
-                                    let bbOffset = .18;
+                                    let bbOffset = .009009 * slider.value;
                                     let options = {
                                         service: 'WFS',
                                         version: '1.0.0',
@@ -1050,6 +1047,8 @@
                                     let parameters = L.Util.extend(options);
                                     cql_url = rootUrl + L.Util.getParamString(parameters);
                                     console.log('bound',cql_url)
+                                    mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+
                                     fetch(cql_url).then(
                                         function(response) {
                                             if (response.status !== 200) {
@@ -1064,6 +1063,7 @@
                                                     },
                                                     onEachFeature: onEachFeatureForPointBB,
                                                 }).addTo(mymap);
+                                                mymap.spin(false);
                                                 oldhfbb = healthFacilityInBB;
                                             });
 
