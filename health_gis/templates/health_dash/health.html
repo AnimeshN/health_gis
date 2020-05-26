@@ -1,208 +1,214 @@
-{% extends 'health_dash/base.html' %}
-{% load static%}
-{% block content %}
+{% extends 'health_dash/base.html' %} {% load static%} {% block content %}
 <style>
-
-table, th, td {
-    border-bottom: 1px solid #ddd;
-    border-collapse: collapse;
-    padding: 2px 3px;
-    text-align: center;
-}
-th {
-    font-weight:bold;
-}
-tr:hover {
-    background-color: #c9dbe6;
-}
-#checkboxes {
-  display: none;
-  /* border: 1px #dadada solid; */
-}
-
-#checkboxes3 label {
-  display: block;
-  text-align: left;
-  margin: 10px;
-}
-
-#checkboxes3 {
-  display: none;
-  /* border: 1px #dadada solid; */
-}
-
-#checkboxes label {
-  display: block;
-  text-align: left;
-  margin: 10px;
-}
-
-/* #checkboxes label:hover {
+    table,
+    th,
+    td {
+        border-bottom: 1px solid #ddd;
+        border-collapse: collapse;
+        padding: 2px 3px;
+        text-align: center;
+    }
+    
+    th {
+        font-weight: bold;
+    }
+    
+    tr:hover {
+        background-color: #c9dbe6;
+    }
+    
+    #checkboxes {
+        display: none;
+        /* border: 1px #dadada solid; */
+    }
+    
+    input[type="range"]::-moz-range-track {
+        padding: 0 10px;
+        background: repeating-linear-gradient(to right, #ccc, #ccc 10%, #000 10%, #000 11%, #ccc 11%, #ccc 20%);
+    }
+    
+    #checkboxes3 label {
+        display: block;
+        text-align: left;
+        margin: 10px;
+    }
+    
+    #checkboxes3 {
+        display: none;
+        /* border: 1px #dadada solid; */
+    }
+    
+    #checkboxes label {
+        display: block;
+        text-align: left;
+        margin: 10px;
+    }
+    /* #checkboxes label:hover {
   background-color: #1e90ff;
 } */
-
-#checkboxes2 label {
-  display: block;
-  text-align: left;
-  margin: 10px;
-}
-
-#checkboxes2 {
-  display: none;
-  /* border: 1px #dadada solid; */
-}
-
-.btn{
-    margin:10px;
-}
-.border {
-    padding: 6px 8px;
-    border-style: groove;
-    border-radius: 5px;
-    margin:20px;
-}
-.info {
-    padding: 6px 8px;
-    font: 14px/16px Arial, Helvetica, sans-serif;
-    background: rgba(255,255,255,0.8);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
-}
-.info h4 {
-    margin: 0 0 5px;
-    color: #777;
-}
-
-.table{
-  border-collapse: collapse;
-  padding: 50px;
-  font-weight: bold;
-
-  
-  /* background:rgba(191, 149, 233, 0.473); */
-
-}
-
-/* css to customize Leaflet default styles  */
-.leaflet-popup-content-wrapper {
-    background: rgba(0, 0, 0, 0.9);
-    color: #ffffff;
-}
-
-.leaflet-popup-content{
-    font-weight: bold;
-}
-
-h6 {
-  color:blue;
-}
-
-
-.select {
-    background-color: rgb(116, 109, 109);
-
-    width: 40%;
-    margin-left: 100px;;
-    color: white;
-
     
+    #checkboxes2 label {
+        display: block;
+        text-align: left;
+        margin: 10px;
+    }
     
-}
-.select.highlight {
-    background:rgb(0, 0, 0);
-    color:white;
-}
-
-
+    #checkboxes2 {
+        display: none;
+        /* border: 1px #dadada solid; */
+    }
+    
+    .btn {
+        margin: 10px;
+    }
+    
+    .border {
+        padding: 6px 8px;
+        border-style: groove;
+        border-radius: 5px;
+        margin: 20px;
+    }
+    
+    .info {
+        padding: 6px 8px;
+        font: 14px/16px Arial, Helvetica, sans-serif;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+    }
+    
+    .info h4 {
+        margin: 0 0 5px;
+        color: #777;
+    }
+    
+    .table {
+        border-collapse: collapse;
+        padding: 50px;
+        font-weight: bold;
+        /* background:rgba(191, 149, 233, 0.473); */
+    }
+    /* css to customize Leaflet default styles  */
+    
+    .leaflet-popup-content-wrapper {
+        background: rgba(0, 0, 0, 0.9);
+        color: #ffffff;
+    }
+    
+    .leaflet-popup-content {
+        font-weight: bold;
+    }
+    
+    h6 {
+        color: blue;
+    }
+    
+    .select {
+        background-color: rgb(116, 109, 109);
+        width: 40%;
+        margin-left: 100px;
+        ;
+        color: white;
+    }
+    
+    .select.highlight {
+        background: rgb(0, 0, 0);
+        color: white;
+    }
 </style>
 
-<div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
-    
-    
-  <div class="mobileShow">
-   
-    <div style="text-align: center"> 
-        <button style="display: inline-block ;position: relative; background: #000; opacity: 0.60;" id="closebutton" name="closebutton" class="btn btn-secondary"><span class="fa fa-bars"></span></button> 
-    </div>
+<div id="side-bar" style="background-color: rgba(255, 255, 255);">
+    <!-- side-bar container -->
 
- </div>   
+
+    <div class="mobileShow">
+
+        <div style="text-align: center">
+            <button style="display: inline-block ;position: relative; background: #000; opacity: 0.60;" id="closebutton" name="closebutton" class="btn btn-secondary"><span class="fa fa-bars"></span></button>
+        </div>
+
+    </div>
     <div class="border">
         <table>
-        <tr><h6>Indian Admin Boundaries</h6></tr>
-        <div class="text-center">
-            <div class="checkbox" id="boundary">
-              <tr><tb>  <label><input type="checkbox" value="{state}" onchange="getBoundary(this)"></tb><tb><span> State </span></label></tb> </tr>
-              </div>
-              <div class="checkbox">
-                <label><input type="checkbox" value="{district}" onchange="getBoundary(this)"><span> District </span></label>
-              </div>
-             
-        </div>
-     </table>   
+            <tr>
+                <h6>Indian Admin Boundaries</h6>
+            </tr>
+            <div class="text-center">
+                <div class="checkbox" id="boundary">
+                    <tr>
+                        <tb> <label><input type="checkbox" value="{state}" onchange="getBoundary(this)"></tb><tb><span> State </span></label></tb>
+                    </tr>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" value="{district}" onchange="getBoundary(this)"><span> District </span></label>
+                </div>
+
+            </div>
+        </table>
     </div>
-  <div class="tooltips" id="view">
-      
-            <select class='form-control' id="view_s">
+    <div class="tooltips" id="view">
+
+        <select class='form-control' id="view_s">
               <option value="All"> Select Health Facility View </option>
               <option value="All India View">All India View</option>
               <option value="Navigated Area View">Navigated Area View</option>
              </select>
-      </div> 
-       &nbsp;&nbsp;
-<!--Starting of India View div--->
-  <div id="indiaview" style="display: none;">
-    <div class="text-center">
-       
+    </div>
+    &nbsp;&nbsp;
+    <!--Starting of India View div--->
+    <div id="indiaview" style="display: none;">
+        <div class="text-center">
 
-        <form id="projectList" class='border'>
-            <h6>Explore Health Care</h6>
-             <form>
-              <div class="multiselect">
-                <div class="selectBox" onclick="showCheckboxes2()">
-                    <button type="button" style="width: 90%;font-size:12px" class="btn btn-outline-dark">Select Health Facilies</button>
-                    
-                  <div class="overSelect"></div>
-                </div>
 
-                <div id="checkboxes2">
-                    
-                  
-                  <div id="kobo" value="kobo">Community Volunteered Hospital Data
-                  <label for="three">
+            <form id="projectList" class='border'>
+                <h6>Explore Health Care</h6>
+                <form>
+                    <div class="multiselect">
+                        <div class="selectBox" onclick="showCheckboxes2()">
+                            <button type="button" style="width: 90%;font-size:12px" class="btn btn-outline-dark">Select Health Facilies</button>
+
+                            <div class="overSelect"></div>
+                        </div>
+
+                        <div id="checkboxes2">
+
+
+                            <div id="kobo" value="kobo">Community Volunteered Hospital Data
+                                <label for="three">
                     <input type="checkbox" value="hospital" onchange="toggleKoboFacilitywms(this)"/>Hospital</label>
-                    <label for="three">
+                                <label for="three">
                     <input type="checkbox" value="subcenter" onchange="toggleKoboFacilitywms(this)"/>Sub center</label>
-                    <label for="three">
-                    <input type="checkbox" value="mhu" onchange="toggleKoboFacilitywms(this)"/>Mobile Health Unit</label> 
-                    <label for="three">
-                    <input type="checkbox" value="phc" onchange="toggleKoboFacilitywms(this)"/>Primary Health Centre</label>   
-                    <label for="three">
-                    <input type="checkbox" value="clinic" onchange="toggleKoboFacilitywms(this)"/>Clinic</label>   
-                    <label for="three">
-                    <input type="checkbox" value="phu" onchange="toggleKoboFacilitywms(this)"/>Primary Health Units</label>   
-                    <label for="three">
-                    <input type="checkbox" value="ashu" onchange="toggleKoboFacilitywms(this)"/>Ashram School Health Units</label>   
-                    <label for="three">
-                    <input type="checkbox" value="mobmedu" onchange="toggleKoboFacilitywms(this)"/>Mobile Medical Units</label>   
-                    <label for="three">
-                    <input type="checkbox" value="hfwi" onchange="toggleKoboFacilitywms(this)"/>Health and family welfare institute</label>   
-                    <label for="three">
-                    <input type="checkbox" value="mhi" onchange="toggleKoboFacilitywms(this)"/>Mental Health Institute</label>   
-                    <label for="three">
-                    <input type="checkbox" value="dc" onchange="toggleKoboFacilitywms(this)"/>Diagnostic Center</label>   
-                    <label for="three">
-                    <input type="checkbox" value="phrmcy" onchange="toggleKoboFacilitywms(this)"/>Pharmacy</label>   
-                    <label for="three">
-                    <input type="checkbox" value="optical" onchange="toggleKoboFacilitywms(this)"/>Optical Shop</label>   
-                    <label for="three">
-                    <input type="checkbox" value="delvry" onchange="toggleKoboFacilitywms(this)"/>Delivery Center</label>   
-                    <label for="three">
-                    <input type="checkbox" value="dropin" onchange="toggleKoboFacilitywms(this)"/>Drop In Centre</label>   
-                    <label for="three">
-                    <input type="checkbox" value="dspnsry" onchange="toggleKoboFacilitywms(this)"/>Dispensary</label>   
-                    <label for="three">
+                                <label for="three">
+                    <input type="checkbox" value="mhu" onchange="toggleKoboFacilitywms(this)"/>Mobile Health Unit</label>
+                                <label for="three">
+                    <input type="checkbox" value="phc" onchange="toggleKoboFacilitywms(this)"/>Primary Health Centre</label>
+                                <label for="three">
+                    <input type="checkbox" value="clinic" onchange="toggleKoboFacilitywms(this)"/>Clinic</label>
+                                <label for="three">
+                    <input type="checkbox" value="phu" onchange="toggleKoboFacilitywms(this)"/>Primary Health Units</label>
+                                <label for="three">
+                    <input type="checkbox" value="ashu" onchange="toggleKoboFacilitywms(this)"/>Ashram School Health Units</label>
+                                <label for="three">
+                    <input type="checkbox" value="mobmedu" onchange="toggleKoboFacilitywms(this)"/>Mobile Medical Units</label>
+                                <label for="three">
+                    <input type="checkbox" value="hfwi" onchange="toggleKoboFacilitywms(this)"/>Health and family welfare institute</label>
+                                <label for="three">
+                    <input type="checkbox" value="mhi" onchange="toggleKoboFacilitywms(this)"/>Mental Health Institute</label>
+                                <label for="three">
+                    <input type="checkbox" value="dc" onchange="toggleKoboFacilitywms(this)"/>Diagnostic Center</label>
+                                <label for="three">
+                    <input type="checkbox" value="phrmcy" onchange="toggleKoboFacilitywms(this)"/>Pharmacy</label>
+                                <label for="three">
+                    <input type="checkbox" value="optical" onchange="toggleKoboFacilitywms(this)"/>Optical Shop</label>
+                                <label for="three">
+                    <input type="checkbox" value="delvry" onchange="toggleKoboFacilitywms(this)"/>Delivery Center</label>
+                                <label for="three">
+                    <input type="checkbox" value="dropin" onchange="toggleKoboFacilitywms(this)"/>Drop In Centre</label>
+                                <label for="three">
+                    <input type="checkbox" value="dspnsry" onchange="toggleKoboFacilitywms(this)"/>Dispensary</label>
+                                <label for="three">
                     <input type="checkbox" value="othr" onchange="toggleKoboFacilitywms(this)"/>Other</label>
-                    <label for="three">                                                                                                                                                                                
+                                <label for="three">                                                                                                                                                                                
                  </div>   
                          
                 </div>
@@ -282,114 +288,132 @@ h6 {
       &nbsp;&nbsp;&nbsp;&nbsp;
         <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumwards">
             
-            <tr><tb>  <label><input type="checkbox" value="{mumwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai City Corporator Wards </span></label></tb> </tr>
-            <tr><tb>  <label><input type="checkbox" value="{mumadm}" onchange="getBoundary(this)"></tb><tb><span> Mumbai City Admin Wards </span></label></tb> </tr>
+            <tr><tb>  <label><input type="checkbox" value="{mumwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai City Corporator Wards </span></label></tb>
+                                </tr>
+                                <tr>
+                                    <tb> <label><input type="checkbox" value="{mumadm}" onchange="getBoundary(this)"></tb><tb><span> Mumbai City Admin Wards </span></label></tb>
+                                </tr>
 
-      </div> 
-      <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumsubwards">
-            
-            <tr><tb>  <label><input type="checkbox" value="{mumsubwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai Suburban Wards </span></label></tb> </tr>
-            <tr><tb>  <label><input type="checkbox" value="{mumadmsubwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai Suburban Admin Wards </span></label></tb> </tr>
-      </div> 
+                            </div>
+                            <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumsubwards">
+
+                                <tr>
+                                    <tb> <label><input type="checkbox" value="{mumsubwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai Suburban Wards </span></label></tb>
+                                </tr>
+                                <tr>
+                                    <tb> <label><input type="checkbox" value="{mumadmsubwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai Suburban Admin Wards </span></label></tb>
+                                </tr>
+                            </div>
 
 
-      <div class="tooltips" title="Please select the Pincode">
-            <select class='form-control' id = "pincode">
+                            <div class="tooltips" title="Please select the Pincode">
+                                <select class='form-control' id="pincode">
               <option value=""> Select Pincode</option>
              </select>
-      </div> 
-<hr>
-<div id="side-bar" style="background-color: rgba(255, 255, 255);">                <!-- side-bar container -->
-    <div class="border">
-        <table>
-        <tr><h6>State Related Data</h6></tr>
-        <div class="text-center">
-            <div class="checkbox" id="stboun">
-              <tr><tb>  <label><input type="checkbox" value="{mahadem}" onchange="getBoundaryst(this)"></tb><tb><span> Demography (Maharashtra's only as for now) </span></label></tb> </tr>
-              </div>
-              <div class="checkbox">
-                <label><input type="checkbox" value="{maharoad}" onchange="getBoundaryst(this)"><span>  Road Network (Maharashtra's only as for now)</span></label>
-              </div>
-              <div class="checkbox">
-                <label><input type="checkbox" value="{mahaschool}" onchange="getBoundaryst(this)"><span> Schools (Maharashtra's only as for now) </span></label>
-              </div>
-        </div>
-     </table>   
-    </div>
+                            </div>
+                            <hr>
+                            <div id="side-bar" style="background-color: rgba(255, 255, 255);">
+                                <!-- side-bar container -->
+                                <div class="border">
+                                    <table>
+                                        <tr>
+                                            <h6>State Related Data</h6>
+                                        </tr>
+                                        <div class="text-center">
+                                            <div class="checkbox" id="stboun">
+                                                <tr>
+                                                    <tb> <label><input type="checkbox" value="{mahadem}" onchange="getBoundaryst(this)"></tb><tb><span> Demography (Maharashtra's only as for now) </span></label></tb>
+                                                </tr>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="{maharoad}" onchange="getBoundaryst(this)"><span>  Road Network (Maharashtra's only as for now)</span></label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="{mahaschool}" onchange="getBoundaryst(this)"><span> Schools (Maharashtra's only as for now) </span></label>
+                                            </div>
+                                        </div>
+                                    </table>
+                                </div>
 
-     <hr>
-     <div class="text-center">
-       
+                                <hr>
+                                <div class="text-center">
 
-        <form id="projectList" class='border'>
-            <h6>Explore Health Care</h6>
-             <form>
-              <div class="multiselect">
-                <div class="selectBox" onclick="showCheckboxes()">
-                    <button type="button" style="width: 90%;font-size:12px" class="btn btn-outline-dark">Select Health Facilies</button>
-                    <!-- <option>Select Health Facilities</option> -->
-                  <div class="overSelect"></div>
-                </div>
 
-                <div id="checkboxes">
-                  <div id="mahaheal" value="mahaheal"><h6 style="color: #820522"> Maharashtra Government Health Facilities</h6>
-                  <div id="ru" value="ru">Facilities from Census 2011-Rural
-                    <label for="one">
+                                    <form id="projectList" class='border'>
+                                        <h6>Explore Health Care</h6>
+                                        <form>
+                                            <div class="multiselect">
+                                                <div class="selectBox" onclick="showCheckboxes()">
+                                                    <button type="button" style="width: 90%;font-size:12px" class="btn btn-outline-dark">Select Health Facilies</button>
+                                                    <!-- <option>Select Health Facilities</option> -->
+                                                    <div class="overSelect"></div>
+                                                </div>
+
+                                                <div id="checkboxes">
+                                                    <div id="mahaheal" value="mahaheal">
+                                                        <h6 style="color: #820522"> Maharashtra Government Health Facilities</h6>
+                                                        <div id="ru" value="ru">Facilities from Census 2011-Rural
+                                                            <label for="one">
                       <input type="checkbox" id="val" value="{CHC}" name='Rural' onchange="GetSelectedfac(this)"/>CHC</label>
-                    <label for="two">
+                                                            <label for="two">
                       <input type="checkbox" id="phs" value="{PHC}" name='Rural' onchange="GetSelectedfac(this)"/>PHC</label>
-                  </div>  <hr>
-                  <div id="ur" value="ur">Facilities from Census 2011-Urban  
-                    <label for="three">
+                                                        </div>
+                                                        <hr>
+                                                        <div id="ur" value="ur">Facilities from Census 2011-Urban
+                                                            <label for="three">
                       <input type="checkbox" id="allo"  value="{Allo}" onchange="GetSelectedfac(this)"/>Allopathy Hospital</label>
-                    <label for="three">
+                                                            <label for="three">
                       <input type="checkbox" id="alt" value="{Alt}" onchange="GetSelectedfac(this)"/>Alternate Hospital</label>
-                  </div><hr>
-                  <div id="ur" value="ur">Dedicated COVID Facilities-Arogya
-                    <label for="three">
+                                                        </div>
+                                                        <hr>
+                                                        <div id="ur" value="ur">Dedicated COVID Facilities-Arogya
+                                                            <label for="three">
                       <input type="checkbox" id="dch"  value="{DCH}" onchange="GetSelectedfac(this)"/> Dedicated COVID Hospitals</label>
-                    <label for="three">
+                                                            <label for="three">
                       <input type="checkbox" id="dhc" value="{DCHC}" onchange="GetSelectedfac(this)"/> Dedicated Health Centers</label>
-                    <label for="three">
-                      <input type="checkbox" id="dcc" value="{DCCC}" onchange="GetSelectedfac(this)"/> Dedicated COVID Centers</label>  
-                  </div>
-                </div><hr> <hr>
-                  <div id="kobo" value="kobo"><h6 style="color: #820522">Community Volunteered Hospital Data of India</h6>
-                  <label for="three">
+                                                            <label for="three">
+                      <input type="checkbox" id="dcc" value="{DCCC}" onchange="GetSelectedfac(this)"/> Dedicated COVID Centers</label>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <hr>
+                                                    <div id="kobo" value="kobo">
+                                                        <h6 style="color: #820522">Community Volunteered Hospital Data of India</h6>
+                                                        <label for="three">
                     <input type="checkbox" value="hospital" onchange="toggleKoboFacility(this)"/>Hospital</label>
-                    <label for="three">
+                                                        <label for="three">
                     <input type="checkbox" value="subcenter" onchange="toggleKoboFacility(this)"/>Sub center</label>
-                    <label for="three">
-                    <input type="checkbox" value="mhu" onchange="toggleKoboFacility(this)"/>Mobile Health Unit</label> 
-                    <label for="three">
-                    <input type="checkbox" value="phc" onchange="toggleKoboFacility(this)"/>Primary Health Centre</label>   
-                    <label for="three">
-                    <input type="checkbox" value="clinic" onchange="toggleKoboFacility(this)"/>Clinic</label>   
-                    <label for="three">
-                    <input type="checkbox" value="phu" onchange="toggleKoboFacility(this)"/>Primary Health Units</label>   
-                    <label for="three">
-                    <input type="checkbox" value="ashu" onchange="toggleKoboFacility(this)"/>Ashram School Health Units</label>   
-                    <label for="three">
-                    <input type="checkbox" value="mobmedu" onchange="toggleKoboFacility(this)"/>Mobile Medical Units</label>   
-                    <label for="three">
-                    <input type="checkbox" value="hfwi" onchange="toggleKoboFacility(this)"/>Health and family welfare institute</label>   
-                    <label for="three">
-                    <input type="checkbox" value="mhi" onchange="toggleKoboFacility(this)"/>Mental Health Institute</label>   
-                    <label for="three">
-                    <input type="checkbox" value="dc" onchange="toggleKoboFacility(this)"/>Diagnostic Center</label>   
-                    <label for="three">
-                    <input type="checkbox" value="phrmcy" onchange="toggleKoboFacility(this)"/>Pharmacy</label>   
-                    <label for="three">
-                    <input type="checkbox" value="optical" onchange="toggleKoboFacility(this)"/>Optical Shop</label>   
-                    <label for="three">
-                    <input type="checkbox" value="delvry" onchange="toggleKoboFacility(this)"/>Delivery Center</label>   
-                    <label for="three">
-                    <input type="checkbox" value="dropin" onchange="toggleKoboFacility(this)"/>Drop In Centre</label>   
-                    <label for="three">
-                    <input type="checkbox" value="dspnsry" onchange="toggleKoboFacility(this)"/>Dispensary</label>   
-                    <label for="three">
+                                                        <label for="three">
+                    <input type="checkbox" value="mhu" onchange="toggleKoboFacility(this)"/>Mobile Health Unit</label>
+                                                        <label for="three">
+                    <input type="checkbox" value="phc" onchange="toggleKoboFacility(this)"/>Primary Health Centre</label>
+                                                        <label for="three">
+                    <input type="checkbox" value="clinic" onchange="toggleKoboFacility(this)"/>Clinic</label>
+                                                        <label for="three">
+                    <input type="checkbox" value="phu" onchange="toggleKoboFacility(this)"/>Primary Health Units</label>
+                                                        <label for="three">
+                    <input type="checkbox" value="ashu" onchange="toggleKoboFacility(this)"/>Ashram School Health Units</label>
+                                                        <label for="three">
+                    <input type="checkbox" value="mobmedu" onchange="toggleKoboFacility(this)"/>Mobile Medical Units</label>
+                                                        <label for="three">
+                    <input type="checkbox" value="hfwi" onchange="toggleKoboFacility(this)"/>Health and family welfare institute</label>
+                                                        <label for="three">
+                    <input type="checkbox" value="mhi" onchange="toggleKoboFacility(this)"/>Mental Health Institute</label>
+                                                        <label for="three">
+                    <input type="checkbox" value="dc" onchange="toggleKoboFacility(this)"/>Diagnostic Center</label>
+                                                        <label for="three">
+                    <input type="checkbox" value="phrmcy" onchange="toggleKoboFacility(this)"/>Pharmacy</label>
+                                                        <label for="three">
+                    <input type="checkbox" value="optical" onchange="toggleKoboFacility(this)"/>Optical Shop</label>
+                                                        <label for="three">
+                    <input type="checkbox" value="delvry" onchange="toggleKoboFacility(this)"/>Delivery Center</label>
+                                                        <label for="three">
+                    <input type="checkbox" value="dropin" onchange="toggleKoboFacility(this)"/>Drop In Centre</label>
+                                                        <label for="three">
+                    <input type="checkbox" value="dspnsry" onchange="toggleKoboFacility(this)"/>Dispensary</label>
+                                                        <label for="three">
                     <input type="checkbox" value="othr" onchange="toggleKoboFacility(this)"/>Other</label>
-                    <label for="three">                                                                                                                                                                                
+                                                        <label for="three">                                                                                                                                                                                
                  </div>   
                          
                 </div>
@@ -411,1086 +435,1305 @@ h6 {
                 <div id="checkboxes3">
                       <div class="checkbox" id="boundary">
                         <label><button type="button" class="btn btn-outline-dark" value="{at}" onchange="" style="background-color:green;width:90%;font-size:14px;" disabled><span>Green Zone</span></label>
-                      </div>
-                      <div class="checkbox">
-                        <label><button class="btn btn-outline-dark" type="button" value="{m}" onchange="" style="background-color:orange;width:90%;font-size:14px;" disabled><span>Orange Zone</span></label>
-                      </div>
-                       <div class="checkbox">
-                        <label><button type="button" class="btn btn-outline-dark" value="{mm}" onchange="" style="background-color:red;width:90%;font-size:14px;" disabled><span>Red Zone</span></label>
-                      </div>
-                     
-                       
+                                                    </div>
+                                                    <div class="checkbox">
+                                                        <label><button class="btn btn-outline-dark" type="button" value="{m}" onchange="" style="background-color:orange;width:90%;font-size:14px;" disabled><span>Orange Zone</span></label>
+                                                    </div>
+                                                    <div class="checkbox">
+                                                        <label><button type="button" class="btn btn-outline-dark" value="{mm}" onchange="" style="background-color:red;width:90%;font-size:14px;" disabled><span>Red Zone</span></label>
+                                                    </div>
+
+
+
+
+
+
+
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <div class="border">
+                                                <table>
+                                                    <!-- <tr><h5>Selected State:Related Data</h5></tr> -->
+                                                    <div class="text-center">
+                                                        <div class="checkbox" id="stboun">
+                                                            <tr>
+                                                                <h6>Highlight Maharashtra Urban Boundaries</h6>
+                                                            </tr>
+                                                            <!-- <tr><tb>  <label><input type="checkbox" value="{mahadem}" onchange="getBoundaryst(this)"></tb><tb><span> Wards</span></label></tb> -->
+                                                            <tb> <label><input type="checkbox" value="{mahatown}" onchange="getBoundaryru(this)"></tb><tb><span> Town</span></label></tb>
+                                                            </tr>
+                                                        </div>
+                                                        <div class="checkbox">
+                                                            <tr>
+                                                                <h6>Highlight Maharashtra Rural Boundaries</h6>
+                                                            </tr>
+
+                                                            <tr> <label><input type="checkbox" value="{maharural}" onchange="getBoundaryru(this)"><span> Villages</span></label></tr>
+                                                        </div>
+
+                                                    </div>
+                                                </table>
+                                            </div>
+
+                                        </form>
+
+
+
+                                    </form>
+                                </div>
+                                <!--Navigated area div ends-->
+
+
+
+                                <div class="border">
+                                    <button type="button" class="btn btn-primary" id='locate'>Your Location</button>
+                                    <button type="button" class="btn btn-primary" id='setlocation'>Set Location</button>
+                                    <button type="button" class="btn btn-primary" id='find-nearest'>Find Nearest Facility</button>
+                                    <div id="slider">
+                                        <label>Set Range</label><br>
+                                        <input type="range" min="1" max="20" value="1" class="slider" id="myRange" step="5" list="steplist">
+                                        <datalist id="steplist">
+                                            <option>1</option>
+                                            <option>5</option>
+                                            <option>10</option>
+                                            <option>15</option>
+                                            <option>20</option>
+                                        </datalist>
+                                        
+                                        <button type="button" class="btn btn-primary" id='setbuffer'>Health facilities within <span id="demo"></span> Km </button>
+
+                                    </div>
+                                </div>
+
+                                <div class="border row">
+                                    <input type="text" placeholder="Enter facility Name" disabled="" class="form-control col-7" id="usr">
+                                    <button type="button" class="btn btn-primary col" onclick="searchFacilities()" disabled="">Search Facility</button>
+                                </div>
+
+
+                            </div>
+                            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+                            <script src="https://d3js.org/d3.v4.min.js"></script>
+
+
+                            <script>
+                                $(document).ready(function() {
+                                    $('#district').on('change', function() {
+                                        if (this.value == 'Mumbai City') {
+                                            $("#mumwards").show();
+                                            $("#mumsubwards").hide();
+                                            removewards();
+
+                                            $("#block").hide();
+                                        } else if (this.value == 'Mumbai Suburban') {
+                                            $("#mumwards").hide();
+                                            removewards();
+                                            $("#mumsubwards").show();
+
+                                            $("#block").hide();
+                                        } else {
+                                            $("#mumwards").hide();
+                                            $("#mumsubwards").hide();
+                                            $("#block").show();
+
+                                        }
+                                    });
+
+                                    $('#view_s').on('change', function() {
+                                        if (this.value == 'All India View') {
+                                            mymap.setView([20.5937, 78.9629], 4);
+                                            $("#indiaview").show();
+                                            $("#navigatedarea").hide();
+
+                                            distLayerList.forEach(l => {
+                                                mymap.removeLayer(l);
+                                            })
+
+                                            pinLayerList.forEach(l => {
+                                                mymap.removeLayer(l);
+                                            })
+
+                                            if (area) {
+                                                mymap.removeLayer(area);
+                                            }
+                                            clear_layer();
+                                            clearpoint_layer();
+                                            removeWFSfac();
+                                            removeKoboHealthFacity();
+                                            removeKoboHealthFacitywms(facility);
+                                            clear_distlayer();
+                                            clear_pinlayer();
+
+                                        } else if (this.value == 'Navigated Area View') {
+                                            wmshealthLayerList.forEach(l => {
+                                                mymap.removeLayer(l);
+                                            })
+
+
+                                            $("#indiaview").hide();
+                                            $("#navigatedarea").show();
+                                            clear_layer();
+                                            clearpoint_layer();
+                                            removeWFSfac();
+                                            removeKoboHealthFacity();
+                                            removeKoboHealthFacitywms(facility);
+                                            clear_distlayer();
+                                            clear_pinlayer();
+                                        }
+
+                                    });
+                                });
+
+
+                                //code for dependent dropdown start    
+                                function filterCSV(csv, key, value) {
+                                    var result = [];
+                                    var unique = [];
+
+                                    csv.forEach(function(val, idx, arr) {
+
+                                        if (val[key] == value) {
+                                            //console.log(val.pincode);
+                                            if (!unique[val.Districtname]) {
+                                                result.push(val.Districtname)
+                                                unique[val.Districtname] = 1;
+                                            }
+                                        }
+                                    })
+                                    return result;
+                                }
+
+
+                                function filterCSV2(csv, key, value) {
+                                    var result = [];
+                                    var unique = [];
+
+                                    csv.forEach(function(val, idx, arr) {
+
+                                        if (val[key] == value) {
+                                            if (!unique[val.pincode]) {
+                                                result.push(val.pincode)
+                                                unique[val.pincode] = 1;
+                                            }
+                                        }
+                                    })
+                                    return result;
+                                }
+
+                                function filterCSV4(csv, key1, value1, key2, value2) {
+
+                                    var result = [];
+                                    var unique = [];
+                                    csv.forEach(function(val, idx, arr) {
+
+                                        if (val[key1] == value1 && val[key2] == value2) {
+
+
+                                            result.push(val.pincode);
+                                            unique[val.pincode] = 1;
+
+
+                                        }
+                                    })
+                                    console.log(result);
+                                    return result;
+                                }
+
+                                function filterCSV3(csv, key, value) {
+                                    var result = [];
+                                    var unique = [];
+
+                                    csv.forEach(function(val, idx, arr) {
+
+                                        if (val[key] == value) {
+
+                                            if (!unique[val.block]) {
+                                                //console.log(val.block);
+
+                                                result.push(val.block)
+                                                unique[val.block] = 1;
+                                            }
+                                        }
+                                    })
+                                    return result;
+                                }
+
+
+
+
+
+                                d3.csv("{% static 'data/healthdash/st_dist_pin.csv' %}", function(data) {
+                                    $('#indstate').on("change", function(d) {
+                                        var val = d3.select(this).property("value");
+                                        $('#district').find('option').not(':first').remove();
+                                        var data_1 = filterCSV(data, 'statename', val);
+                                        var select = document.getElementById("district");
+                                        for (var i = 0; i < data_1.length; i++) {
+                                            var opt = data_1[i];
+                                            var el = document.createElement("option");
+                                            el.textContent = opt;
+                                            el.value = opt;
+                                            select.appendChild(el);
+                                        }
+                                        $('#districtd3').val("");
+                                    });
+
+                                    $('#district').on("change", function(d) {
+                                        var val1 = document.getElementById("indstate").value;
+                                        console.log(val1);
+                                        var val2 = d3.select(this).property("value");
+                                        $('#pincode').find('option').not(':first').remove();
+
+                                        var data_2 = filterCSV4(data, 'statename', val1, 'Districtname', val2);
+                                        var select = document.getElementById("pincode");
+                                        for (var i = 0; i < data_2.length; i++) {
+                                            var opt = data_2[i];
+                                            var el = document.createElement("option");
+                                            el.textContent = opt;
+                                            el.value = opt;
+                                            select.appendChild(el);
+                                        }
+                                        $('#pincoded3').val("");
+
+
+                                        $('#block_s').find('option').not(':first').remove();
+                                        var data_3 = filterCSV3(data, 'Districtname', val2);
+                                        var select = document.getElementById("block_s");
+                                        for (var i = 0; i < data_3.length; i++) {
+                                            var opt = data_3[i];
+                                            var el = document.createElement("option");
+                                            el.textContent = opt;
+                                            el.value = opt;
+                                            select.appendChild(el);
+                                        }
+                                        $('#block_sd3').val("");
+
+
+                                    });
+
+
+
+
+                                });
+
+
+
+
+                                var expanded = false;
+
+                                function showCheckboxes() {
+                                    var checkboxes = document.getElementById("checkboxes");
+                                    if (!expanded) {
+                                        checkboxes.style.display = "block";
+                                        expanded = true;
+                                    } else {
+                                        checkboxes.style.display = "none";
+                                        expanded = false;
+                                    }
+                                }
+
+                                function showCheckboxes2() {
+                                    var checkboxes = document.getElementById("checkboxes2");
+                                    if (!expanded) {
+                                        checkboxes2.style.display = "block";
+                                        expanded = true;
+                                    } else {
+                                        checkboxes2.style.display = "none";
+                                        expanded = false;
+                                    }
+                                }
+
+                                function showCheckboxes3() {
+                                    var checkboxes = document.getElementById("checkboxes3");
+                                    if (!expanded) {
+                                        checkboxes3.style.display = "block";
+                                        expanded = true;
+                                    } else {
+                                        checkboxes3.style.display = "none";
+                                        expanded = false;
+                                    }
+                                }
+
+                                function getBoundary(obj) {
+                                    let boundary = obj.value;
+                                    if ($(obj).is(":checked")) {
+                                        if (boundary == "{state}")
+                                            putWMS("geonode:states_in_india");
+                                        else if (boundary == "{district}")
+                                            putWMS("geonode:all_india_districts_10may2020");
+                                        else if (boundary == "{mumwards}")
+                                            putwards("Mumbai City", 'geonode:corporatorwardboundary_mumbai_13may');
+                                        else if (boundary == "{mumadm}")
+                                            putwards("Mumbai City", 'geonode:Mumbai_Ward_Boundary_19may2020');
+                                        else if (boundary == "{mumsubwards}")
+                                            putwards("Mumbai Suburban", 'geonode:corporatorwardboundary_mumbai_13may');
+                                        else if (boundary == "{mumadmsubwards}")
+                                            putwards("Mumbai Suburban", 'geonode:Mumbai_Ward_Boundary_19may2020');
+                                        else
+                                            putWMS("geonode:maha_demography_with_mumbai");
+                                    } else {
+                                        if (boundary == "{state}")
+                                            removeWMS("geonode:states_in_india");
+                                        else if (boundary == "{district}")
+                                            removeWMS("geonode:all_india_districts_10may2020");
+                                        else if (boundary == "{mumwards}")
+                                            removewards();
+                                        else if (boundary == "{mumsubwards}")
+                                            removewards();
+                                        else if (boundary == "{mumadmsubwards}")
+                                            removewards();
+                                        else if (boundary == "{mumadm}")
+                                            removewards();
+                                        else
+                                            removeWMS("geonode:maha_demography_with_mumbai");
+                                    }
+                                }
+
+                                function getBoundaryst(obj) {
+                                    let boundary = obj.value;
+                                    if ($(obj).is(":checked")) {
+                                        if (boundary == "{mahadem}")
+                                            putWMS("geonode:maha_demography_with_mumbai");
+                                        else if (boundary == "{maharoad}")
+                                            putWMS("geonode:osm_highways");
+                                        else
+                                            putWMS("geonode:school_16_17_11april");
+                                    } else {
+                                        if (boundary == "{mahadem}")
+                                            removeWMS("geonode:maha_demography_with_mumbai");
+                                        else if (boundary == "{maharoad}")
+                                            removeWMS("geonode:osm_highways");
+                                        else
+                                            removeWMS("geonode:school_16_17_11april");
+                                    }
+                                }
+
+
+                                function getBoundaryru(obj) {
+                                    let boundary = obj.value;
+                                    if ($(obj).is(":checked")) {
+                                        if (boundary == "{mahatown}")
+                                            putWMSru("geonode:TownHealth0");
+                                        else if (boundary == "{maharural}")
+                                            putWMSru("geonode:maha_village_polygon_29mar");
+
+                                    } else {
+                                        if (boundary == "{mahatown}")
+                                            removeWMS("geonode:TownHealth0");
+                                        else if (boundary == "{maharural}")
+                                            removeWMS("geonode:maha_village_polygon_29mar");
+
+                                    };
+
+
+                                }
+
+                                function GetSelectedfac(obj) {
+                                    let fac = obj.value;
+                                    if ($(obj).is(":checked")) {
+                                        if (fac == "{CHC}")
+                                            putWFSFacility("CHC");
+                                        else if (fac == "{PHC}")
+                                            putWFSFacility("PHC");
+                                        else if (fac == '{Allo}')
+                                            putWFSFacility("Allo");
+
+                                        else if (fac == '{Alt}')
+                                            putWFSFacility("Alt");
+                                        else if (fac == '{DCH}')
+                                            putArogya("DCH");
+                                        else if (fac == '{DCHC}')
+                                            putArogya("DCHC");
+                                        else if (fac == '{DCCC}')
+                                            putArogya("DCCC");
+                                    } else {
+                                        if (fac === "{CHC}")
+                                            removeWFSfac("CHC");
+                                        else if (fac === "{PHC}")
+                                            removeWFSfac("PHC");
+                                        else if (fac == '{Allo}')
+                                            removeWFSfac("Allo");
+
+                                        else if (fac == '{Alt}')
+                                            removeWFSfac("Alt");
+                                        else if (fac == '{DCH}')
+                                            removeArogya("DCH");
+                                        else if (fac == '{DCHC}')
+                                            removeArogya("DCHC");
+                                        else if (fac == '{DCCC}')
+                                            removeArogya("DCCC");
+                                    };
+                                }
+
+                                function toggleKoboFacility(clickedCheckBox) {
+                                    let value = clickedCheckBox.value;
+                                    if ($(clickedCheckBox).is(':checked')) {
+                                        putKoboHealthFacity(value);
+                                    } else {
+                                        removeKoboHealthFacity(value);
+
+                                    }
+                                }
+
+
+                                function toggleKoboFacilitywms(clickedCheckBox) {
+                                    let value = clickedCheckBox.value;
+                                    if ($(clickedCheckBox).is(':checked')) {
+                                        putKoboHealthFacitywms(value);
+                                    } else {
+                                        removeKoboHealthFacitywms(value);
+                                    }
+                                }
+
+
+                                function removeKoboHealthFacity(facility) {
+                                    mymap.removeLayer(activeKoboHealthFacity[facility]);
+                                };
+
+
+                                function removeArogya(facility) {
+                                    mymap.removeLayer(activearogyaFacity[facility]);
+                                };
+
+
+
+                                function removeKoboHealthFacitywms(facility) {
+                                    mymap.removeLayer(activeKoboAllIndiaHealthFacity[facility]);
+                                }
+
+                                function removeWFSfac(facility) {
+                                    mymap.removeLayer(activatedHealthFacility[facility]);
+                                };
+
+                                function removewards() {
+                                    wardLayerList.forEach(layer => mymap.removeLayer(layer));
+                                }
+
+                                // ***********FIND NEAREST FACILITY FEATURE
+                                let healthFacility,
+                                    $locate = $('#locate'),
+                                    $body = $('body'),
+                                    $findNearest = $('#find-nearest'),
+                                    $setlocation = $('#setlocation'),
+                                    $setbuffer= $('#setbuffer')
+
+                                let currentPos = null;
+                                let marker = null;
+                                let oldMarker = null;
+                                let facilityLayer = new L.featureGroup();
+                                let oldLayer = null;
+
+                                // YOUR LOCATION BUTTON
+                                $locate.on('click', function(e) {
+                                    if (oldMarker) {
+                                        mymap.removeLayer(oldMarker);
+                                        oldMarker = null;
+                                    }
+                                    if (oldLayer) {
+                                        mymap.removeLayer(oldLayer);
+                                        oldLayer = null;
+                                        facilityLayer = new L.featureGroup();
+                                    }
+                                    // $status.html('finding your location');
+                                    if (!navigator.geolocation) {
+                                        alert("<p>Sorry, your browser does not support Geolocation</p>");
+                                        return;
+                                    }
+                                    $body.removeClass('loaded');
+                                    navigator.geolocation.getCurrentPosition(success, error);
+                                });
+
+                                // SET LOCATION BUTTON
+                                $setlocation.on('click', function(e) {
+                                        mymap.on('dblclick', function(e) {
+                                            currentPos = [e.latlng.lat, e.latlng.lng];
+                                            if (oldMarker) {
+                                                mymap.removeLayer(oldMarker);
+                                                oldMarker = null;
+                                            }
+                                            if (oldLayer) {
+                                                mymap.removeLayer(oldLayer);
+                                                oldLayer = null;
+                                                facilityLayer = new L.featureGroup();
+                                            }
+
+                                            if (oldhfbb){
+                                                mymap.removeLayer(oldhfbb);
+                                                oldhfbb = null;
+                                                healthFacilityInBB = null;
+                                            }
+                                            marker = new L.marker(currentPos).addTo(mymap);
+                                            oldMarker = marker;
+                                        });
+                                    })
+                                    // SET BUFFER
+                                var slider = document.getElementById("myRange");
+                                var output = document.getElementById("demo");
+                                output.innerHTML = slider.value;
+
+                                slider.oninput = function() {
+                                    output.innerHTML = this.value;
+
+                                    //<!-- mymap.removeLayer(circle); -->
+
+
+                                }
+                                var circle = new L.circle();
+                                let healthFacilityInBB = null;
+                                let oldhfbb = null;
+
+                                $setbuffer.on('click', function(e) {
+                                    if (oldhfbb){
+                                                mymap.removeLayer(oldhfbb);
+                                                oldhfbb = null;
+                                                healthFacilityInBB = null;
+                                            }
+                                    querybuf(currentPos);
+
+
+                                });
+                                var highlight = L.circleMarker()
+                                let indstate = document.getElementById('indstate').value;
+
+                               
+                                function querybuf(currentPos    ) {
+
+                                    function onEachFeatureForPointBB(feature, layer) {
+                                        const unavailable = '-';
+                                        const updateDate = "India Hospitals";
+                                        layer.bindPopup(`<table class = 'popupclass'>
+                                        <tr><td>Name:</td><td> ${feature.properties.facltyname}</td></tr>
+                                        <tr><td>Type:</td><td> ${feature.properties.facltytyp}</td></tr>
+                                        <tr><td>Amenities:</td><td> ${feature.properties.amenities}</td></tr>
+                                        <tr><td>Address:</td><td> ${feature.properties.address_te1}</td></tr>
+                                        <tr><td>District:</td><td> ${feature.properties.district_g}</td></tr>
+                                        <tr><td>State:</td><td> ${feature.properties.state_gen}</td></tr>
+                                        <tr><td>Pin Code:</td><td> ${feature.properties.pincode_ge}</td></tr>
+                                        <tr><td>Total Bed Count:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Pin Code Accuracy (within area):</td><td> Yes</td></tr>
+                                        <tr><td>Management:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Food Arrangement:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Website:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Last updated:</td><td> 12th May 2020</td></tr>
+                                        <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
+                                        </table>`)
+                                    }
+
+                                    let keys = Object.keys(activeKoboHealthFacity)
+                                    let query=''
+                                    keys.forEach((v,i) => {
+                                        query+=v+">0.0"
+                                    if (i != keys.length-1){
+                                        query+= " OR "
+                                    }
+                                    })
+
+                                    let rootUrl = '{{site_url}}geoserver/geonode/ows';
+                                    let bbOffset = .009009 * slider.value;
+                                    let options = {
+                                        service: 'WFS',
+                                        version: '1.0.0',
+                                        request: 'GetFeature',
+                                        outputFormat: 'application/json',
+                                        typeName: 'geonode:cumulative_healthfacility_18may',
+                                        cql_filter: `BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset}) AND (${query})`,
+                                        propertyName: 'the_geom,facltyname,facltytyp,address_te1,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
+                                    };
+                                    let parameters = L.Util.extend(options);
+                                    cql_url = rootUrl + L.Util.getParamString(parameters);
+                                    console.log('bound',cql_url)
+                                    mymap.spin(true, {
+                                        lines: 9,
+                                        length: 2,
+                                        width: 20,
+                                        scale: 60,
+                                        radius: 70,
+                                        color: "grey"
+                                    });
+                                    fetch(cql_url).then(
+                                        function(response) {
+                                            if (response.status !== 200) {
+                                                console.log('Looks like there was a problem. Status Code: ' +
+                                                    response.status);
+                                                return;
+                                            }
+                                            response.json().then(function(geojsonData) {
+                                                let healthFacilityInBB = L.geoJson(geojsonData.features, {
+                                                    pointToLayer: function(feature, latlng) {
+                                                        return L.circleMarker(latlng,{color: "yellow", weight: 6, opacity: .1,fillOpacity: 0.8});
+                                                    },
+                                                    onEachFeature: onEachFeatureForPointBB,
+                                                }).addTo(mymap);
+                                                mymap.spin(false);
+                                                oldhfbb = healthFacilityInBB;
+                                            });
+
+
+                                        }).catch(function(err) {
+                                        console.log('Fetch Error :-S', err);
+                                    });
                   
-
-                  
-              
-                         
-                </div>
-              </div>
-     <hr>
-
-    <div class="border">
-        <table>
-        <!-- <tr><h5>Selected State:Related Data</h5></tr> -->
-        <div class="text-center">
-            <div class="checkbox" id="stboun">
-            <tr><h6>Highlight Maharashtra Urban Boundaries</h6></tr>  
-              <!-- <tr><tb>  <label><input type="checkbox" value="{mahadem}" onchange="getBoundaryst(this)"></tb><tb><span> Wards</span></label></tb> -->
-                <tb>  <label><input type="checkbox" value="{mahatown}" onchange="getBoundaryru(this)"></tb><tb><span> Town</span></label></tb>
-               </tr>
-              </div>
-              <div class="checkbox">
-                <tr><h6>Highlight Maharashtra Rural Boundaries</h6></tr>  
-  
-               <tr> <label><input type="checkbox" value="{maharural}" onchange="getBoundaryru(this)"><span> Villages</span></label></tr>
-              </div>
-              
-        </div>
-     </table>   
-    </div>
-  
-        </form>
- 
-        
-
-         </form> 
-   </div> <!--Navigated area div ends--> 
-
-
-
-         <div class="border">
-            <button type="button" class="btn btn-primary" id='locate'>Your Location</button>
-            <button type="button" class="btn btn-primary" id='setlocation'>Set Location</button>
-            <button type="button" class="btn btn-primary" id='find-nearest'>Find Nearest Facility</button>
-         </div>
-
-         <div class="border row">
-            <input type="text" placeholder = "Enter facility Name" disabled="" class="form-control col-7" id="usr">
-            <button type="button" class="btn btn-primary col" onclick = "searchFacilities()" disabled="">Search Facility</button>
-         </div>
-     
-
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-<script  src="https://d3js.org/d3.v4.min.js"></script>
-
-
-<script>
-
-
-
-
-
-$(document).ready(function(){
-    $('#district').on('change', function() {
-      if ( this.value == 'Mumbai City')
-      {
-        $("#mumwards").show();
-        $("#mumsubwards").hide();
-        removewards();
-
-        $("#block").hide();
-      }
-      else if(this.value =='Mumbai Suburban'){
-        $("#mumwards").hide();
-        removewards();
-        $("#mumsubwards").show();
-
-        $("#block").hide();
-      }
-      else
-      {
-        $("#mumwards").hide();
-        $("#mumsubwards").hide();
-        $("#block").show();
-
-      }
-    });
-
-
-
-    $('#view_s').on('change', function() {
-      if (this.value == 'All India View')
-      {
-        mymap.setView([20.5937,78.9629],4);
-        $("#indiaview").show();
-        $("#navigatedarea").hide();
-
-        distLayerList.forEach(l =>{
-          mymap.removeLayer(l);
-        })
-
-        pinLayerList.forEach(l =>{
-          mymap.removeLayer(l);
-        })
-
-      if(area){
-        mymap.removeLayer(area);
-      }
-         clear_layer();
-        clearpoint_layer();
-        removeWFSfac();
-        removeKoboHealthFacity();
-        removeKoboHealthFacitywms(facility);
-        clear_distlayer();
-        clear_pinlayer();
-        
-      }
-      else if (this.value == 'Navigated Area View'){
-        wmshealthLayerList.forEach(l => {
-          mymap.removeLayer(l);
-        })
-        
-        
-        $("#indiaview").hide();
-        $("#navigatedarea").show();
-        clear_layer();
-        clearpoint_layer();
-        removeWFSfac();
-        removeKoboHealthFacity();
-        removeKoboHealthFacitywms(facility);
-        clear_distlayer();
-        clear_pinlayer();
-      }
-
-   });
-});
-
-
-//code for dependent dropdown start    
-  function filterCSV(csv, key, value) 
-  {
-    var result = [];
-    var unique = [];
-
-    csv.forEach(function(val,idx,arr){
-  
-    if(val[key] == value){
-    //console.log(val.pincode);
-      if( !unique[val.Districtname]){
-      result.push(val.Districtname)
-      unique[val.Districtname] = 1;
-     } 
-    }
-    })
-      return result;
-  }
-
-
-function filterCSV2(csv, key, value) 
-  {
-    var result = [];
-    var unique = [];
-
-    csv.forEach(function(val,idx,arr){
-  
-    if(val[key] == value){
-      if( !unique[val.pincode]){
-      result.push(val.pincode)
-      unique[val.pincode] = 1;
-    }
-    }
-    })
-      return result;
-  }
-
-function filterCSV4(csv, key1, value1, key2, value2)
-{
-
-var result = [];
-var unique = [];
-csv.forEach(function(val,idx,arr){
-
-if(val[key1] == value1 && val[key2]==value2){
-
-
-result.push(val.pincode);
-unique[val.pincode] = 1;
-
-
-}
-})
-console.log(result);
-return result;
-}
-
-function filterCSV3(csv, key, value) 
-  {
-    var result = [];
-    var unique = [];
-
-    csv.forEach(function(val,idx,arr){
-  
-    if(val[key] == value){
-
-      if( !unique[val.block]){
-      //console.log(val.block);
-      
-      result.push(val.block)
-      unique[val.block] = 1;
-    }
-    }
-    })
-      return result;
-  }
-
-
-
-
-
-d3.csv("{% static 'data/healthdash/st_dist_pin.csv' %}",function(data){
-    $('#indstate').on("change", function(d) {
-       var val = d3.select(this).property("value");
-     $('#district').find('option').not(':first').remove();
-    var data_1 = filterCSV(data, 'statename', val);
-     var select = document.getElementById("district");
-     for (var i=0; i < data_1.length; i++) {
-        var opt = data_1[i];
-        var el = document.createElement("option");
-        el.textContent = opt;
-        el.value = opt;
-        select.appendChild(el);         
-            }
-        $('#districtd3').val("");
-      });
-      
-    $('#district').on("change", function(d) {
-       var val1= document.getElementById("indstate").value;
-       console.log(val1);
-       var val2 = d3.select(this).property("value");
-       $('#pincode').find('option').not(':first').remove();
-
-       var data_2=filterCSV4(data,'statename',val1,'Districtname',val2);
-       var select=document.getElementById("pincode");
-       for (var i=0; i < data_2.length; i++) {
-        var opt = data_2[i];
-        var el = document.createElement("option");
-        el.textContent = opt;
-        el.value = opt;
-        select.appendChild(el);         
-            }
-        $('#pincoded3').val("");
-
-
-        $('#block_s').find('option').not(':first').remove();
-        var data_3=filterCSV3(data,'Districtname',val2);
-       var select=document.getElementById("block_s");
-       for (var i=0; i < data_3.length; i++) {
-        var opt = data_3[i];
-        var el = document.createElement("option");
-        el.textContent = opt;
-        el.value = opt;
-        select.appendChild(el);         
-            }
-        $('#block_sd3').val("");
-
-
-   });
-
-
-
-
-  });
-
-
-
-
- var expanded = false;
-
-function showCheckboxes() {
-  var checkboxes = document.getElementById("checkboxes");
-  if (!expanded) {
-    checkboxes.style.display = "block";
-    expanded = true;
-  } else {
-    checkboxes.style.display = "none";
-    expanded = false;
-  }
-}  
-
-function showCheckboxes2() {
-  var checkboxes = document.getElementById("checkboxes2");
-  if (!expanded) {
-    checkboxes2.style.display = "block";
-    expanded = true;
-  } else {
-    checkboxes2.style.display = "none";
-    expanded = false;
-  }
-}  
-
-function showCheckboxes3() {
-  var checkboxes = document.getElementById("checkboxes3");
-  if (!expanded) {
-    checkboxes3.style.display = "block";
-    expanded = true;
-  } else {
-    checkboxes3.style.display = "none";
-    expanded = false;
-  }
-}   
-
-function getBoundary(obj) {
-    let boundary = obj.value;
-    if($(obj).is(":checked")){ 
-        if(boundary == "{state}")
-            putWMS("geonode:states_in_india");
-        else if(boundary== "{district}")
-            putWMS("geonode:all_india_districts_10may2020");
-        else if(boundary=="{mumwards}")  
-            putwards("Mumbai City",'geonode:corporatorwardboundary_mumbai_13may');
-        else if(boundary=="{mumadm}")  
-            putwards("Mumbai City",'geonode:Mumbai_Ward_Boundary_19may2020');  
-        else if(boundary=="{mumsubwards}")  
-            putwards("Mumbai Suburban",'geonode:corporatorwardboundary_mumbai_13may'); 
-        else if(boundary=="{mumadmsubwards}")  
-            putwards("Mumbai Suburban",'geonode:Mumbai_Ward_Boundary_19may2020');      
-        else
-            putWMS("geonode:maha_demography_with_mumbai");
-    }else{
-        if(boundary== "{state}")
-            removeWMS("geonode:states_in_india");
-        else if(boundary== "{district}")
-            removeWMS("geonode:all_india_districts_10may2020");
-        else if(boundary=="{mumwards}")  
-            removewards();
-        else if(boundary=="{mumsubwards}")  
-            removewards();
-        else if(boundary=="{mumadmsubwards}")  
-            removewards();
-        else if(boundary=="{mumadm}")  
-            removewards();            
-        else 
-            removeWMS("geonode:maha_demography_with_mumbai");
-    }
-}
-
-function getBoundaryst(obj) {
-    let boundary = obj.value;
-    if($(obj).is(":checked")){ 
-        if(boundary == "{mahadem}")
-            putWMS("geonode:maha_demography_with_mumbai");
-        else if(boundary== "{maharoad}")
-            putWMS("geonode:osm_highways");
-        else
-            putWMS("geonode:school_16_17_11april");
-    }else{
-        if(boundary== "{mahadem}")
-            removeWMS("geonode:maha_demography_with_mumbai");
-        else if(boundary== "{maharoad}")
-            removeWMS("geonode:osm_highways");
-        else 
-            removeWMS("geonode:school_16_17_11april");
-    }
-}
-
-
-function getBoundaryru(obj) {
-    let boundary = obj.value;
-    if($(obj).is(":checked")){ 
-        if(boundary == "{mahatown}")
-            putWMSru("geonode:TownHealth0");
-        else if(boundary== "{maharural}")
-            putWMSru("geonode:maha_village_polygon_29mar");
-    
-    }else{
-        if(boundary== "{mahatown}")
-            removeWMS("geonode:TownHealth0");
-        else if(boundary== "{maharural}")
-            removeWMS("geonode:maha_village_polygon_29mar");
-   
-    };
-    
-
-}
-
-function GetSelectedfac(obj) {
-    let fac = obj.value;
-    if($(obj).is(":checked")){ 
-        if(fac == "{CHC}")
-            putWFSFacility("CHC");
-        else if(fac== "{PHC}")
-            putWFSFacility("PHC");
-       else if(fac=='{Allo}')
-            putWFSFacility("Allo"); 
-            
-       else if(fac=='{Alt}')
-            putWFSFacility("Alt"); 
-       else if(fac=='{DCH}') 
-            putArogya("DCH");    
-       else if(fac=='{DCHC}') 
-            putArogya("DCHC"); 
-       else if(fac=='{DCCC}') 
-            putArogya("DCCC");    
-    }else{
-        if(fac === "{CHC}")
-            removeWFSfac("CHC");
-        else if(fac === "{PHC}")
-            removeWFSfac("PHC");
-        else if(fac=='{Allo}')
-            removeWFSfac("Allo"); 
-            
-       else if(fac=='{Alt}')
-            removeWFSfac("Alt");
-       else if(fac=='{DCH}') 
-            removeArogya("DCH");    
-       else if(fac=='{DCHC}') 
-            removeArogya("DCHC"); 
-       else if(fac=='{DCCC}') 
-            removeArogya("DCCC");      
-    };
-}
-
-function toggleKoboFacility(clickedCheckBox){
-    let value = clickedCheckBox.value;
-    if($(clickedCheckBox).is(':checked')){
-        putKoboHealthFacity(value);
-    }else{
-        removeKoboHealthFacity(value);
-
-    }
-}
-
-
-function toggleKoboFacilitywms(clickedCheckBox){
-    let value = clickedCheckBox.value;
-    if($(clickedCheckBox).is(':checked')){
-        putKoboHealthFacitywms(value);
-    }else{
-        removeKoboHealthFacitywms(value);
-    }
-}
-
-
-function removeKoboHealthFacity(facility){
-        mymap.removeLayer(activeKoboHealthFacity[facility]);
-};
-
-
-function removeArogya(facility){
-        mymap.removeLayer(activearogyaFacity[facility]);
-};
-
-
-
-function removeKoboHealthFacitywms(facility){
-    mymap.removeLayer(activeKoboAllIndiaHealthFacity[facility]);
-}
-
-function removeWFSfac(facility){
-        mymap.removeLayer(activatedHealthFacility[facility]);
-};
-
-function removewards(){
-            wardLayerList.forEach(layer => mymap.removeLayer(layer));
-}
-
-// ***********FIND NEAREST FACILITY FEATURE
-let healthFacility,
-    $locate = $('#locate'),
-    $body = $('body'),
-    $findNearest = $('#find-nearest'),
-    $setlocation = $('#setlocation')
-
-let currentPos = null;
-let marker = null;
-let oldMarker = null;
-let facilityLayer = new L.featureGroup();
-let oldLayer = null;
-
-// YOUR LOCATION BUTTON
-$locate.on('click', function(e) {
-    if(oldMarker){
-        mymap.removeLayer(oldMarker);
-        oldMarker = null;
-    }
-    if(oldLayer){
-        mymap.removeLayer(oldLayer);
-        oldLayer = null;
-        facilityLayer = new L.featureGroup();
-    }
-        // $status.html('finding your location');
-    if (!navigator.geolocation){
-        alert("<p>Sorry, your browser does not support Geolocation</p>");
-        return;
-    }
-    $body.removeClass('loaded');
-    navigator.geolocation.getCurrentPosition(success, error);
-});   
-
-// SET LOCATION BUTTON
-$setlocation.on('click',function(e){
-    mymap.on('dblclick', function(e) {
-        currentPos = [e.latlng.lat,e.latlng.lng];
-        if(oldMarker){
-            mymap.removeLayer(oldMarker);
-            oldMarker = null;
-        }
-        if(oldLayer){
-            mymap.removeLayer(oldLayer);
-            oldLayer = null;
-            facilityLayer = new L.featureGroup();
-        }
-        marker = new L.marker(currentPos).addTo(mymap);
-        oldMarker = marker;
-    });
-})
-
-// FIND NEAREST BUTTON
-$findNearest.on('click', function(e) {
-            queryFeatures(currentPos, 1);
-});
-
-// IF LOCATION FETCH BY BROWSER SUCCESS
-function success(position) {
-    $body.addClass('loaded');
-    currentPos = [position.coords.latitude,position.coords.longitude];
-    mymap.setView(currentPos, 13);
-    marker = L.marker(currentPos)
-                        .addTo(mymap)
-                        .bindTooltip("Your Location")
-                        .openTooltip();
-    oldMarker = marker;
-
-};
-// IF error IN FETCHING LOCATION
-function error() {
-    alert("Unable to retrieve your location");
-};
-// LOOP THROUGH EACH POINT AND COMPARE WITH SELECTED OR CURRENT USER LOCATION
-function queryFeatures(currentPos, numResults) {
-    var distances = [];
-    healthFacility.eachLayer(function(l) {
-        var distance = L.latLng(currentPos).distanceTo(l.getLatLng())/1000;
-        distances.push(distance);
-    });
-    distances.sort(function(a, b) {
-        return a - b;
-    });
-
-    healthFacility.eachLayer(function(l) {
-        var distance = L.latLng(currentPos).distanceTo(l.getLatLng())/1000;
-        if(distance < distances[numResults]) {
-            l.bindTooltip(distance.toLocaleString() + ' km from current location.');
-            L.polyline([currentPos, l.getLatLng()], {
-                color : 'blue',
-                weight : 4,
-                opacity: .5,
-            }).addTo(facilityLayer);
-        }
-    });
-    oldLayer = facilityLayer;
-    mymap.flyToBounds(facilityLayer.getBounds(), {duration : 3, easeLinearity: .1 });
-    mymap.on('zoomend', function() {
-        mymap.addLayer(facilityLayer);
-    })
-}
-
-// *****************
-  let listState = {'Uttarakhand':['Uttarakhand',30.0668, 79.0193],'Ladakh':['Ladakh',34.152588,77.577049],'Daman & Diu':['Daman & Diu',20.4283, 72.8397],'Telangana':['Telangana',18.1124, 79.0193],'Odisha':['Odisha',20.9517, 85.0985],'Gujarat':['Gujarat',22.2587, 71.1924],'Andaman & Nicobar Island':['Andaman & Nicobar Island',11.7401, 92.6586],'Maharashtra':['Maharashtra',19.7515,75.7139],'Andhra Pradesh':['Andhra Pradesh',15.91,79.7439],'Arunachal Pradesh':['Arunachal Pradesh',27.10039878 ,93.61660071],'Assam':['Assam',26.7499809,94.21666744],'Bihar':['Bihar',25.78541445,87.4799727],
-    'Chandigarh':['Chandigarh',30.71999697,76.78000565],'Chhattisgarh':['Chhattisgarh',22.09042035,82.15998734],'Dadra & Nagar Havelli':['Dadra & Nagar Havelli',20.26657819,73.0166178],'Delhi':['Delhi',28.6699929,77.23000403],'Goa':['Goa',15.491997,73.81800065],'Haryana':['Haryana',28.45000633,77.01999101],'Himachal Pradesh':['Himachal Pradesh',31.10002545,77.16659704],'Jammu & Kashmir':['Jammu & Kashmir',34.29995933,74.46665849],'Jharkhand':['Jharkhand',23.80039349,86.41998572],'Karnataka':['Karnataka',12.57038129,76.91999711],'Kerala':['Kerala', 8.900372741,76.56999263],'Lakshadweep':['Lakshadweep',10.56257331,72.63686717],'Madhya Pradesh':['Madhya Pradesh',21.30039105,76.13001949],'Manipur':['Manipur',24.6637, 93.9063],'Meghalaya':['Meghalaya',25.57049217,91.8800142],'Mizoram':['Mizoram',23.71039899,92.72001461],'Nagaland':['Nagaland',  25.6669979,94.11657019],'Orissa':['Orissa',19.82042971,85.90001746],'Puducherry':['Puducherry', 11.93499371,79.83000037],'Punjab':['Punjab',31.51997398, 75.98000281],'Rajasthan':['Rajasthan',26.44999921,  74.63998124],'Sikkim':['Sikkim',27.3333303,88.6166475],'Tamil Nadu':['Tamil Nadu',12.92038576,79.15004187],'Tripura':['Tripura',  23.83540428,91.27999914],'Uttar Pradesh':['Uttar Pradesh',27.59998069,78.05000565],',Uttaranchal':['Uttaranchal',30.32040895,78.05000565],'West Bengal':['West Bengal',22.58039044,88.32994665]}
-
-    let listDistrict = {'Akola':['Akola',20.7002, 77.0082],'Amravati':['Amravati',20.9374,77.7796],
-    'Buldana':['Buldana',20.4561,76.3637],'Yavatmal':['Yavatmal',20.3888,78.1204],'Washim':['Washim',20.139,77.1025],
-    'Aurangabad':['Aurangabad',19.8762,75.3433],'Beed':['Beed',18.9891,75.7601],'Jalna':['Jalna',19.8297,75.88],
-    'Osmanabad':['Osmanabad',18.207,76.1784],'Nanded':['Nanded',19.1383,77.321],'Latur':['Latur',18.4088,76.5604],
-    'Parbhani':['Parbhani',19.2644,76.6413],'Hingoli':['Hingoli',19.5781,77.1025],'Thane':['Thane',19.2183,72.9781],
-    'Palghar':['Palghar',19.6936,72.7655],'Raigad':['Raigad',18.5158,73.1822],'Ratnagiri':['Ratnagiri',16.9902,73.312],'Sindhudurg':['Sindhudurg',16.3492,73.5594],'Bhandara':['Bhandara',21.0736,79.8297],'Mumbai City':['Mumbai City',18.942,72.816], 'Mumbai Suburban':['Mumbai Suburban',19.118,72.905],
-    'Gadchiroli':['Gadchiroli',19.4969,80.2767],'Chandrapur':['Chandrapur',19.9615,79.2961],
-    'Gondia':['Gondia',21.4624,80.221],'Nagpur':['Nagpur',21.1458,79.0882],'Wardha':['Wardha',20.7453,78.6022],
-    'Ahmadnagar':['Ahmadnagar',19.0948,74.748],'Dhule':['Dhule',20.9042,74.7749],'Jalgaon':['Jalgaon',21.0077,75.5626],
-    'Nandurbar':['Nandurbar',21.7469,74.124],'Nashik':['Nashik',19.9975,73.7898],'Kolhapur':['Kolhapur',16.705,74.2433],
-    'Pune':['Pune',18.5204,73.8567],'Sangli':['Sangli',16.8524,74.5815],'Satara':['Satara',17.6805,74.0183],
-    'Solapur':['Solapur',17.6599,74.9064]}
-    
-    let listFacility= {'CHC':'chc_num','PHC':'phc_num','Allo':'h_allo_tot','Alt':'h_alt_tot'}
-    
-
-    let url;
-    
-    function style(feature) {
-    return {
-        fillColor: "#0000",
-        weight: 2,
-        opacity: 1,
-        color: 'black',
-        // dashArray: '3',
-        fillOpacity: 0.7
-    };
-}
-    const domain = ['https://makerghat.urbansciences.in/','http://localhost/'];
-    var rootUrl = domain[0] + 'geoserver/geonode/ows';
-
-    var defaultParameters = {
-        service: 'WFS',
-        version: '1.0.0',
-        request: 'GetFeature',
-        outputFormat: 'json'
-        };
-
-    var info = L.control();
-    var attribute_table = L.control({position: 'bottomright'});  
-    var LayerList = [];
-    var pointLayerList = [];
-    var newLayerList = [];
-    var faciLayerList=[];
-    var pinLayerList=[];
-    var distLayerList=[];
-    var wardLayerList=[];
-    var wmshealthLayerList=[];
-
-    var searchControl;
-
-    
-
-$('#indstate').on('change',function(){
-        
-        
-        clear_layer();
-        clearpoint_layer();
-
-        let indstate = document.getElementById('indstate').value;
-
-        putWMSLayerst();
-        
-
-        //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
-     })
-
-$('#district').on('change',function(){
-        //clear_layer();
-        clearpoint_layer();
-
-        let district = document.getElementById('district').value;
-
-        putWMSLayerdist();
-       
-
-        //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
-     })
-
-
-$('#pincode').on('change',function(){
-        
-        clearpoint_layer();
-
-        let pincode = document.getElementById('pincode').value;
-
-        putWMSLayerpincode(pincode);
-       
-
-        //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
-     })
-
-
-
-function onEachFeature(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        //click: zoomToFeature,
-    });
-
-    layer.bindTooltip("<div style = 'text-transform: capitalize'>"+feature.properties.village_na+"</div>",{permanent: true, 
-   direction: "center",
-   className: "my-labels"});
-   
-
-}
-function highlightFeature(e) {
-    var layer = e.target;
-
-    layer.setStyle({
-        weight: 5        
-    });
-    info.update(layer.feature.properties);
-    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-        layer.bringToFront();
-    }
-}
-
-function resetHighlight(e) {
-    geojson.resetStyle(e.target);
-    info.update();
-}
-
-
-//this is for putting districts in drop down menu
-function putWMSLayer(){
-             var aspiD = document.getElementById('district').value;
-             var distLayerLatLong= listDistrict[aspiD];
-             //clear_layer();
-             //console.log('kk',distLayerLatLong);
-            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-            layers: 'geonode:maha_taluka_15apr2020',
-            format: 'image/png',
-            transparent:'true',
-            tiled:true,
-           
-            //opacity:0.5,
-            // version: '1.3.0',
-            cql_filter:"distname='"+distLayerLatLong[0]+"'",
-            style:""});
-            clear_layer();
-            clearpoint_layer();
-            wms_layer.addTo(mymap);
-          mymap.setView([distLayerLatLong[1],distLayerLatLong[2]],9);
-
-            //console.log(wms_layer);
-            LayerList.push(wms_layer);
-            // addWMSLegend(layer);
-            
-
-         }
-
-function putWMSLayerst(){
-             var indstate = document.getElementById('indstate').value;
-             //console.log(indstate);
-             var stLayerLatLong= listState[indstate];
-            
-            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-            layers: 'geonode:states_in_india',
-            format: 'image/png',
-            transparent:'true',
-            // version: '1.3.0',
-            cql_filter: "state='"+stLayerLatLong[0]+"'",
-            style:""});
-            clear_layer();
-            clear_distlayer();
-            clearpoint_layer();
-            wms_layer.addTo(mymap);
-            mymap.setView([stLayerLatLong[1],stLayerLatLong[2]-2],7);
-            LayerList.push(wms_layer);
-            // addWMSLegend(layer);
-            
-
-         }
-
-
-function putWMSLayerdist(){
-             var dist = document.getElementById('district').value;
-             var state= document.getElementById('indstate').value;
-
-             //console.log(indstate);
-             //var stLayerLatLong= listState[indstate];
-            if(dist=='Mumbai City' || dist=='Mumbai Suburban')
-                  mymap.setView([19.0760, 72.8777],11);
-
-            clear_distlayer();
-            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-            layers: 'geonode:india_pincodes_13may',
-            format: 'image/png',
-            transparent:'true',
-            // version: '1.3.0',
-            cql_filter: `district='${dist}' AND state='${state}'` ,
-            style:""});
-            //console.log(wms_layer);
-            //clear_layer();
-            //clearpoint_layer();
-            wms_layer.addTo(mymap);
-            //mymap.setView([stLayerLatLong[1],stLayerLatLong[2]],8);
-            distLayerList.push(wms_layer);
-            // addWMSLegend(layer);
-            
-
-         }
-
-
-
-function putwards(cql,layer){
-             var dist = cql;
-            var layer=layer;
-            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-            layers:layer,
-            format: 'image/png',
-            transparent:'true',
-            // version: '1.3.0',
-            cql_filter: "district='"+dist+"'",
-            style:""});
-            //clear_layer();
-            //clearpoint_layer();
-            wms_layer.addTo(mymap);
-            //mymap.setView([stLayerLatLong[1],stLayerLatLong[2]],8);
-            wardLayerList.push(wms_layer);
-            // addWMSLegend(layer);
-            
-
-         }
-       
-
-//this function is for state boundary
-function putWMS(layer){
-    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-        layers: layer,
-        format: 'image/png',
-        transparent:'true',
-    });
-    wms_layer.addTo(mymap);
-    newLayerList.push(wms_layer);
-}
-
-let area = null;
-function setView(layerName,selectedBoundary){
-    if(area){
-        mymap.removeLayer(area);
-    }
-    let rootUrl = '{{site_url}}geoserver/geonode/ows';
-
-    let options = {
-    service: 'WFS',
-    version: '1.0.0',
-    request: 'GetFeature',
-    outputFormat: 'application/json',
-    typeName:layerName,
-    cql_filter:`pincode='${selectedBoundary}'`,
-    propertyName:'the_geom'
-    };
-    let parameters = L.Util.extend(options);
-    layer_url = rootUrl + L.Util.getParamString(parameters)
-    fetch(layer_url).then(
-        function(response) {
-        if (response.status !== 200) {
-            console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-            return;
-        }
-        response.json().then(function(geojsonData) {
-            area = L.geoJson(geojsonData.features).addTo(mymap)
-            lat = area.getBounds()._northEast.lat
-            lng = area.getBounds()._northEast.lng
-            mymap.setView([lat,lng-0.4],10)
-        });
-    }).catch(function(err) {
-            console.log('Fetch Error :-S', err);
-    });
-}
-function putWMSLayerpincode(pincode){
-    clear_pinlayer();
-    var state = document.getElementById('indstate').value;
-
-    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-        layers:"geonode:india_pincodes_12may",
-        cql_filter:"pincode='"+pincode+"'",
-        cql_filter: `pincode='${pincode}' AND state='${state}'` ,
-        format: 'image/png',
-        transparent:'true',
-    });
-    wms_layer.addTo(mymap);
-    setView('geonode:india_pincodes_12may',pincode);
-
-    pinLayerList.push(wms_layer);
-
-  
-
-
-
-}
-
-
-
-function putWMSru(layer){
-  
-    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-        layers: layer,
-        format: 'image/png',
-        transparent:'true',
-        //cql_filter:"district_n='"+district+"'"
-    });
-    wms_layer.addTo(mymap);
-    newLayerList.push(wms_layer);
-    //console.log(wms_layer);
-}
-
-
-function displayPolygon(param){
-// clear_layer();
-
-var parameters = L.Util.extend(param);
-layer_url = rootUrl + L.Util.getParamString(parameters)
-// console.log(layer_url);
-//mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
-
-fetch(layer_url,{mode:'cors'})
-.then(
-    function(response) {
-    if (response.status !== 200) {
-        console.log('Looks like there was a problem. Status Code: ' +
-        response.status);
-        return;
-    }
-
-    // Examine the text in the response
-    response.json().then(function(geojsonData) {
-        // console.log(geojsonData)
-        geojson = L.geoJson(geojsonData.features, {
-        style : style,
-        onEachFeature: onEachFeature
-    }).addTo(mymap);
-     clear_layer();
-    if(typeof searchControl === 'undefined'){
-                searchControl = addSearchControl(geojson,'ipname');
-                mymap.addControl(searchControl);
-          }
-    mymap.spin(false);
-    LayerList.push(geojson);
-
-    });
-
-
-    }
-)
-.catch(function(err) {
-    console.log('Fetch Error :-S', err);
-    
-});
-
-    
-}
-function clear_layer(){
-    LayerList.forEach(layer => mymap.removeLayer(layer));
-    
-}
-
-function clear_distlayer(){
-    distLayerList.forEach(layer => mymap.removeLayer(layer));
-    
-}
-
-
-function clear_pinlayer(){
-    pinLayerList.forEach(layer => mymap.removeLayer(layer));
-    
-}
-
-
-function clearpoint_layer(){
-    //console.log(pointLayerList);
-    pointLayerList.forEach(layer => mymap.removeLayer(layer));
-    
-}
-
-function removeWMS(unchecked_layer){
-    newLayerList.forEach((layer, index) => {
-            if(layer.options.layers === unchecked_layer){
-                mymap.removeLayer(layer);
-                newLayerList.splice(index, 1);
-            }
-        });
-}
-
-function style(feature) {
-    return {
-        weight: 2,
-        opacity: 1,
-        color: "black",
-        fillOpacity: 0
-    };
-}
-
-function addSearchControl(layer,propertyName){
-    var searchControl = new L.Control.Search({
-    layer: layer,
-    propertyName: 'ipname',
-    marker: false,
-    moveToLocation: function(latlng, title, mymap) {
-        //mymap.fitBounds( latlng.layer.getBounds() );
-        //console.log(latlng);
-        var zoom = mymap.getBoundsZoom(latlng.layer.getBounds());
-        mymap.setView(latlng, zoom); // access the zoom
-    }
-});
-searchControl.on('search:locationfound', function(e) {
-    e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
-    if(e.layer._popup)
-        e.layer.openPopup();
-
-}).on('search:collapsed', function(e) {
-
-    featuresLayer.eachLayer(function(layer) {   //restore feature color
-        featuresLayer.resetStyle(layer);
-    }); 
-});
-
-return searchControl;
-}
-
-L.Map.include({
-    hasSearchControl: function () {
-        return (this.searchControl) ? true : false;
-    }
-});
-
-
-let activatedHealthFacility = {'CHC':{},'PHC':{},'Allo':{},'Alt':{}}
-let activeKoboHealthFacity={'hospital':{},'other':{}}
-let activeKoboAllIndiaHealthFacity={}
-let activearogyaFacity={}
-
-function putKoboHealthFacitywms(facility){
-            //console.log(cql);
-            var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms',{
-            layers: 'geonode:cumulative_healthfacility_18may',
-            format: 'image/png',
-            transparent:'true',
-            tiled:'true',
-            opacity:0.7,
-            // version: '1.3.0',
-            cql_filter:""+facility+">0",
-            style:""});
-           
-
-            wms_layer.addTo(mymap);
-            //console.log(wms_layer);
-            TRIBLAYER="https://makerghat.urbansciences.in/geoserver/geonode/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS="+wms_layer.options.layers+"&QUERY_LAYERS="+wms_layer.options.layers;
-            wmshealthLayerList.push(wms_layer);
-            activeKoboAllIndiaHealthFacity[facility] = wms_layer;
-         }  
-
-
-
-function putKoboHealthFacity(facility){
-  let indstate = document.getElementById('indstate').value;
-  let rootUrl = '{{site_url}}geoserver/geonode/ows';
-
-    let options = {
-    service: 'WFS',
-    version: '1.0.0',
-    request: 'GetFeature',
-    outputFormat: 'application/json',
-    typeName:'geonode:cumulative_healthfacility_18may',
-    cql_filter:`${facility}>0 AND state_gen='${indstate}'`,
-    propertyName:'the_geom,facltyname,facltytyp,address_te1,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
-    };
-    let parameters = L.Util.extend(options);
-    cql_url = rootUrl + L.Util.getParamString(parameters)
-    console.log(cql_url);
-
-    function geojsonMarkerOptions(fac) {
-        let circleProp = {radius:6,fillColor: "#",color: "#000",weight: 1,opacity: 1,fillOpacity: 0.8};
-        if(fac === 'hospital') circleProp['fillColor'] = 'bluevoilet'
-        else if(fac === 'mhu') circleProp['fillColor'] = 'teal'
-        else if(fac === 'subcenter') circleProp['fillColor'] = 'aqua'
-        else if(fac === 'phc') circleProp['fillColor'] = 'crimson'
-        else if(fac === 'clinic') circleProp['fillColor'] = 'darkcyan'
-        else if(fac === 'phu') circleProp['fillColor'] = 'darkmagenta'
-        else if(fac === 'ashu') circleProp['fillColor'] = 'gold'
-        else if(fac === 'mobmedu') circleProp['fillColor'] = 'hotpink'
-        else if(fac === 'hfwi') circleProp['fillColor'] = 'indigo'
-        else if(fac === 'mhi') circleProp['fillColor'] = 'lightseagreen'
-        else if(fac === 'dc') circleProp['fillColor'] = 'maroon'
-        else if(fac === 'phrmcy') circleProp['fillColor'] = 'midnightblue'
-        else if(fac === 'optical') circleProp['fillColor'] = 'orangered'
-        else if(fac === 'delvry') circleProp['fillColor'] = 'palevioletred'
-        else if(fac === 'dspnsry') circleProp['fillColor'] = 'peru'
-        else if(fac === 'othr') circleProp['fillColor'] = 'purple'
-       return circleProp
-    };
-    
-    function onEachFeatureForPoint(feature, layer) {
-        const unavailable = '-';
-        const updateDate = "India Hospitals";
-        layer.bindPopup(`<table class = 'popupclass'>
+                                    
+                                  
+                                }
+
+                                // FIND NEAREST BUTTON
+                                $findNearest.on('click', function(e) {
+                                    queryFeatures(currentPos, 1);
+                                });
+
+                                // IF LOCATION FETCH BY BROWSER SUCCESS
+                                function success(position) {
+                                    $body.addClass('loaded');
+                                    currentPos = [position.coords.latitude, position.coords.longitude];
+                                    mymap.setView(currentPos, 13);
+                                    marker = L.marker(currentPos)
+                                        .addTo(mymap)
+                                        .bindTooltip("Your Location")
+                                        .openTooltip();
+                                    oldMarker = marker;
+
+                                };
+                                // IF error IN FETCHING LOCATION
+                                function error() {
+                                    alert("Unable to retrieve your location");
+                                };
+                                // LOOP THROUGH EACH POINT AND COMPARE WITH SELECTED OR CURRENT USER LOCATION
+                                function queryFeatures(currentPos, numResults) {
+                                    var distances = [];
+                                    healthFacility.eachLayer(function(l) {
+                                        var distance = L.latLng(currentPos).distanceTo(l.getLatLng()) / 1000;
+                                        distances.push(distance);
+                                    });
+                                    distances.sort(function(a, b) {
+                                        return a - b;
+                                    });
+
+                                    healthFacility.eachLayer(function(l) {
+                                        var distance = L.latLng(currentPos).distanceTo(l.getLatLng()) / 1000;
+                                        if (distance < distances[numResults]) {
+                                            l.bindTooltip(distance.toLocaleString() + ' km from current location.');
+                                            L.polyline([currentPos, l.getLatLng()], {
+                                                color: 'blue',
+                                                weight: 4,
+                                                opacity: .5,
+                                            }).addTo(facilityLayer);
+                                        }
+                                    });
+                                    oldLayer = facilityLayer;
+                                    mymap.flyToBounds(facilityLayer.getBounds(), {
+                                        duration: 3,
+                                        easeLinearity: .1
+                                    });
+                                    mymap.on('zoomend', function() {
+                                        mymap.addLayer(facilityLayer);
+                                    })
+                                }
+
+                                // *****************
+                                let listState = {
+                                    'Uttarakhand': ['Uttarakhand', 30.0668, 79.0193],
+                                    'Ladakh': ['Ladakh', 34.152588, 77.577049],
+                                    'Daman & Diu': ['Daman & Diu', 20.4283, 72.8397],
+                                    'Telangana': ['Telangana', 18.1124, 79.0193],
+                                    'Odisha': ['Odisha', 20.9517, 85.0985],
+                                    'Gujarat': ['Gujarat', 22.2587, 71.1924],
+                                    'Andaman & Nicobar Island': ['Andaman & Nicobar Island', 11.7401, 92.6586],
+                                    'Maharashtra': ['Maharashtra', 19.7515, 75.7139],
+                                    'Andhra Pradesh': ['Andhra Pradesh', 15.91, 79.7439],
+                                    'Arunachal Pradesh': ['Arunachal Pradesh', 27.10039878, 93.61660071],
+                                    'Assam': ['Assam', 26.7499809, 94.21666744],
+                                    'Bihar': ['Bihar', 25.78541445, 87.4799727],
+                                    'Chandigarh': ['Chandigarh', 30.71999697, 76.78000565],
+                                    'Chhattisgarh': ['Chhattisgarh', 22.09042035, 82.15998734],
+                                    'Dadra & Nagar Havelli': ['Dadra & Nagar Havelli', 20.26657819, 73.0166178],
+                                    'Delhi': ['Delhi', 28.6699929, 77.23000403],
+                                    'Goa': ['Goa', 15.491997, 73.81800065],
+                                    'Haryana': ['Haryana', 28.45000633, 77.01999101],
+                                    'Himachal Pradesh': ['Himachal Pradesh', 31.10002545, 77.16659704],
+                                    'Jammu & Kashmir': ['Jammu & Kashmir', 34.29995933, 74.46665849],
+                                    'Jharkhand': ['Jharkhand', 23.80039349, 86.41998572],
+                                    'Karnataka': ['Karnataka', 12.57038129, 76.91999711],
+                                    'Kerala': ['Kerala', 8.900372741, 76.56999263],
+                                    'Lakshadweep': ['Lakshadweep', 10.56257331, 72.63686717],
+                                    'Madhya Pradesh': ['Madhya Pradesh', 21.30039105, 76.13001949],
+                                    'Manipur': ['Manipur', 24.6637, 93.9063],
+                                    'Meghalaya': ['Meghalaya', 25.57049217, 91.8800142],
+                                    'Mizoram': ['Mizoram', 23.71039899, 92.72001461],
+                                    'Nagaland': ['Nagaland', 25.6669979, 94.11657019],
+                                    'Orissa': ['Orissa', 19.82042971, 85.90001746],
+                                    'Puducherry': ['Puducherry', 11.93499371, 79.83000037],
+                                    'Punjab': ['Punjab', 31.51997398, 75.98000281],
+                                    'Rajasthan': ['Rajasthan', 26.44999921, 74.63998124],
+                                    'Sikkim': ['Sikkim', 27.3333303, 88.6166475],
+                                    'Tamil Nadu': ['Tamil Nadu', 12.92038576, 79.15004187],
+                                    'Tripura': ['Tripura', 23.83540428, 91.27999914],
+                                    'Uttar Pradesh': ['Uttar Pradesh', 27.59998069, 78.05000565],
+                                    ',Uttaranchal': ['Uttaranchal', 30.32040895, 78.05000565],
+                                    'West Bengal': ['West Bengal', 22.58039044, 88.32994665]
+                                }
+
+                                let listDistrict = {
+                                    'Akola': ['Akola', 20.7002, 77.0082],
+                                    'Amravati': ['Amravati', 20.9374, 77.7796],
+                                    'Buldana': ['Buldana', 20.4561, 76.3637],
+                                    'Yavatmal': ['Yavatmal', 20.3888, 78.1204],
+                                    'Washim': ['Washim', 20.139, 77.1025],
+                                    'Aurangabad': ['Aurangabad', 19.8762, 75.3433],
+                                    'Beed': ['Beed', 18.9891, 75.7601],
+                                    'Jalna': ['Jalna', 19.8297, 75.88],
+                                    'Osmanabad': ['Osmanabad', 18.207, 76.1784],
+                                    'Nanded': ['Nanded', 19.1383, 77.321],
+                                    'Latur': ['Latur', 18.4088, 76.5604],
+                                    'Parbhani': ['Parbhani', 19.2644, 76.6413],
+                                    'Hingoli': ['Hingoli', 19.5781, 77.1025],
+                                    'Thane': ['Thane', 19.2183, 72.9781],
+                                    'Palghar': ['Palghar', 19.6936, 72.7655],
+                                    'Raigad': ['Raigad', 18.5158, 73.1822],
+                                    'Ratnagiri': ['Ratnagiri', 16.9902, 73.312],
+                                    'Sindhudurg': ['Sindhudurg', 16.3492, 73.5594],
+                                    'Bhandara': ['Bhandara', 21.0736, 79.8297],
+                                    'Mumbai City': ['Mumbai City', 18.942, 72.816],
+                                    'Mumbai Suburban': ['Mumbai Suburban', 19.118, 72.905],
+                                    'Gadchiroli': ['Gadchiroli', 19.4969, 80.2767],
+                                    'Chandrapur': ['Chandrapur', 19.9615, 79.2961],
+                                    'Gondia': ['Gondia', 21.4624, 80.221],
+                                    'Nagpur': ['Nagpur', 21.1458, 79.0882],
+                                    'Wardha': ['Wardha', 20.7453, 78.6022],
+                                    'Ahmadnagar': ['Ahmadnagar', 19.0948, 74.748],
+                                    'Dhule': ['Dhule', 20.9042, 74.7749],
+                                    'Jalgaon': ['Jalgaon', 21.0077, 75.5626],
+                                    'Nandurbar': ['Nandurbar', 21.7469, 74.124],
+                                    'Nashik': ['Nashik', 19.9975, 73.7898],
+                                    'Kolhapur': ['Kolhapur', 16.705, 74.2433],
+                                    'Pune': ['Pune', 18.5204, 73.8567],
+                                    'Sangli': ['Sangli', 16.8524, 74.5815],
+                                    'Satara': ['Satara', 17.6805, 74.0183],
+                                    'Solapur': ['Solapur', 17.6599, 74.9064]
+                                }
+
+                                let listFacility = {
+                                    'CHC': 'chc_num',
+                                    'PHC': 'phc_num',
+                                    'Allo': 'h_allo_tot',
+                                    'Alt': 'h_alt_tot'
+                                }
+
+
+                                let url;
+
+                                function style(feature) {
+                                    return {
+                                        fillColor: "#0000",
+                                        weight: 2,
+                                        opacity: 1,
+                                        color: 'black',
+                                        // dashArray: '3',
+                                        fillOpacity: 0.7
+                                    };
+                                }
+                                const domain = ['https://makerghat.urbansciences.in/', 'http://localhost/'];
+                                var rootUrl = domain[0] + 'geoserver/geonode/ows';
+
+                                var defaultParameters = {
+                                    service: 'WFS',
+                                    version: '1.0.0',
+                                    request: 'GetFeature',
+                                    outputFormat: 'json'
+                                };
+
+                                var info = L.control();
+                                var attribute_table = L.control({
+                                    position: 'bottomright'
+                                });
+                                var LayerList = [];
+                                var pointLayerList = [];
+                                var newLayerList = [];
+                                var faciLayerList = [];
+                                var pinLayerList = [];
+                                var distLayerList = [];
+                                var wardLayerList = [];
+                                var wmshealthLayerList = [];
+
+                                var searchControl;
+
+
+
+                                $('#indstate').on('change', function() {
+
+
+                                    clear_layer();
+                                    clearpoint_layer();
+
+                                    let indstate = document.getElementById('indstate').value;
+
+                                    putWMSLayerst();
+
+
+                                    //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+                                })
+
+                                $('#district').on('change', function() {
+                                    //clear_layer();
+                                    clearpoint_layer();
+
+                                    let district = document.getElementById('district').value;
+
+                                    putWMSLayerdist();
+
+
+                                    //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+                                })
+
+
+                                $('#pincode').on('change', function() {
+
+                                    clearpoint_layer();
+
+                                    let pincode = document.getElementById('pincode').value;
+
+                                    putWMSLayerpincode(pincode);
+
+
+                                    //mymap.spin(true,{lines: 15, length: 1, width: 50, scale: 200,radius: 200, color: "grey"});
+                                })
+
+
+
+                                function onEachFeature(feature, layer) {
+                                    layer.on({
+                                        mouseover: highlightFeature,
+                                        mouseout: resetHighlight,
+                                        //click: zoomToFeature,
+                                    });
+
+                                    layer.bindTooltip("<div style = 'text-transform: capitalize'>" + feature.properties.village_na + "</div>", {
+                                        permanent: true,
+                                        direction: "center",
+                                        className: "my-labels"
+                                    });
+
+
+                                }
+
+                                function highlightFeature(e) {
+                                    var layer = e.target;
+
+                                    layer.setStyle({
+                                        weight: 5
+                                    });
+                                    info.update(layer.feature.properties);
+                                    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                                        layer.bringToFront();
+                                    }
+                                }
+
+                                function resetHighlight(e) {
+                                    geojson.resetStyle(e.target);
+                                    info.update();
+                                }
+
+
+                                //this is for putting districts in drop down menu
+                                function putWMSLayer() {
+                                    var aspiD = document.getElementById('district').value;
+                                    var distLayerLatLong = listDistrict[aspiD];
+                                    //clear_layer();
+                                    //console.log('kk',distLayerLatLong);
+                                    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms', {
+                                        layers: 'geonode:maha_taluka_15apr2020',
+                                        format: 'image/png',
+                                        transparent: 'true',
+                                        tiled: true,
+
+                                        //opacity:0.5,
+                                        // version: '1.3.0',
+                                        cql_filter: "distname='" + distLayerLatLong[0] + "'",
+                                        style: ""
+                                    });
+                                    clear_layer();
+                                    clearpoint_layer();
+                                    wms_layer.addTo(mymap);
+                                    mymap.setView([distLayerLatLong[1], distLayerLatLong[2]], 9);
+
+                                    //console.log(wms_layer);
+                                    LayerList.push(wms_layer);
+                                    // addWMSLegend(layer);
+
+
+                                }
+
+                                function putWMSLayerst() {
+                                    var indstate = document.getElementById('indstate').value;
+                                    //console.log(indstate);
+                                    var stLayerLatLong = listState[indstate];
+
+                                    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms', {
+                                        layers: 'geonode:states_in_india',
+                                        format: 'image/png',
+                                        transparent: 'true',
+                                        // version: '1.3.0',
+                                        cql_filter: "state='" + stLayerLatLong[0] + "'",
+                                        style: ""
+                                    });
+                                    clear_layer();
+                                    clear_distlayer();
+                                    clearpoint_layer();
+                                    wms_layer.addTo(mymap);
+                                    mymap.setView([stLayerLatLong[1], stLayerLatLong[2] - 2], 7);
+                                    LayerList.push(wms_layer);
+                                    // addWMSLegend(layer);
+
+
+                                }
+
+
+                                function putWMSLayerdist() {
+                                    var dist = document.getElementById('district').value;
+                                    var state = document.getElementById('indstate').value;
+
+                                    //console.log(indstate);
+                                    //var stLayerLatLong= listState[indstate];
+                                    if (dist == 'Mumbai City' || dist == 'Mumbai Suburban')
+                                        mymap.setView([19.0760, 72.8777], 11);
+
+                                    clear_distlayer();
+                                    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms', {
+                                        layers: 'geonode:india_pincodes_13may',
+                                        format: 'image/png',
+                                        transparent: 'true',
+                                        // version: '1.3.0',
+                                        cql_filter: `district='${dist}' AND state='${state}'`,
+                                        style: ""
+                                    });
+                                    //console.log(wms_layer);
+                                    //clear_layer();
+                                    //clearpoint_layer();
+                                    wms_layer.addTo(mymap);
+                                    //mymap.setView([stLayerLatLong[1],stLayerLatLong[2]],8);
+                                    distLayerList.push(wms_layer);
+                                    // addWMSLegend(layer);
+
+
+                                }
+
+
+
+                                function putwards(cql, layer) {
+                                    var dist = cql;
+                                    var layer = layer;
+                                    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms', {
+                                        layers: layer,
+                                        format: 'image/png',
+                                        transparent: 'true',
+                                        // version: '1.3.0',
+                                        cql_filter: "district='" + dist + "'",
+                                        style: ""
+                                    });
+                                    //clear_layer();
+                                    //clearpoint_layer();
+                                    wms_layer.addTo(mymap);
+                                    //mymap.setView([stLayerLatLong[1],stLayerLatLong[2]],8);
+                                    wardLayerList.push(wms_layer);
+                                    // addWMSLegend(layer);
+
+
+                                }
+
+
+                                //this function is for state boundary
+                                function putWMS(layer) {
+                                    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms', {
+                                        layers: layer,
+                                        format: 'image/png',
+                                        transparent: 'true',
+                                    });
+                                    wms_layer.addTo(mymap);
+                                    newLayerList.push(wms_layer);
+                                }
+
+                                let area = null;
+
+                                function setView(layerName, selectedBoundary) {
+                                    if (area) {
+                                        mymap.removeLayer(area);
+                                    }
+                                    let rootUrl = '{{site_url}}geoserver/geonode/ows';
+
+                                    let options = {
+                                        service: 'WFS',
+                                        version: '1.0.0',
+                                        request: 'GetFeature',
+                                        outputFormat: 'application/json',
+                                        typeName: layerName,
+                                        cql_filter: `pincode='${selectedBoundary}'`,
+                                        propertyName: 'the_geom'
+                                    };
+                                    let parameters = L.Util.extend(options);
+                                    layer_url = rootUrl + L.Util.getParamString(parameters)
+                                    fetch(layer_url).then(
+                                        function(response) {
+                                            if (response.status !== 200) {
+                                                console.log('Looks like there was a problem. Status Code: ' +
+                                                    response.status);
+                                                return;
+                                            }
+                                            response.json().then(function(geojsonData) {
+                                                area = L.geoJson(geojsonData.features).addTo(mymap)
+                                                lat = area.getBounds()._northEast.lat
+                                                lng = area.getBounds()._northEast.lng
+                                                mymap.setView([lat, lng - 0.4], 10)
+                                            });
+                                        }).catch(function(err) {
+                                        console.log('Fetch Error :-S', err);
+                                    });
+                                }
+
+                                function putWMSLayerpincode(pincode) {
+                                    clear_pinlayer();
+                                    var state = document.getElementById('indstate').value;
+
+                                    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms', {
+                                        layers: "geonode:india_pincodes_12may",
+                                        cql_filter: "pincode='" + pincode + "'",
+                                        cql_filter: `pincode='${pincode}' AND state='${state}'`,
+                                        format: 'image/png',
+                                        transparent: 'true',
+                                    });
+                                    wms_layer.addTo(mymap);
+                                    setView('geonode:india_pincodes_12may', pincode);
+
+                                    pinLayerList.push(wms_layer);
+
+
+
+
+
+                                }
+
+
+
+                                function putWMSru(layer) {
+
+                                    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms', {
+                                        layers: layer,
+                                        format: 'image/png',
+                                        transparent: 'true',
+                                        //cql_filter:"district_n='"+district+"'"
+                                    });
+                                    wms_layer.addTo(mymap);
+                                    newLayerList.push(wms_layer);
+                                    //console.log(wms_layer);
+                                }
+
+
+                                function displayPolygon(param) {
+                                    // clear_layer();
+
+                                    var parameters = L.Util.extend(param);
+                                    layer_url = rootUrl + L.Util.getParamString(parameters)
+                                        // console.log(layer_url);
+                                        //mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
+
+                                    fetch(layer_url, {
+                                            mode: 'cors'
+                                        })
+                                        .then(
+                                            function(response) {
+                                                if (response.status !== 200) {
+                                                    console.log('Looks like there was a problem. Status Code: ' +
+                                                        response.status);
+                                                    return;
+                                                }
+
+                                                // Examine the text in the response
+                                                response.json().then(function(geojsonData) {
+                                                    // console.log(geojsonData)
+                                                    geojson = L.geoJson(geojsonData.features, {
+                                                        style: style,
+                                                        onEachFeature: onEachFeature
+                                                    }).addTo(mymap);
+                                                    clear_layer();
+                                                    if (typeof searchControl === 'undefined') {
+                                                        searchControl = addSearchControl(geojson, 'ipname');
+                                                        mymap.addControl(searchControl);
+                                                    }
+                                                    mymap.spin(false);
+                                                    LayerList.push(geojson);
+
+                                                });
+
+
+                                            }
+                                        )
+                                        .catch(function(err) {
+                                            console.log('Fetch Error :-S', err);
+
+                                        });
+
+
+                                }
+
+                                function clear_layer() {
+                                    LayerList.forEach(layer => mymap.removeLayer(layer));
+
+                                }
+
+                                function clear_distlayer() {
+                                    distLayerList.forEach(layer => mymap.removeLayer(layer));
+
+                                }
+
+
+                                function clear_pinlayer() {
+                                    pinLayerList.forEach(layer => mymap.removeLayer(layer));
+
+                                }
+
+
+                                function clearpoint_layer() {
+                                    //console.log(pointLayerList);
+                                    pointLayerList.forEach(layer => mymap.removeLayer(layer));
+
+                                }
+
+                                function removeWMS(unchecked_layer) {
+                                    newLayerList.forEach((layer, index) => {
+                                        if (layer.options.layers === unchecked_layer) {
+                                            mymap.removeLayer(layer);
+                                            newLayerList.splice(index, 1);
+                                        }
+                                    });
+                                }
+
+                                function style(feature) {
+                                    return {
+                                        weight: 2,
+                                        opacity: 1,
+                                        color: "black",
+                                        fillOpacity: 0
+                                    };
+                                }
+
+                                function addSearchControl(layer, propertyName) {
+                                    var searchControl = new L.Control.Search({
+                                        layer: layer,
+                                        propertyName: 'ipname',
+                                        marker: false,
+                                        moveToLocation: function(latlng, title, mymap) {
+                                            //mymap.fitBounds( latlng.layer.getBounds() );
+                                            //console.log(latlng);
+                                            var zoom = mymap.getBoundsZoom(latlng.layer.getBounds());
+                                            mymap.setView(latlng, zoom); // access the zoom
+                                        }
+                                    });
+                                    searchControl.on('search:locationfound', function(e) {
+                                        e.layer.setStyle({
+                                            fillColor: '#3f0',
+                                            color: '#0f0'
+                                        });
+                                        if (e.layer._popup)
+                                            e.layer.openPopup();
+
+                                    }).on('search:collapsed', function(e) {
+
+                                        featuresLayer.eachLayer(function(layer) { //restore feature color
+                                            featuresLayer.resetStyle(layer);
+                                        });
+                                    });
+
+                                    return searchControl;
+                                }
+
+                                L.Map.include({
+                                    hasSearchControl: function() {
+                                        return (this.searchControl) ? true : false;
+                                    }
+                                });
+
+
+                                let activatedHealthFacility = {}
+                                let activeKoboHealthFacity = {}
+                                let activeKoboAllIndiaHealthFacity = {}
+                                let activearogyaFacity = {}
+
+                                function putKoboHealthFacitywms(facility) {
+                                    //console.log(cql);
+                                    var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms', {
+                                        layers: 'geonode:cumulative_healthfacility_18may',
+                                        format: 'image/png',
+                                        transparent: 'true',
+                                        tiled: 'true',
+                                        opacity: 0.7,
+                                        // version: '1.3.0',
+                                        cql_filter: "" + facility + ">0.0",
+                                        style: ""
+                                    });
+
+
+                                    wms_layer.addTo(mymap);
+                                    //console.log(wms_layer);
+                                    TRIBLAYER = "https://makerghat.urbansciences.in/geoserver/geonode/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS=" + wms_layer.options.layers + "&QUERY_LAYERS=" + wms_layer.options.layers;
+                                    wmshealthLayerList.push(wms_layer);
+                                    activeKoboAllIndiaHealthFacity[facility] = wms_layer;
+                                }
+
+
+
+                                function putKoboHealthFacity(facility) {
+                                    let indstate = document.getElementById('indstate').value;
+                                    let rootUrl = '{{site_url}}geoserver/geonode/ows';
+
+                                    let options = {
+                                        service: 'WFS',
+                                        version: '1.0.0',
+                                        request: 'GetFeature',
+                                        outputFormat: 'application/json',
+                                        typeName: 'geonode:cumulative_healthfacility_18may',
+                                        cql_filter: `${facility}>0.0 AND state_gen='${indstate}'`,
+                                        propertyName: 'the_geom,facltyname,facltytyp,address_te1,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
+                                    };
+                                    let parameters = L.Util.extend(options);
+                                    cql_url = rootUrl + L.Util.getParamString(parameters)
+                                    console.log(cql_url);
+
+                                    function geojsonMarkerOptions(fac) {
+                                        let circleProp = {
+                                            radius: 6,
+                                            fillColor: "#",
+                                            color: "#000",
+                                            weight: 1,
+                                            opacity: 1,
+                                            fillOpacity: 0.8
+                                        };
+                                        if (fac === 'hospital') circleProp['fillColor'] = 'bluevoilet'
+                                        else if (fac === 'mhu') circleProp['fillColor'] = 'teal'
+                                        else if (fac === 'subcenter') circleProp['fillColor'] = 'aqua'
+                                        else if (fac === 'phc') circleProp['fillColor'] = 'crimson'
+                                        else if (fac === 'clinic') circleProp['fillColor'] = 'darkcyan'
+                                        else if (fac === 'phu') circleProp['fillColor'] = 'darkmagenta'
+                                        else if (fac === 'ashu') circleProp['fillColor'] = 'gold'
+                                        else if (fac === 'mobmedu') circleProp['fillColor'] = 'hotpink'
+                                        else if (fac === 'hfwi') circleProp['fillColor'] = 'indigo'
+                                        else if (fac === 'mhi') circleProp['fillColor'] = 'lightseagreen'
+                                        else if (fac === 'dc') circleProp['fillColor'] = 'maroon'
+                                        else if (fac === 'phrmcy') circleProp['fillColor'] = 'midnightblue'
+                                        else if (fac === 'optical') circleProp['fillColor'] = 'orangered'
+                                        else if (fac === 'delvry') circleProp['fillColor'] = 'palevioletred'
+                                        else if (fac === 'dspnsry') circleProp['fillColor'] = 'peru'
+                                        else if (fac === 'othr') circleProp['fillColor'] = 'purple'
+                                        return circleProp
+                                    };
+
+                                    function onEachFeatureForPoint(feature, layer) {
+                                        const unavailable = '-';
+                                        const updateDate = "India Hospitals";
+                                        layer.bindPopup(`<table class = 'popupclass'>
                         <tr><td>Name:</td><td> ${feature.properties.facltyname}</td></tr>
                         <tr><td>Type:</td><td> ${feature.properties.facltytyp}</td></tr>
                          <tr><td>Amenities:</td><td> ${feature.properties.amenities}</td></tr>
@@ -1507,66 +1750,80 @@ function putKoboHealthFacity(facility){
                         <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
                         <tr><td>Last updated:</td><td> 12th May 2020</td></tr>
                         <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
-                        </table>`
-                        ) 
-    }
+                        </table>`)
+                                    }
 
-    mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
-    fetch(cql_url).then(
-        function(response) {
-        if (response.status !== 200) {
-            console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-            return;
-        }
-        response.json().then(function(geojsonData) {
-            healthFacility = L.geoJson(geojsonData.features, {
-                pointToLayer: function (feature, latlng) {
-                            return L.circleMarker(latlng, geojsonMarkerOptions(facility));
-                },onEachFeature:onEachFeatureForPoint,
-            }).addTo(mymap);
-            mymap.spin(false);
-            LayerList.push(healthFacility);
-            activeKoboHealthFacity[facility] = healthFacility;
-        });
+                                    mymap.spin(true, {
+                                        lines: 9,
+                                        length: 2,
+                                        width: 20,
+                                        scale: 60,
+                                        radius: 70,
+                                        color: "grey"
+                                    });
+                                    fetch(cql_url).then(
+                                        function(response) {
+                                            if (response.status !== 200) {
+                                                console.log('Looks like there was a problem. Status Code: ' +
+                                                    response.status);
+                                                return;
+                                            }
+                                            response.json().then(function(geojsonData) {
+                                                healthFacility = L.geoJson(geojsonData.features, {
+                                                    pointToLayer: function(feature, latlng) {
+                                                        return L.circleMarker(latlng, geojsonMarkerOptions(facility));
+                                                    },
+                                                    onEachFeature: onEachFeatureForPoint,
+                                                }).addTo(mymap);
+                                                mymap.spin(false);
+                                                LayerList.push(healthFacility);
+                                                activeKoboHealthFacity[facility] = healthFacility;
+                                            });
 
 
-    }).catch(function(err) {
-            console.log('Fetch Error :-S', err);
-    });
+                                        }).catch(function(err) {
+                                        console.log('Fetch Error :-S', err);
+                                    });
 
-}
+                                }
 
 
-function putArogya(facility){
-  let rootUrl = '{{site_url}}geoserver/geonode/ows';
-    var cql=facility;
-    let options = {
-    service: 'WFS',
-    version: '1.0.0',
-    request: 'GetFeature',
-    outputFormat: 'application/json',
-    typeName:'geonode:maha_govt_corona_hospital_21may2020',
-    cql_filter:`category='${cql}'`,
-    propertyName:'the_geom,faclty_nam,type,iso_minus_,iso_confm_,iso_suspec,o2suported,total_icu,ventilator,address,category'
-    };
-    let parameters = L.Util.extend(options);
-    cql_url = rootUrl + L.Util.getParamString(parameters)
-    console.log(cql_url);
+                                function putArogya(facility) {
+                                    let rootUrl = '{{site_url}}geoserver/geonode/ows';
+                                    var cql = facility;
+                                    let options = {
+                                        service: 'WFS',
+                                        version: '1.0.0',
+                                        request: 'GetFeature',
+                                        outputFormat: 'application/json',
+                                        typeName: 'geonode:maha_govt_corona_hospital_21may2020',
+                                        cql_filter: `category='${cql}'`,
+                                        propertyName: 'the_geom,faclty_nam,type,iso_minus_,iso_confm_,iso_suspec,o2suported,total_icu,ventilator,address,category'
+                                    };
+                                    let parameters = L.Util.extend(options);
+                                    cql_url = rootUrl + L.Util.getParamString(parameters)
+                                    console.log(cql_url);
 
-    function geojsonMarkerOptions(fac) {
-        let circleProp = {radius:7,fillColor: "#",color: "#000",weight: 1,opacity: 1,fillOpacity: 0.8};
-        if(fac === 'DCH') circleProp['fillColor'] = '#fa4646'
-        else if(fac === 'DCHC') circleProp['fillColor'] = '#a8fc0d'
-        else if(fac === 'DCCC') circleProp['fillColor'] = '#fc0de8'
-       
-       return circleProp
-    };
-    
-    function onEachFeatureForPoint(feature, layer) {
-        const unavailable = '-';
-        const updateDate = "Dedicated COVID Facilities-Arogya";
-        layer.bindPopup(`<table class = 'popupclass'>
+                                    function geojsonMarkerOptions(fac) {
+                                        let circleProp = {
+                                            radius: 7,
+                                            fillColor: "#",
+                                            color: "#000",
+                                            weight: 1,
+                                            opacity: 1,
+                                            fillOpacity: 0.8
+                                        };
+                                        if (fac === 'DCH') circleProp['fillColor'] = '#fa4646'
+                                        else if (fac === 'DCHC') circleProp['fillColor'] = '#a8fc0d'
+                                        else if (fac === 'DCCC') circleProp['fillColor'] = '#fc0de8'
+
+                                        return circleProp
+                                    };
+
+                                    function onEachFeatureForPoint(feature, layer) {
+                                        const unavailable = '-';
+                                        const updateDate = "Dedicated COVID Facilities-Arogya";
+                                        layer.bindPopup(`<table class = 'popupclass'>
                         <tr><td>Facility Name:</td><td> ${feature.properties.faclty_nam}</td></tr>
 
                         <tr><td>Category:</td><td> ${feature.properties.category}</td></tr>
@@ -1584,95 +1841,102 @@ function putArogya(facility){
                         <tr><td>Website:</td><td> ${unavailable}</td></tr>
                         <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
                         <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
-                        </table>`
-                        ) 
-    }
+                        </table>`)
+                                    }
 
-    mymap.spin(true,{lines: 9, length: 2, width: 20, scale: 60,radius: 70, color: "grey"});
-    fetch(cql_url).then(
-        function(response) {
-        if (response.status !== 200) {
-            console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-            return;
-        }
-        response.json().then(function(geojsonData) {
-            healthFacility = L.geoJson(geojsonData.features, {
-                pointToLayer: function (feature, latlng) {
-                            return L.circleMarker(latlng, geojsonMarkerOptions(facility));
-                },onEachFeature:onEachFeatureForPoint,
-            }).addTo(mymap);
-            mymap.spin(false);
-            LayerList.push(healthFacility);
-            activearogyaFacity[facility] = healthFacility;
-        });
-
-
-    }).catch(function(err) {
-            console.log('Fetch Error :-S', err);
-    });
-
-}
-
-
+                                    mymap.spin(true, {
+                                        lines: 9,
+                                        length: 2,
+                                        width: 20,
+                                        scale: 60,
+                                        radius: 70,
+                                        color: "grey"
+                                    });
+                                    fetch(cql_url).then(
+                                        function(response) {
+                                            if (response.status !== 200) {
+                                                console.log('Looks like there was a problem. Status Code: ' +
+                                                    response.status);
+                                                return;
+                                            }
+                                            response.json().then(function(geojsonData) {
+                                                healthFacility = L.geoJson(geojsonData.features, {
+                                                    pointToLayer: function(feature, latlng) {
+                                                        return L.circleMarker(latlng, geojsonMarkerOptions(facility));
+                                                    },
+                                                    onEachFeature: onEachFeatureForPoint,
+                                                }).addTo(mymap);
+                                                mymap.spin(false);
+                                                LayerList.push(healthFacility);
+                                                activearogyaFacity[facility] = healthFacility;
+                                            });
 
 
+                                        }).catch(function(err) {
+                                        console.log('Fetch Error :-S', err);
+                                    });
 
-function putWFSFacility(facility) {
-
-     var geojsonMarkerOptions = {
-        radius: 6,
-        fillColor: "#ff4800",
-        color: "#000",
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.8
-    };
-
-    var geojsonMarkerOptions2 = {
-        radius: 6,
-        fillColor: "#0004ff",
-        color: "#000",
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.8
-    };
-
-    var geojsonMarkerOptions3 = {
-        radius:5,
-        fillColor: "#a8325a",
-        color: "#000",
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.8
-    };
-
-    var geojsonMarkerOptions4 = {
-        radius:5,
-        fillColor: "#143d5e",
-        color: "#000",
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.8
-    };
-
-   
-    const url = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar';
-    const url2='https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:townhealth_centroid_15apr';
-
-    if(facility =='CHC')
-        newurl= url + `&cql_filter=chc_num>0`;
-    else if(facility=='PHC')
-        newurl=url + `&cql_filter=phc_num>0`;
-    else if(facility=='Allo')
-        newurl=url2 + `&cql_filter=h_allo_tot>0`;
-    else if(facility=='Alt')
-        newurl=url2 + `&cql_filter=h_alt_tot>0`;
+                                }
 
 
-    function onEachFeatureForPoint(feature, layer) {
-        if(facility === 'CHC'){
-            layer.bindPopup(`<div class = 'text-center'>CHC<br>
+
+
+
+                                function putWFSFacility(facility) {
+
+                                    var geojsonMarkerOptions = {
+                                        radius: 6,
+                                        fillColor: "#ff4800",
+                                        color: "#000",
+                                        weight: 1,
+                                        opacity: 1,
+                                        fillOpacity: 0.8
+                                    };
+
+                                    var geojsonMarkerOptions2 = {
+                                        radius: 6,
+                                        fillColor: "#0004ff",
+                                        color: "#000",
+                                        weight: 1,
+                                        opacity: 1,
+                                        fillOpacity: 0.8
+                                    };
+
+                                    var geojsonMarkerOptions3 = {
+                                        radius: 5,
+                                        fillColor: "#a8325a",
+                                        color: "#000",
+                                        weight: 1,
+                                        opacity: 1,
+                                        fillOpacity: 0.8
+                                    };
+
+                                    var geojsonMarkerOptions4 = {
+                                        radius: 5,
+                                        fillColor: "#143d5e",
+                                        color: "#000",
+                                        weight: 1,
+                                        opacity: 1,
+                                        fillOpacity: 0.8
+                                    };
+
+
+                                    const url = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar';
+                                    const url2 = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:townhealth_centroid_15apr';
+
+                                    if (facility == 'CHC')
+                                        newurl = url + `&cql_filter=chc_num>0`;
+                                    else if (facility == 'PHC')
+                                        newurl = url + `&cql_filter=phc_num>0`;
+                                    else if (facility == 'Allo')
+                                        newurl = url2 + `&cql_filter=h_allo_tot>0`;
+                                    else if (facility == 'Alt')
+                                        newurl = url2 + `&cql_filter=h_alt_tot>0`;
+
+
+                                    function onEachFeatureForPoint(feature, layer) {
+                                        if (facility === 'CHC') {
+                                            layer.bindPopup(`<div class = 'text-center'>CHC<br>
                                 Source: Census 2011<br>
                                 Village Name: ${feature.properties.village_na}<br>
                                 Distance Range: ${feature.properties.chc_distan}<br>
@@ -1680,9 +1944,10 @@ function putWFSFacility(facility) {
                                 Doctors Total Strength :${feature.properties.chc_doc_nu}<br>
                                 Para Medical Staff Total Strength : ${feature.properties.chc_param_}<br>
                                 Para Medical Staff In Position : ${feature.properties.chc_para_1}
-                                </div>`) 
-        }if(facility === 'PHC'){
-            layer.bindPopup(`<div class = 'text-center'>PHC<br>
+                                </div>`)
+                                        }
+                                        if (facility === 'PHC') {
+                                            layer.bindPopup(`<div class = 'text-center'>PHC<br>
                                 Source: Census 2011<br>
                                 Village Name: ${feature.properties.village_na}<br>
                                 Distance Range: ${feature.properties.phc_distan}<br>
@@ -1690,10 +1955,10 @@ function putWFSFacility(facility) {
                                 Doctors Total Strength :${feature.properties.phc_doc_nu}<br>
                                 Para Medical Staff Total Strength : ${feature.properties.phc_param_}<br>
                                 Para Medical Staff In Position : ${feature.properties.phc_para_1}fen
-                                </div>`) 
-        }
-        if(facility === 'Allo'){
-            layer.bindPopup(`<div class = 'text-center'>Allopathy Hospital<br>
+                                </div>`)
+                                        }
+                                        if (facility === 'Allo') {
+                                            layer.bindPopup(`<div class = 'text-center'>Allopathy Hospital<br>
                             Distance Range: ${feature.properties.h_allo_dst}<br>
                             Doctors In Position :${feature.properties.h_allo_din}<br>
                             Doctors Total Strength :${feature.properties.h_allo_doc}<br>
@@ -1701,129 +1966,125 @@ function putWFSFacility(facility) {
                             Para Medical Staff Total Strength : ${feature.properties.h_allo_pm}<br>
                             Para Medical Staff In Position : ${feature.properties.h_allo_pin}
                             </div>`)
-        }else if(facility === 'Alt'){
-            layer.bindPopup(`<div class = 'text-center'>Alternate Hospital<br>
+                                        } else if (facility === 'Alt') {
+                                            layer.bindPopup(`<div class = 'text-center'>Alternate Hospital<br>
                 Distance Range: ${feature.properties.h_alt_dst}<br>
                             Doctors In Position :${feature.properties.h_alt_din}<br>
                             Doctors Total Strength :${feature.properties.h_alt_doc}<br>
                             Total Beds :${feature.properties.h_alt_bed}<br>
                             Para Medical Staff Total Strength : ${feature.properties.h_alt_pm}<br>
                             Para Medical Staff In Position : ${feature.properties.h_alt_pin}
-                            </div>`) 
-        }
-    
-    }
-    fetch(newurl).then(
-        function(response) {
-        if (response.status !== 200) {
-            console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-            return;
-        }
-        response.json().then(function(geojsonData) {
-            // console.log(geojsonData.features);
-            healthFacility = L.geoJson(geojsonData.features, {
-                pointToLayer: function (feature, latlng) {
-                    if(facility === 'CHC')
-                            return L.circleMarker(latlng, geojsonMarkerOptions);
-                    else if(facility === 'PHC')
-                        return L.circleMarker(latlng, geojsonMarkerOptions2);
-                    else if(facility === 'Allo')
-                        return L.circleMarker(latlng, geojsonMarkerOptions3);
-                    else if(facility === 'Alt')
-                        return L.circleMarker(latlng, geojsonMarkerOptions4);  
-                },onEachFeature:onEachFeatureForPoint,
-            }).addTo(mymap);
-            activatedHealthFacility[facility] = healthFacility;
-        });
+                            </div>`)
+                                        }
+
+                                    }
+                                    fetch(newurl).then(
+                                        function(response) {
+                                            if (response.status !== 200) {
+                                                console.log('Looks like there was a problem. Status Code: ' +
+                                                    response.status);
+                                                return;
+                                            }
+                                            response.json().then(function(geojsonData) {
+                                                // console.log(geojsonData.features);
+                                                healthFacility = L.geoJson(geojsonData.features, {
+                                                    pointToLayer: function(feature, latlng) {
+                                                        if (facility === 'CHC')
+                                                            return L.circleMarker(latlng, geojsonMarkerOptions);
+                                                        else if (facility === 'PHC')
+                                                            return L.circleMarker(latlng, geojsonMarkerOptions2);
+                                                        else if (facility === 'Allo')
+                                                            return L.circleMarker(latlng, geojsonMarkerOptions3);
+                                                        else if (facility === 'Alt')
+                                                            return L.circleMarker(latlng, geojsonMarkerOptions4);
+                                                    },
+                                                    onEachFeature: onEachFeatureForPoint,
+                                                }).addTo(mymap);
+                                                activatedHealthFacility[facility] = healthFacility;
+                                            });
 
 
-    }).catch(function(err) {
-            console.log('Fetch Error :-S', err);
-    });
-    //})
-    };         
+                                        }).catch(function(err) {
+                                        console.log('Fetch Error :-S', err);
+                                    });
+                                    //})
+                                };
 
-function Identify(e)
-{
+                                function Identify(e) {
 
-// set parameters needed for GetFeatureInfo WMS request
-var sw = mymap.options.crs.project(mymap.getBounds().getSouthWest());
-var ne = mymap.options.crs.project(mymap.getBounds().getNorthEast());
-var BBOX = sw.x + "," + sw.y + "," + ne.x + "," + ne.y;
-var WIDTH = mymap.getSize().x;
-var HEIGHT = mymap.getSize().y;
+                                    // set parameters needed for GetFeatureInfo WMS request
+                                    var sw = mymap.options.crs.project(mymap.getBounds().getSouthWest());
+                                    var ne = mymap.options.crs.project(mymap.getBounds().getNorthEast());
+                                    var BBOX = sw.x + "," + sw.y + "," + ne.x + "," + ne.y;
+                                    var WIDTH = mymap.getSize().x;
+                                    var HEIGHT = mymap.getSize().y;
 
-var X = Math.trunc(mymap.layerPointToContainerPoint(e.layerPoint).x);
-var Y = Math.trunc(mymap.layerPointToContainerPoint(e.layerPoint).y);
+                                    var X = Math.trunc(mymap.layerPointToContainerPoint(e.layerPoint).x);
+                                    var Y = Math.trunc(mymap.layerPointToContainerPoint(e.layerPoint).y);
 
-// compose the URL for the request
+                                    // compose the URL for the request
 
-var URL = TRIBLAYER + '&BBOX='+BBOX+'&FEATURE_COUNT=1&HEIGHT='+HEIGHT+'&WIDTH='+WIDTH+'&INFO_FORMAT=application%2Fjson&TILED=false&CRS=EPSG%3A3857&I='+X+'&J='+Y;
-$.ajax({
-    url: URL,
-    dataType: "json",
-    type: "GET",
-    success: function(data)
-    {
-        if(data.features.length !== 0) {  // at least one feature returned in response
-        var feature = data.features[0]; // first feature from response
-        console.log(feature);
-        // Set up popup for clicked feature and open it
-        var popup = new L.Popup({
-            maxWidth: 300
-        });
-        console.log(feature.properties.facltytyp);
+                                    var URL = TRIBLAYER + '&BBOX=' + BBOX + '&FEATURE_COUNT=1&HEIGHT=' + HEIGHT + '&WIDTH=' + WIDTH + '&INFO_FORMAT=application%2Fjson&TILED=false&CRS=EPSG%3A3857&I=' + X + '&J=' + Y;
+                                    $.ajax({
+                                        url: URL,
+                                        dataType: "json",
+                                        type: "GET",
+                                        success: function(data) {
+                                            if (data.features.length !== 0) { // at least one feature returned in response
+                                                var feature = data.features[0]; // first feature from response
+                                                console.log(feature);
+                                                // Set up popup for clicked feature and open it
+                                                var popup = new L.Popup({
+                                                    maxWidth: 300
+                                                });
+                                                console.log(feature.properties.facltytyp);
 
-        let insti_content =  "<table class = 'popupclass' ><tr><td><b>Facility Name</b></td><td>"+feature.properties.facltyname+"</td></tr>"+
-               "<tr><td><b>Facility Type</b></td><td>"+feature.properties.facltytyp+"</td></tr>"+
-                "<tr><td><b>Amenities</b></td><td>"+feature.properties.amenities+"</td></tr>"+            
-                "<tr><td><b>Address</b></td><td>"+feature.properties.address_te1+"</td></tr>"+
-                "<tr><td><b>District</b></td><td>"+feature.properties.district_g+"</td></tr>"+
-                "<tr><td><b>State</b></td><td>"+feature.properties.state_gen+"</td></tr>"+
-                "<tr><td><b>Pin Code</b></td><td>"+feature.properties.pincode_ge+"</td></tr>"+
-                "<tr><td><b>Total Bed Count</b></td><td>"+"Unavailable"+"</td></tr>"+
-                "<tr><td><b>Pin Code Accuracy (within area)</b></td><td>"+"Yes"+"</td></tr>"+
-                "<tr><td><b>Management</b></td><td>"+"Unavailable"+"</td></tr>"+
-                "<tr><td><b>Food Arrangement</b></td><td>"+"Unavailable"+"</td></tr>"+
-                "<tr><td><b>Email ID</b></td><td>"+"Unavailable"+"</td></tr>"+
-                "<tr><td><b>Website</b></td><td>"+"Unavailable"+"</td></tr>"+
-                "<tr><td><b>Phone number</b></td><td>"+"Unavailable"+"</td></tr>"+
-               "<tr><td><b>Last updated</b></td><td>"+"18 May"+"</td></tr>"+
-               `<tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>`+
-               "</table>";
-               
-        
-        popup.setContent(insti_content);
-        popup.setLatLng(e.latlng);
-        mymap.openPopup(popup);
-    }
-    }
-    });
-}
-
-mymap.addEventListener('click',Identify);
-   
-
-$('.select').click(function () {
-        $(this).toggleClass('highlight')
-    })
-var coll = document.getElementsByClassName("collapsible");
-var i;
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    } else {
-      content.style.display = "block";
-    }
-  });
-}  
+                                                let insti_content = "<table class = 'popupclass' ><tr><td><b>Facility Name</b></td><td>" + feature.properties.facltyname + "</td></tr>" +
+                                                    "<tr><td><b>Facility Type</b></td><td>" + feature.properties.facltytyp + "</td></tr>" +
+                                                    "<tr><td><b>Amenities</b></td><td>" + feature.properties.amenities + "</td></tr>" +
+                                                    "<tr><td><b>Address</b></td><td>" + feature.properties.address_te1 + "</td></tr>" +
+                                                    "<tr><td><b>District</b></td><td>" + feature.properties.district_g + "</td></tr>" +
+                                                    "<tr><td><b>State</b></td><td>" + feature.properties.state_gen + "</td></tr>" +
+                                                    "<tr><td><b>Pin Code</b></td><td>" + feature.properties.pincode_ge + "</td></tr>" +
+                                                    "<tr><td><b>Total Bed Count</b></td><td>" + "Unavailable" + "</td></tr>" +
+                                                    "<tr><td><b>Pin Code Accuracy (within area)</b></td><td>" + "Yes" + "</td></tr>" +
+                                                    "<tr><td><b>Management</b></td><td>" + "Unavailable" + "</td></tr>" +
+                                                    "<tr><td><b>Food Arrangement</b></td><td>" + "Unavailable" + "</td></tr>" +
+                                                    "<tr><td><b>Email ID</b></td><td>" + "Unavailable" + "</td></tr>" +
+                                                    "<tr><td><b>Website</b></td><td>" + "Unavailable" + "</td></tr>" +
+                                                    "<tr><td><b>Phone number</b></td><td>" + "Unavailable" + "</td></tr>" +
+                                                    "<tr><td><b>Last updated</b></td><td>" + "18 May" + "</td></tr>" +
+                                                    `<tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>` +
+                                                    "</table>";
 
 
+                                                popup.setContent(insti_content);
+                                                popup.setLatLng(e.latlng);
+                                                mymap.openPopup(popup);
+                                            }
+                                        }
+                                    });
+                                }
 
-</script>
+                                mymap.addEventListener('click', Identify);
 
-{% endblock %}
+
+                                $('.select').click(function() {
+                                    $(this).toggleClass('highlight')
+                                })
+                                var coll = document.getElementsByClassName("collapsible");
+                                var i;
+                                for (i = 0; i < coll.length; i++) {
+                                    coll[i].addEventListener("click", function() {
+                                        this.classList.toggle("active");
+                                        var content = this.nextElementSibling;
+                                        if (content.style.display === "block") {
+                                            content.style.display = "none";
+                                        } else {
+                                            content.style.display = "block";
+                                        }
+                                    });
+                                }
+                            </script>
+
+                            {% endblock %}
