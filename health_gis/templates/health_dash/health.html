@@ -1,4 +1,6 @@
-{% extends 'health_dash/base.html' %} {% load static%} {% block content %}
+{% extends 'health_dash/base.html' %}
+{% load static%} 
+{% block content %}
 <style>
     table,
     th,
@@ -288,20 +290,20 @@
       &nbsp;&nbsp;&nbsp;&nbsp;
         <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumwards">
             
-            <tr><tb>  <label><input type="checkbox" value="{mumwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai City Corporator Wards </span></label></tb>
+            <tr><tb>  <label><input type="checkbox" value="{mumwards}" onchange="getBoundary(this)"></tb><tb><span> Corporator Wards </span></label></tb>
                                 </tr>
                                 <tr>
-                                    <tb> <label><input type="checkbox" value="{mumadm}" onchange="getBoundary(this)"></tb><tb><span> Mumbai City Admin Wards </span></label></tb>
+                                    <tb> <label><input type="checkbox" value="{mumadm}" onchange="getBoundary(this)"></tb><tb><span> Admin Wards </span></label></tb>
                                 </tr>
 
                             </div>
                             <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumsubwards">
 
                                 <tr>
-                                    <tb> <label><input type="checkbox" value="{mumsubwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai Suburban Wards </span></label></tb>
+                                    <tb> <label><input type="checkbox" value="{mumsubwards}" onchange="getBoundary(this)"></tb><tb><span> Corporator Wards </span></label></tb>
                                 </tr>
                                 <tr>
-                                    <tb> <label><input type="checkbox" value="{mumadmsubwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai Suburban Admin Wards </span></label></tb>
+                                    <tb> <label><input type="checkbox" value="{mumadmsubwards}" onchange="getBoundary(this)"></tb><tb><span> Admin Wards </span></label></tb>
                                 </tr>
                             </div>
 
@@ -492,17 +494,19 @@
                                     <button type="button" class="btn btn-primary" id='setlocation'>Set Location</button>
                                     <button type="button" class="btn btn-primary" id='find-nearest'>Find Nearest Facility</button>
                                     <div id="slider">
-                                        <label>Set Radius</label><br>
+                                        <label>Set Range</label><br>
                                         <input type="range" min="1" max="20" value="1" class="slider" id="myRange" step="5" list="steplist">
                                         <datalist id="steplist">
                                             <option>1</option>
-                                            <option>5</option>
+                                            <option>6</option>
                                             <option>10</option>
                                             <option>15</option>
                                             <option>20</option>
+                                            
+                                            
                                         </datalist>
-                                        <p>Value: <span id="demo"></span></p>
-                                        <button type="button" class="btn btn-primary" id='setbuffer'>Set Radius(in Kms)</button>
+                                        
+                                        <button type="button" class="btn btn-primary" id='setbuffer'>Health facilities within <span id="demo"></span> Km </button>
 
                                     </div>
                                 </div>
@@ -541,8 +545,6 @@
 
                                         }
                                     });
-
-
 
                                     $('#view_s').on('change', function() {
                                         if (this.value == 'All India View') {
@@ -961,6 +963,12 @@
                                                 oldLayer = null;
                                                 facilityLayer = new L.featureGroup();
                                             }
+
+                                            if (oldhfbb){
+                                                mymap.removeLayer(oldhfbb);
+                                                oldhfbb = null;
+                                                healthFacilityInBB = null;
+                                            }
                                             marker = new L.marker(currentPos).addTo(mymap);
                                             oldMarker = marker;
                                         });
@@ -978,67 +986,104 @@
 
                                 }
                                 var circle = new L.circle();
-
+                                let healthFacilityInBB = null;
+                                let oldhfbb = null;
 
                                 $setbuffer.on('click', function(e) {
-                                    mymap.removeLayer(circle);
-
-                                    var radius = (output.innerHTML) * 1000;
-                                    var circleCenter = currentPos;
-                                    var circleOptions = {
-                                        color: 'red',
-                                        fillColor: '#f03',
-                                        fillOpacity: 0.1
-                                    }
-                                    circle = new L.circle(circleCenter, radius, circleOptions);
-
-                                    circle.addTo(mymap);
-                                    querybuf(currentPos, radius);
+                                    if (oldhfbb){
+                                                mymap.removeLayer(oldhfbb);
+                                                oldhfbb = null;
+                                                healthFacilityInBB = null;
+                                            }
+                                    querybuf(currentPos);
 
 
                                 });
                                 var highlight = L.circleMarker()
+                                let indstate = document.getElementById('indstate').value;
 
-                                function querybuf(currentPos, numResults) {
-                                    var distances = [];
-                                    healthFacility.eachLayer(function(f) {
-                                        var distance = L.latLng(currentPos).distanceTo(f.getLatLng());
-                                        distances.push(distance);
-                                    });
-                                    distances.sort(function(a, b) {
-                                        return a - b;
-                                    });
-                                    facilityLayer.removeLayer(highlight);
+                               
+                                function querybuf(currentPos    ) {
 
-                                    console.log(distances)
-                                    healthFacility.eachLayer(function(f) {
-                                        var distance = L.latLng(currentPos).distanceTo(f.getLatLng());
-                                        //mymap.removeLayer(facilityLayer)
+                                    function onEachFeatureForPointBB(feature, layer) {
+                                        const unavailable = '-';
+                                        const updateDate = "India Hospitals";
+                                        layer.bindPopup(`<table class = 'popupclass'>
+                                        <tr><td>Name:</td><td> ${feature.properties.facltyname}</td></tr>
+                                        <tr><td>Type:</td><td> ${feature.properties.facltytyp}</td></tr>
+                                        <tr><td>Amenities:</td><td> ${feature.properties.amenities}</td></tr>
+                                        <tr><td>Address:</td><td> ${feature.properties.address_te1}</td></tr>
+                                        <tr><td>District:</td><td> ${feature.properties.district_g}</td></tr>
+                                        <tr><td>State:</td><td> ${feature.properties.state_gen}</td></tr>
+                                        <tr><td>Pin Code:</td><td> ${feature.properties.pincode_ge}</td></tr>
+                                        <tr><td>Total Bed Count:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Pin Code Accuracy (within area):</td><td> Yes</td></tr>
+                                        <tr><td>Management:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Food Arrangement:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Website:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
+                                        <tr><td>Last updated:</td><td> 12th May 2020</td></tr>
+                                        <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
+                                        </table>`)
+                                    }
 
-                                        if (distance < numResults) {
-                                            //f.bindTooltip(onEachFeatureForPoint1);
-
-                                            highlight = L.circleMarker(f.getLatLng(), {
-                                                color: 'yellow',
-                                                weight: 6,
-                                                opacity: 1,
-                                            })
-                                            highlight.addTo(facilityLayer)
-
-                                        }
-                                        //facilityLayer.remove(highlight)
-                                    });
-                                    mymap.removeLayer(facilityLayer)
-                                    oldLayers = facilityLayer;
-                                    mymap.flyToBounds(facilityLayer.getBounds(), {
-                                        duration: 1,
-                                        easeLinearity: .1
-                                    });
-                                    mymap.on('zoomend', function() {
-                                        mymap.addLayer(facilityLayer);
+                                    let keys = Object.keys(activeKoboHealthFacity)
+                                    let query=''
+                                    keys.forEach((v,i) => {
+                                        query+=v+">0.0"
+                                    if (i != keys.length-1){
+                                        query+= " OR "
+                                    }
                                     })
-                                    mymap.removeLayer(flyToBounds);
 
+                                    let rootUrl = '{{site_url}}geoserver/geonode/ows';
+                                    let bbOffset = .009009 * slider.value;
+                                    let options = {
+                                        service: 'WFS',
+                                        version: '1.0.0',
+                                        request: 'GetFeature',
+                                        outputFormat: 'application/json',
+                                        typeName: 'geonode:cumulative_healthfacility_18may',
+                                        cql_filter: `BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset}) AND (${query})`,
+                                        propertyName: 'the_geom,facltyname,facltytyp,address_te1,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
+                                    };
+                                    let parameters = L.Util.extend(options);
+                                    cql_url = rootUrl + L.Util.getParamString(parameters);
+                                    console.log('bound',cql_url)
+                                    mymap.spin(true, {
+                                        lines: 9,
+                                        length: 2,
+                                        width: 20,
+                                        scale: 60,
+                                        radius: 70,
+                                        color: "grey"
+                                    });
+                                    fetch(cql_url).then(
+                                        function(response) {
+                                            if (response.status !== 200) {
+                                                console.log('Looks like there was a problem. Status Code: ' +
+                                                    response.status);
+                                                return;
+                                            }
+                                            response.json().then(function(geojsonData) {
+                                                let healthFacilityInBB = L.geoJson(geojsonData.features, {
+                                                    pointToLayer: function(feature, latlng) {
+                                                        return L.circleMarker(latlng,{color: "yellow", weight: 6, opacity: .1,fillOpacity: 0.8});
+                                                    },
+                                                    onEachFeature: onEachFeatureForPointBB,
+                                                }).addTo(mymap);
+                                                mymap.spin(false);
+                                                oldhfbb = healthFacilityInBB;
+                                            });
+
+
+                                        }).catch(function(err) {
+                                        console.log('Fetch Error :-S', err);
+                                    });
+                  
+                                    
+                                  
                                 }
 
                                 // FIND NEAREST BUTTON
@@ -1616,16 +1661,8 @@
                                 });
 
 
-                                let activatedHealthFacility = {
-                                    'CHC': {},
-                                    'PHC': {},
-                                    'Allo': {},
-                                    'Alt': {}
-                                }
-                                let activeKoboHealthFacity = {
-                                    'hospital': {},
-                                    'other': {}
-                                }
+                                let activatedHealthFacility = {}
+                                let activeKoboHealthFacity = {}
                                 let activeKoboAllIndiaHealthFacity = {}
                                 let activearogyaFacity = {}
 
@@ -1638,7 +1675,7 @@
                                         tiled: 'true',
                                         opacity: 0.7,
                                         // version: '1.3.0',
-                                        cql_filter: "" + facility + ">0",
+                                        cql_filter: "" + facility + ">0.0",
                                         style: ""
                                     });
 
@@ -1662,7 +1699,7 @@
                                         request: 'GetFeature',
                                         outputFormat: 'application/json',
                                         typeName: 'geonode:cumulative_healthfacility_18may',
-                                        cql_filter: `${facility}>0 AND state_gen='${indstate}'`,
+                                        cql_filter: `${facility}>0.0 AND state_gen='${indstate}'`,
                                         propertyName: 'the_geom,facltyname,facltytyp,address_te1,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
                                     };
                                     let parameters = L.Util.extend(options);
@@ -1678,7 +1715,7 @@
                                             opacity: 1,
                                             fillOpacity: 0.8
                                         };
-                                        if (fac === 'hospital') circleProp['fillColor'] = 'bluevoilet'
+                                        if (fac === 'hospital') circleProp['fillColor'] = 'orangered'
                                         else if (fac === 'mhu') circleProp['fillColor'] = 'teal'
                                         else if (fac === 'subcenter') circleProp['fillColor'] = 'aqua'
                                         else if (fac === 'phc') circleProp['fillColor'] = 'crimson'
@@ -1690,7 +1727,7 @@
                                         else if (fac === 'mhi') circleProp['fillColor'] = 'lightseagreen'
                                         else if (fac === 'dc') circleProp['fillColor'] = 'maroon'
                                         else if (fac === 'phrmcy') circleProp['fillColor'] = 'midnightblue'
-                                        else if (fac === 'optical') circleProp['fillColor'] = 'orangered'
+                                        else if (fac === 'optical') circleProp['fillColor'] = 'blue'
                                         else if (fac === 'delvry') circleProp['fillColor'] = 'palevioletred'
                                         else if (fac === 'dspnsry') circleProp['fillColor'] = 'peru'
                                         else if (fac === 'othr') circleProp['fillColor'] = 'purple'
@@ -1766,14 +1803,25 @@
                                         typeName: 'geonode:maha_govt_corona_hospital_21may2020',
                                         cql_filter: `category='${cql}'`,
                                         propertyName: 'the_geom,faclty_nam,type,iso_minus_,iso_confm_,iso_suspec,o2suported,total_icu,ventilator,address,category'
+                                    
                                     };
                                     let parameters = L.Util.extend(options);
                                     cql_url = rootUrl + L.Util.getParamString(parameters)
                                     console.log(cql_url);
+                                    
+                                    function geojsonMarkerOptions(feature,fac) {
+                                        var rad;
+                                        var num=`${feature.properties.iso_minus_}`;
+                                        if(num>0 && num<320){
+                                            rad=7;
+                                        }else if(num>320 && num<640){
+                                            rad=9;
+                                        }else{
+                                            rad=11;
+                                        }
 
-                                    function geojsonMarkerOptions(fac) {
                                         let circleProp = {
-                                            radius: 7,
+                                            radius: rad,
                                             fillColor: "#",
                                             color: "#000",
                                             weight: 1,
@@ -1829,7 +1877,7 @@
                                             response.json().then(function(geojsonData) {
                                                 healthFacility = L.geoJson(geojsonData.features, {
                                                     pointToLayer: function(feature, latlng) {
-                                                        return L.circleMarker(latlng, geojsonMarkerOptions(facility));
+                                                        return L.circleMarker(latlng, geojsonMarkerOptions(feature,facility));
                                                     },
                                                     onEachFeature: onEachFeatureForPoint,
                                                 }).addTo(mymap);
@@ -1935,7 +1983,7 @@
                             </div>`)
                                         } else if (facility === 'Alt') {
                                             layer.bindPopup(`<div class = 'text-center'>Alternate Hospital<br>
-                Distance Range: ${feature.properties.h_alt_dst}<br>
+                            Distance Range: ${feature.properties.h_alt_dst}<br>
                             Doctors In Position :${feature.properties.h_alt_din}<br>
                             Doctors Total Strength :${feature.properties.h_alt_doc}<br>
                             Total Beds :${feature.properties.h_alt_bed}<br>
