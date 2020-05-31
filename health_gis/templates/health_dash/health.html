@@ -23,6 +23,57 @@
         display: none;
         /* border: 1px #dadada solid; */
     }
+
+    .slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 25px;
+        background: #D3D3D3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+    
+    .slider:hover {
+        opacity: 1;
+    }
+    
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        background: #FF0000;
+        cursor: pointer;
+    }
+    
+    .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        background: #FF0000;
+        cursor: pointer;
+    }
+    
+    .sliderticks {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px;
+    }
+    
+    .sliderticks p {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        width: 1px;
+        background: #D3D3D3;
+        height: 10px;
+        line-height: 40px;
+        margin: 0 0 20px 0;
+    }
+    
     
     input[type="range"]::-moz-range-track {
         padding: 0 10px;
@@ -506,17 +557,15 @@
                                     <button type="button" class="btn btn-primary" id='find-nearest'>Find Nearest Facility</button>
                                     <div id="slider">
                                         <label>Set Range</label><br>
-                                        <input type="range" min="1" max="20" value="1" class="slider" id="myRange" step="5" list="steplist">
-                                        <datalist id="steplist">
-                                            <option>1</option>
-                                            <option>6</option>
-                                            <option>10</option>
-                                            <option>15</option>
-                                            <option>20</option>
-                                            
-                                            
-                                        </datalist>
-                                        
+                                        <input type="range" min="1" max="20" value="1" class="slider" id="myRange" step="1">
+                                        <div class="sliderticks">
+                                            <p>1</p>
+                                            <p>5</p>
+                                            <p>10</p>
+                                            <p>15</p>
+                                            <p>20</p>
+                                        </div>
+
                                         <button type="button" class="btn btn-primary" id='setbuffer'>Health facilities within <span id="demo"></span> Km </button>
 
                                     </div>
@@ -1013,21 +1062,37 @@
                                 let healthFacilityInBB = null;
                                 let oldhfbb = null;
 
+                                let healthFacility1 = null;
+                                let healthFacility2 = null;
                                 $setbuffer.on('click', function(e) {
-                                    if (oldhfbb){
-                                                mymap.removeLayer(oldhfbb);
-                                                oldhfbb = null;
-                                                healthFacilityInBB = null;
-                                            }
+                                    if (oldhfbb) {
+                                        mymap.removeLayer(oldhfbb);
+                                        oldhfbb = null;
+                                        healthFacilityInBB = null;
+                                        healthFacility2 = null;
+                                        healthFacility1 = null;
+                                    }
+                                    mymap.removeLayer(circle);
+
+                                    var radius = (output.innerHTML) * 1000;
+                                    var circleCenter = currentPos;
+                                    var circleOptions = {
+                                        color: 'red',
+                                        fillColor: '#f03',
+                                        fillOpacity: 0.1
+                                    }
+                                    circle = new L.circle(circleCenter, radius, circleOptions);
+                                    circle.addTo(mymap)
                                     querybuf(currentPos);
-
-
+                                    queryArog(currentPos);
+                                    //querybufCHCPHC(currentPos)
+                                    //querybufAlloALt(currentPos)
                                 });
                                 var highlight = L.circleMarker()
                                 let indstate = document.getElementById('indstate').value;
 
-                               
-                                function querybuf(currentPos    ) {
+
+                                function querybuf(currentPos) {
 
                                     function onEachFeatureForPointBB(feature, layer) {
                                         const unavailable = '-';
@@ -1053,16 +1118,17 @@
                                     }
 
                                     let keys = Object.keys(activeKoboHealthFacity)
-                                    let query=''
-                                    keys.forEach((v,i) => {
-                                        query+=v+">0.0"
-                                    if (i != keys.length-1){
-                                        query+= " OR "
-                                    }
+                                    let query = ''
+                                    keys.forEach((v, i) => {
+                                        query += v + ">0.0"
+                                        if (i != keys.length - 1) {
+                                            query += " OR "
+                                        }
                                     })
+                                    console.log(query)
 
                                     let rootUrl = '{{site_url}}geoserver/geonode/ows';
-                                    let bbOffset = .009009 * slider.value;
+                                    let bbOffset = output.innerHTML / 111;
                                     let options = {
                                         service: 'WFS',
                                         version: '1.0.0',
@@ -1074,7 +1140,7 @@
                                     };
                                     let parameters = L.Util.extend(options);
                                     cql_url = rootUrl + L.Util.getParamString(parameters);
-                                    console.log('bound',cql_url)
+                                    console.log('bound', cql_url)
                                     mymap.spin(true, {
                                         lines: 9,
                                         length: 2,
@@ -1093,7 +1159,12 @@
                                             response.json().then(function(geojsonData) {
                                                 let healthFacilityInBB = L.geoJson(geojsonData.features, {
                                                     pointToLayer: function(feature, latlng) {
-                                                        return L.circleMarker(latlng,{color: "yellow", weight: 6, opacity: .1,fillOpacity: 0.8});
+                                                        return L.circleMarker(latlng, {
+                                                            color: "yellow",
+                                                            weight: 6,
+                                                            opacity: .1,
+                                                            fillOpacity: 0.8
+                                                        });
                                                     },
                                                     onEachFeature: onEachFeatureForPointBB,
                                                 }).addTo(mymap);
@@ -1105,15 +1176,374 @@
                                         }).catch(function(err) {
                                         console.log('Fetch Error :-S', err);
                                     });
-                  
-                                    
-                                  
+
+
+
                                 }
 
+                                function queryArog(currentPos) {
+
+                                    function onEachFeatureForPointBB(feature, layer) {
+                                        const unavailable = '-';
+                                        const updateDate = "Dedicated COVID Facilities-Arogya";
+                                        layer.bindPopup(`<table class = 'popupclass'>
+                                       <tr><td>Facility Name:</td><td> ${feature.properties.faclty_nam}</td></tr>
+
+                                       <tr><td>Category:</td><td> ${feature.properties.category}</td></tr>
+                                        <tr><td>Facility Type:</td><td> ${feature.properties.type}</td></tr>
+                                      <tr><td>Total Isolation beds(excluding ICU beds)</td><td> ${feature.properties.iso_minus_}</td></tr>
+                        <tr><td>Isolation beds of Confirmed Cases:</td><td> ${feature.properties.iso_confm_}</td></tr>
+                        <tr><td>Isolation beds for Suspected Cases:</td><td> ${feature.properties.iso_suspec}</td></tr>
+                        <tr><td>O2 Supported Beds:</td><td> ${feature.properties.o2suported}</td></tr>
+                        <tr><td>Total ICU Beds:</td><td> ${feature.properties.total_icu}</td></tr>
+                        <tr><td>No. of Ventilators:</td><td>${feature.properties.ventilator}</td></tr>
+                        <tr><td>Address:</td><td>${feature.properties.address}</td></tr>
+                        <tr><td>Management:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Food Arrangement:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Website:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
+                        <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
+                        </table>`)
+                                    }
+
+
+                                    let keys = Object.keys(activearogyaFacity)
+                                    let query = ''
+                                    keys.forEach((v, i) => {
+                                        query += "category =" + "'" + v + "'"
+
+                                        if (i != keys.length - 1) {
+                                            query += " OR "
+                                        }
+                                    })
+                                    console.log(query)
+
+                                    let rootUrl = '{{site_url}}geoserver/geonode/ows';
+                                    let bbOffset = output.innerHTML / 111;
+                                    let options = {
+                                        service: 'WFS',
+                                        version: '1.0.0',
+                                        request: 'GetFeature',
+                                        outputFormat: 'application/json',
+                                        typeName: 'geonode:maha_govt_corona_hospital_21may2020',
+                                        cql_filter: `BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset}) AND (${query})`,
+                                        propertyName: 'the_geom,faclty_nam,type,iso_minus_,iso_confm_,iso_suspec,o2suported,total_icu,ventilator,address,category'
+                                    };
+                                    let parameters = L.Util.extend(options);
+                                    cql_url = rootUrl + L.Util.getParamString(parameters);
+                                    console.log('bound', cql_url)
+                                    mymap.spin(true, {
+                                        lines: 9,
+                                        length: 2,
+                                        width: 20,
+                                        scale: 60,
+                                        radius: 70,
+                                        color: "grey"
+                                    });
+                                    fetch(cql_url).then(
+                                        function(response) {
+                                            if (response.status !== 200) {
+                                                console.log('Looks like there was a problem. Status Code: ' +
+                                                    response.status);
+                                                return;
+                                            }
+                                            response.json().then(function(geojsonData) {
+                                                let healthFacilityInBB = L.geoJson(geojsonData.features, {
+                                                    pointToLayer: function(feature, latlng) {
+                                                        return L.circleMarker(latlng, {
+                                                            color: "yellow",
+                                                            weight: 6,
+                                                            opacity: .1,
+                                                            fillOpacity: 0.8
+                                                        });
+                                                    },
+                                                    onEachFeature: onEachFeatureForPointBB,
+                                                }).addTo(mymap);
+                                                mymap.spin(false);
+                                                oldhfbb = healthFacilityInBB;
+                                            });
+
+
+                                        }).catch(function(err) {
+                                        console.log('Fetch Error :-S', err);
+                                    });
+
+                                }
+
+
+
+
+                                function querybufCHCPHC(currentPos) {
+
+                                    let keys = Object.keys(activatedHealthFacility);
+                                    let arr = [];
+                                    let arr1 = [];
+
+
+                                    let query = ''
+
+
+                                    let k = ''
+                                    let x = ''
+                                    let y = ''
+
+
+                                    keys.forEach((v, i) => {
+                                        k = v;
+                                        if (k == 'CHC')
+                                            arr.push(k);
+                                        else if (k == 'PHC')
+                                            arr.push(k);
+                                        else if (k == 'Allo')
+                                            arr1.push(k)
+                                        else if (k == 'Alt')
+                                            arr1.push(k)
+
+
+                                        return (arr, arr1)
+                                    })
+                                    let chcphc = [];
+
+                                    arr.forEach((f, i) => {
+                                        if (f == 'CHC') {
+                                            x = 'chc_num'
+                                            chcphc.push(x)
+                                        }
+                                        if (f == 'PHC') {
+                                            y = 'phc_num'
+                                            chcphc.push(y)
+                                        }
+                                        console.log(chcphc)
+                                        return chcphc;
+
+                                    })
+                                    chcphc.forEach((p, i) => {
+
+                                        query += p + ">0"
+                                        if (i != chcphc.length - 1) {
+                                            query += " OR "
+                                        }
+                                    })
+
+
+                                    const url = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar';
+
+
+                                    let bbOffset = output.innerHTML / 111;
+
+
+                                    console.log(query)
+                                    newurl = url + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(${query}) `;
+
+
+                                    // if (k == 'CHC')
+                                    // newurl = url + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(chc_num > 0) `;
+                                    //else if (k == 'PHC')
+                                    //newurl = url + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(phc_num > 0)`;
+                                    //else if (k == 'Allo')
+                                    //newurl = url2 + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(h_allo_tot>0)`;
+                                    //else if (k == 'Alt')
+                                    //newurl = url2 + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(h_alt_tot > 0)`;
+
+
+
+                                    console.log(newurl)
+
+
+                                    function onEachFeatureForPointBB(feature, layer) {
+                                        if (k === 'CHC') {
+                                            layer.bindPopup(`<div class = 'text-center'>CHC<br>
+                                Source: Census 2011<br>
+                                Village Name: ${feature.properties.village_na}<br>
+                                Distance Range: ${feature.properties.chc_distan}<br>
+                                Doctors In Position :${feature.properties.chc_doc_in}<br>
+                                Doctors Total Strength :${feature.properties.chc_doc_nu}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.chc_param_}<br>
+                                Para Medical Staff In Position : ${feature.properties.chc_para_1}
+                                </div>`)
+                                        }
+                                        if (k === 'PHC') {
+                                            layer.bindPopup(`<div class = 'text-center'>PHC<br>
+                                Source: Census 2011<br>
+                                Village Name: ${feature.properties.village_na}<br>
+                                Distance Range: ${feature.properties.phc_distan}<br>
+                                Doctors In Position :${feature.properties.phc_doc_in}<br>
+                                Doctors Total Strength :${feature.properties.phc_doc_nu}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.phc_param_}<br>
+                                Para Medical Staff In Position : ${feature.properties.phc_para_1}fen
+                                </div>`)
+                                        }
+
+
+                                    }
+                                    fetch(newurl).then(
+                                        function(response) {
+                                            if (response.status !== 200) {
+                                                console.log('Looks like there was a problem. Status Code: ' +
+                                                    response.status);
+                                                return;
+                                            }
+
+
+                                            response.json().then(function(geojsonData) {
+                                                // console.log(geojsonData.features);
+                                                let healthFacilityBB = L.geoJson(geojsonData.features, {
+                                                    pointToLayer: function(feature, latlng) {
+                                                        return L.circleMarker(latlng, {
+                                                            color: "yellow",
+                                                            weight: 6,
+                                                            opacity: .1,
+                                                            fillOpacity: 0.8
+                                                        });
+                                                    },
+                                                    onEachFeature: onEachFeatureForPointBB,
+                                                }).addTo(mymap);
+                                                oldhfbb = healthFacilityBB;
+                                            });
+
+
+                                        }).catch(function(err) {
+                                        console.log('Fetch Error :-S', err);
+                                    });
+
+                                }
+
+                                function querybufAlloALt(currentPos) {
+                                    let keys = Object.keys(activatedHealthFacility);
+                                    let arr = [];
+                                    let arr1 = [];
+
+
+                                    let query = ''
+
+
+                                    let k = ''
+
+                                    let z = ''
+                                    let u = ''
+
+                                    keys.forEach((v, i) => {
+                                        k = v;
+                                        if (k == 'CHC')
+                                            arr.push(k);
+                                        else if (k == 'PHC')
+                                            arr.push(k);
+                                        else if (k == 'Allo')
+                                            arr1.push(k)
+                                        else if (k == 'Alt')
+                                            arr1.push(k)
+
+
+                                        return (arr, arr1)
+                                    })
+
+                                    let alloalt = [];
+
+                                    arr1.forEach((j, i) => {
+                                        if (j == 'Allo') {
+                                            z = 'h_allo_tot'
+                                            alloalt.push(z)
+                                        }
+                                        if (j == 'Alt') {
+                                            u = 'h_alt_tot'
+                                            alloalt.push(u)
+                                        }
+                                        return alloalt;
+                                    })
+                                    console.log(alloalt)
+                                    alloalt.forEach((b, i) => {
+
+                                        query += b + ">0"
+                                        if (i != alloalt.length - 1) {
+                                            query += " OR "
+                                        }
+                                    })
+
+                                    const url2 = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:townhealth_centroid_15apr';
+
+
+                                    let bbOffset = output.innerHTML / 111;
+
+
+                                    console.log(query)
+                                    newurl = url2 + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(${query}) `;
+
+
+                                    // if (k == 'CHC')
+                                    // newurl = url + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(chc_num > 0) `;
+                                    //else if (k == 'PHC')
+                                    //newurl = url + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(phc_num > 0)`;
+                                    //else if (k == 'Allo')
+                                    //newurl = url2 + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(h_allo_tot>0)`;
+                                    //else if (k == 'Alt')
+                                    //newurl = url2 + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(h_alt_tot > 0)`;
+
+
+
+                                    console.log(newurl)
+
+
+                                    function onEachFeatureForPointBB(feature, layer) {
+
+                                        if (k === 'Allo') {
+                                            layer.bindPopup(`<div class = 'text-center'>Allopathy Hospital<br>
+                            Distance Range: ${feature.properties.h_allo_dst}<br>
+                            Doctors In Position :${feature.properties.h_allo_din}<br>
+                            Doctors Total Strength :${feature.properties.h_allo_doc}<br>
+                            Total Beds :${feature.properties.h_allo_bed}<br>
+                            Para Medical Staff Total Strength : ${feature.properties.h_allo_pm}<br>
+                            Para Medical Staff In Position : ${feature.properties.h_allo_pin}
+                            </div>`)
+                                        } else if (k === 'Alt') {
+                                            layer.bindPopup(`<div class = 'text-center'>Alternate Hospital<br>
+                Distance Range: ${feature.properties.h_alt_dst}<br>
+                            Doctors In Position :${feature.properties.h_alt_din}<br>
+                            Doctors Total Strength :${feature.properties.h_alt_doc}<br>
+                            Total Beds :${feature.properties.h_alt_bed}<br>
+                            Para Medical Staff Total Strength : ${feature.properties.h_alt_pm}<br>
+                            Para Medical Staff In Position : ${feature.properties.h_alt_pin}
+                            </div>`)
+                                        }
+
+                                    }
+
+                                    fetch(newurl).then(
+                                        function(response) {
+                                            if (response.status !== 200) {
+                                                console.log('Looks like there was a problem. Status Code: ' +
+                                                    response.status);
+                                                return;
+                                            }
+
+
+                                            response.json().then(function(geojsonData) {
+                                                // console.log(geojsonData.features);
+                                                let healthFacilityBB = L.geoJson(geojsonData.features, {
+                                                    pointToLayer: function(feature, latlng) {
+                                                        return L.circleMarker(latlng, {
+                                                            color: "yellow",
+                                                            weight: 6,
+                                                            opacity: .1,
+                                                            fillOpacity: 0.8
+                                                        });
+                                                    },
+                                                    onEachFeature: onEachFeatureForPointBB,
+                                                }).addTo(mymap);
+                                                oldhfbb = healthFacilityBB;
+                                            });
+
+
+                                        }).catch(function(err) {
+                                        console.log('Fetch Error :-S', err);
+                                        //})
+                                    })
+                                }
                                 // FIND NEAREST BUTTON
                                 $findNearest.on('click', function(e) {
                                     queryFeatures(currentPos, 1);
                                 });
+
 
                                 // IF LOCATION FETCH BY BROWSER SUCCESS
                                 function success(position) {
