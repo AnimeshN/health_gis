@@ -1,4 +1,6 @@
-{% extends 'health_dash/base.html' %} {% load static%} {% block content %}
+{% extends 'health_dash/base.html' %}
+{% load static%} 
+{% block content %}
 <style>
     table,
     th,
@@ -288,20 +290,20 @@
       &nbsp;&nbsp;&nbsp;&nbsp;
         <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumwards">
             
-            <tr><tb>  <label><input type="checkbox" value="{mumwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai City Corporator Wards </span></label></tb>
+            <tr><tb>  <label><input type="checkbox" value="{mumwards}" onchange="getBoundary(this)"></tb><tb><span> Corporator Wards </span></label></tb>
                                 </tr>
                                 <tr>
-                                    <tb> <label><input type="checkbox" value="{mumadm}" onchange="getBoundary(this)"></tb><tb><span> Mumbai City Admin Wards </span></label></tb>
+                                    <tb> <label><input type="checkbox" value="{mumadm}" onchange="getBoundary(this)"></tb><tb><span> Admin Wards </span></label></tb>
                                 </tr>
 
                             </div>
                             <div class="tooltips" style="display:none;" title="Please select the Maharashtra's Blocks" id="mumsubwards">
 
                                 <tr>
-                                    <tb> <label><input type="checkbox" value="{mumsubwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai Suburban Wards </span></label></tb>
+                                    <tb> <label><input type="checkbox" value="{mumsubwards}" onchange="getBoundary(this)"></tb><tb><span> Corporator Wards </span></label></tb>
                                 </tr>
                                 <tr>
-                                    <tb> <label><input type="checkbox" value="{mumadmsubwards}" onchange="getBoundary(this)"></tb><tb><span> Mumbai Suburban Admin Wards </span></label></tb>
+                                    <tb> <label><input type="checkbox" value="{mumadmsubwards}" onchange="getBoundary(this)"></tb><tb><span> Admin Wards </span></label></tb>
                                 </tr>
                             </div>
 
@@ -330,6 +332,17 @@
                                             </div>
                                             <div class="checkbox">
                                                 <label><input type="checkbox" value="{mahaschool}" onchange="getBoundaryst(this)"><span> Schools (Maharashtra's only as for now) </span></label>
+                                            </div>
+                                            
+                                             <div class="checkbox">
+                                                <label><input type="checkbox" value="{govtri}" onchange="getBoundaryst(this)"><span> Government Schools (Maharashtra's only as for now) </span></label>
+                                            </div>
+
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="{aidtri}" onchange="getBoundaryst(this)"><span> Aided Schools (Maharashtra's only as for now) </span></label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="{mahatrib}" onchange="getBoundaryst(this)"><span> Tribal Areas (Maharashtra's only as for now) </span></label>
                                             </div>
                                         </div>
                                     </table>
@@ -496,10 +509,12 @@
                                         <input type="range" min="1" max="20" value="1" class="slider" id="myRange" step="5" list="steplist">
                                         <datalist id="steplist">
                                             <option>1</option>
-                                            <option>5</option>
+                                            <option>6</option>
                                             <option>10</option>
                                             <option>15</option>
                                             <option>20</option>
+                                            
+                                            
                                         </datalist>
                                         
                                         <button type="button" class="btn btn-primary" id='setbuffer'>Health facilities within <span id="demo"></span> Km </button>
@@ -799,6 +814,12 @@
                                             putWMS("geonode:maha_demography_with_mumbai");
                                         else if (boundary == "{maharoad}")
                                             putWMS("geonode:osm_highways");
+                                        else if (boundary == "{mahatrib}")
+                                            putWMS("geonode:maha_tribal_villages_and_towns");
+                                        else if (boundary == "{govtri}")
+                                            putWMS("geonode:govt_schools_30april");
+                                        else if (boundary == "{aidtri}")
+                                            putWMS("geonode:aided_schools_30april");
                                         else
                                             putWMS("geonode:school_16_17_11april");
                                     } else {
@@ -806,8 +827,15 @@
                                             removeWMS("geonode:maha_demography_with_mumbai");
                                         else if (boundary == "{maharoad}")
                                             removeWMS("geonode:osm_highways");
+                                        else if (boundary == "{mahatrib}")
+                                            removeWMS("geonode:maha_tribal_villages_and_towns");
+                                        else if (boundary == "{govtri}")
+                                            removeWMS("geonode:govt_schools_30april");
+                                        else if (boundary == "{aidtri}")
+                                            removeWMS("geonode:aided_schools_30april");
                                         else
                                             removeWMS("geonode:school_16_17_11april");
+
                                     }
                                 }
 
@@ -1259,7 +1287,8 @@
                                 var distLayerList = [];
                                 var wardLayerList = [];
                                 var wmshealthLayerList = [];
-
+                                var wms_legend;
+                                let insti_content;
                                 var searchControl;
 
 
@@ -1455,7 +1484,21 @@
                                     });
                                     wms_layer.addTo(mymap);
                                     newLayerList.push(wms_layer);
+
+                                    if(wms_legend){
+                                        mymap.removeControl(wms_legend);
+                                    }
+                                    console.log(wms_legend); 
+                                    addWMSLegend(layer);
+                                    TRIBLAYER="https://makerghat.urbansciences.in/geoserver/geonode/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS="+wms_layer.options.layers+"&QUERY_LAYERS="+wms_layer.options.layers;
+
+
                                 }
+                                function addWMSLegend(layer){
+                                    lagendGraphic = "https://makerghat.urbansciences.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER="+layer+"&LEGEND_OPTIONS=forceLabels:on";
+                                    wms_legend = L.wmsLegend(lagendGraphic);
+                                }
+
 
                                 let area = null;
 
@@ -1603,6 +1646,9 @@
                                 }
 
                                 function removeWMS(unchecked_layer) {
+                                    if(wms_legend){
+                                        mymap.removeControl(wms_legend);
+                                    }
                                     newLayerList.forEach((layer, index) => {
                                         if (layer.options.layers === unchecked_layer) {
                                             mymap.removeLayer(layer);
@@ -1711,7 +1757,7 @@
                                             opacity: 1,
                                             fillOpacity: 0.8
                                         };
-                                        if (fac === 'hospital') circleProp['fillColor'] = 'bluevoilet'
+                                        if (fac === 'hospital') circleProp['fillColor'] = 'orangered'
                                         else if (fac === 'mhu') circleProp['fillColor'] = 'teal'
                                         else if (fac === 'subcenter') circleProp['fillColor'] = 'aqua'
                                         else if (fac === 'phc') circleProp['fillColor'] = 'crimson'
@@ -1723,7 +1769,7 @@
                                         else if (fac === 'mhi') circleProp['fillColor'] = 'lightseagreen'
                                         else if (fac === 'dc') circleProp['fillColor'] = 'maroon'
                                         else if (fac === 'phrmcy') circleProp['fillColor'] = 'midnightblue'
-                                        else if (fac === 'optical') circleProp['fillColor'] = 'orangered'
+                                        else if (fac === 'optical') circleProp['fillColor'] = 'blue'
                                         else if (fac === 'delvry') circleProp['fillColor'] = 'palevioletred'
                                         else if (fac === 'dspnsry') circleProp['fillColor'] = 'peru'
                                         else if (fac === 'othr') circleProp['fillColor'] = 'purple'
@@ -1799,14 +1845,25 @@
                                         typeName: 'geonode:maha_govt_corona_hospital_21may2020',
                                         cql_filter: `category='${cql}'`,
                                         propertyName: 'the_geom,faclty_nam,type,iso_minus_,iso_confm_,iso_suspec,o2suported,total_icu,ventilator,address,category'
+                                    
                                     };
                                     let parameters = L.Util.extend(options);
                                     cql_url = rootUrl + L.Util.getParamString(parameters)
                                     console.log(cql_url);
+                                    
+                                    function geojsonMarkerOptions(feature,fac) {
+                                        var rad;
+                                        var num=`${feature.properties.iso_minus_}`;
+                                        if(num>0 && num<320){
+                                            rad=7;
+                                        }else if(num>320 && num<640){
+                                            rad=9;
+                                        }else{
+                                            rad=11;
+                                        }
 
-                                    function geojsonMarkerOptions(fac) {
                                         let circleProp = {
-                                            radius: 7,
+                                            radius: rad,
                                             fillColor: "#",
                                             color: "#000",
                                             weight: 1,
@@ -1862,7 +1919,7 @@
                                             response.json().then(function(geojsonData) {
                                                 healthFacility = L.geoJson(geojsonData.features, {
                                                     pointToLayer: function(feature, latlng) {
-                                                        return L.circleMarker(latlng, geojsonMarkerOptions(facility));
+                                                        return L.circleMarker(latlng, geojsonMarkerOptions(feature,facility));
                                                     },
                                                     onEachFeature: onEachFeatureForPoint,
                                                 }).addTo(mymap);
@@ -1968,7 +2025,7 @@
                             </div>`)
                                         } else if (facility === 'Alt') {
                                             layer.bindPopup(`<div class = 'text-center'>Alternate Hospital<br>
-                Distance Range: ${feature.properties.h_alt_dst}<br>
+                            Distance Range: ${feature.properties.h_alt_dst}<br>
                             Doctors In Position :${feature.properties.h_alt_din}<br>
                             Doctors Total Strength :${feature.properties.h_alt_doc}<br>
                             Total Beds :${feature.properties.h_alt_bed}<br>
@@ -2025,6 +2082,7 @@
                                     // compose the URL for the request
 
                                     var URL = TRIBLAYER + '&BBOX=' + BBOX + '&FEATURE_COUNT=1&HEIGHT=' + HEIGHT + '&WIDTH=' + WIDTH + '&INFO_FORMAT=application%2Fjson&TILED=false&CRS=EPSG%3A3857&I=' + X + '&J=' + Y;
+                                    //console.log(e);
                                     $.ajax({
                                         url: URL,
                                         dataType: "json",
@@ -2037,9 +2095,36 @@
                                                 var popup = new L.Popup({
                                                     maxWidth: 300
                                                 });
-                                                console.log(feature.properties.facltytyp);
+                                                //console.log(feature.properties.facltytyp);
+                                                if(feature.properties.type==="aided ashramschool")
+                                                {
+                                                  insti_content ="<table class = 'popupclass' ><tr><td><b>District</b></td><td>" + feature.properties.district + "</td></tr>" +
+                                                    "<tr><td><b>Block</b></td><td>" + feature.properties.taluka + "</td></tr>" +
+                                                    "<tr><td><b>Village</b></td><td>" + feature.properties.village + "</td></tr>" +
+                                                    "<tr><td><b>School Name</b></td><td>" + feature.properties.school_nam + "</td></tr>" +
+                                                    
+                                                    
+                                                    "</table>";
+                                                }else if(feature.properties.area_name){
+                                                     insti_content = "<table class = 'popupclass' ><tr><td><b>Additional TSP District</b></td><td>"+feature.properties.district+"</td></tr>"+
+                                                       "<tr><td><b>Village Name</b></td><td>"+feature.properties.area_name+"</td></tr>"+             
+                                                        "<tr><td><b>Total Population</b></td><td>"+feature.properties.tot_p+"</td></tr>"+
+                                                        "<tr><td><b>Total Tribal Population</b></td><td>"+feature.properties.st_pop+"</td></tr>"+
+                                                        "<tr><td><b>Percentage Total Tribal Population</b></td><td>"+feature.properties.percent_of+"%"+"</td></tr></table>";
+                                                }else if(feature.properties.name_of_sc){
+                                                     insti_content = "<table class = 'popupclass' ><tr><td><b>District</b></td><td>"+feature.properties.district+"</td></tr>"+
+                                                        "<tr><td><b>Block</b></td><td>"+feature.properties.taluka+"</td></tr>"+             
+                                                        "<tr><td><b>Village</b></td><td>"+feature.properties.village+"</td></tr>"+
+                                                        "<tr><td><b>School Name</b></td><td>"+feature.properties.name_of_sc+"</td></tr>";
 
-                                                let insti_content = "<table class = 'popupclass' ><tr><td><b>Facility Name</b></td><td>" + feature.properties.facltyname + "</td></tr>" +
+                                                }else if(feature.properties.village__1){
+                                                    insti_content = "<table class = 'popupclass' ><tr><td><b>District</b></td><td>"+feature.properties.distname+"</td></tr>"+
+                                                        "<tr><td><b>Block</b></td><td>"+feature.properties.block_name+"</td></tr>"+             
+                                                        "<tr><td><b>Village</b></td><td>"+feature.properties.village_na+"</td></tr>"+
+                                                        "<tr><td><b>School Name</b></td><td>"+feature.properties.school_nam+"</td></tr>";
+
+                                                }else{
+                                                 insti_content = "<table class = 'popupclass' ><tr><td><b>Facility Name</b></td><td>" + feature.properties.facltyname + "</td></tr>" +
                                                     "<tr><td><b>Facility Type</b></td><td>" + feature.properties.facltytyp + "</td></tr>" +
                                                     "<tr><td><b>Amenities</b></td><td>" + feature.properties.amenities + "</td></tr>" +
                                                     "<tr><td><b>Address</b></td><td>" + feature.properties.address_te1 + "</td></tr>" +
@@ -2056,7 +2141,7 @@
                                                     "<tr><td><b>Last updated</b></td><td>" + "18 May" + "</td></tr>" +
                                                     `<tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>` +
                                                     "</table>";
-
+                                                }
 
                                                 popup.setContent(insti_content);
                                                 popup.setLatLng(e.latlng);
