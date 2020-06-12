@@ -1134,9 +1134,9 @@
                                         version: '1.0.0',
                                         request: 'GetFeature',
                                         outputFormat: 'application/json',
-                                        typeName: 'geonode:cumulative_healthfacility_18may',
+                                        typeName: 'geonode:cumulative_health_facility_till_2june',
                                         cql_filter: `BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset}) AND (${query})`,
-                                        propertyName: 'the_geom,facltyname,facltytyp,address_te1,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
+                                        propertyName: 'the_geom,facltyname,facltytyp,address_te,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
                                     };
                                     let parameters = L.Util.extend(options);
                                     cql_url = rootUrl + L.Util.getParamString(parameters);
@@ -1730,7 +1730,7 @@
 
                                     clear_layer();
                                     clearpoint_layer();
-
+                                    clear_pinlayer();
                                     let indstate = document.getElementById('indstate').value;
 
                                     putWMSLayerst();
@@ -1742,7 +1742,7 @@
                                 $('#district').on('change', function() {
                                     //clear_layer();
                                     clearpoint_layer();
-
+                                    clear_pinlayer();
                                     let district = document.getElementById('district').value;
 
                                     putWMSLayerdist();
@@ -1857,7 +1857,7 @@
                                 function putWMSLayerdist() {
                                     var dist = document.getElementById('district').value;
                                     var state = document.getElementById('indstate').value;
-                                    var layers='geonode:india_pincodes_13may';
+                                    var layers='geonode:india_pincodes_12june';
                                     //console.log(indstate);
                                     //var stLayerLatLong= listState[indstate];
                                     if (dist == 'Mumbai City' || dist == 'Mumbai Suburban')
@@ -1977,14 +1977,14 @@
                                     var state = document.getElementById('indstate').value;
 
                                     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms', {
-                                        layers: "geonode:india_pincodes_12may",
+                                        layers: "geonode:india_pincodes_12june",
                                         cql_filter: "pincode='" + pincode + "'",
                                         cql_filter: `pincode='${pincode}' AND state='${state}'`,
                                         format: 'image/png',
                                         transparent: 'true',
                                     });
                                     wms_layer.addTo(mymap);
-                                    setView('geonode:india_pincodes_12may', pincode);
+                                    setView('geonode:india_pincodes_12june', pincode);
 
                                     pinLayerList.push(wms_layer);
 
@@ -2146,7 +2146,7 @@
                                 function putKoboHealthFacitywms(facility) {
                                     //console.log(cql);
                                     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms', {
-                                        layers: 'geonode:cumulative_healthfacility_18may',
+                                        layers: 'geonode:cumulative_health_facility_till_2june',
                                         format: 'image/png',
                                         transparent: 'true',
                                         tiled: 'true',
@@ -2175,9 +2175,9 @@
                                         version: '1.0.0',
                                         request: 'GetFeature',
                                         outputFormat: 'application/json',
-                                        typeName: 'geonode:cumulative_healthfacility_18may',
+                                        typeName: 'geonode:cumulative_health_facility_till_2june',
                                         cql_filter: `${facility}>0.0 AND state_gen='${indstate}'`,
-                                        propertyName: 'the_geom,facltyname,facltytyp,address_te1,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
+                                        propertyName: 'the_geom,facltyname,facltytyp,address_te,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
                                     };
                                     let parameters = L.Util.extend(options);
                                     cql_url = rootUrl + L.Util.getParamString(parameters)
@@ -2229,7 +2229,7 @@
                         <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
                         <tr><td>Website:</td><td> ${unavailable}</td></tr>
                         <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Last updated:</td><td> 12th May 2020</td></tr>
+                        <tr><td>Last updated:</td><td> 2nd June 2020</td></tr>
                         <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
                         </table>`)
                                     }
@@ -2574,7 +2574,7 @@
                                                     "<tr><td><b>Email ID</b></td><td>" + "Unavailable" + "</td></tr>" +
                                                     "<tr><td><b>Website</b></td><td>" + "Unavailable" + "</td></tr>" +
                                                     "<tr><td><b>Phone number</b></td><td>" + "Unavailable" + "</td></tr>" +
-                                                    "<tr><td><b>Last updated</b></td><td>" + "18 May" + "</td></tr>" +
+                                                    "<tr><td><b>Last updated</b></td><td>" + "2nd June,2020" + "</td></tr>" +
                                                     `<tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>` +
                                                     "</table>";
                                                 }
