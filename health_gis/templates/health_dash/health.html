@@ -1727,7 +1727,9 @@
 
                                 $('#indstate').on('change', function() {
 
-
+                                    if (area) {
+                                        mymap.removeLayer(area);
+                                    }
                                     clear_layer();
                                     clearpoint_layer();
                                     clear_pinlayer();
@@ -1740,6 +1742,9 @@
                                 })
 
                                 $('#district').on('change', function() {
+                                    if (area) {
+                                        mymap.removeLayer(area);
+                                    }
                                     //clear_layer();
                                     clearpoint_layer();
                                     clear_pinlayer();
