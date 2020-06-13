@@ -1,4 +1,6 @@
-{% extends 'health_dash/base.html' %} {% load static%} {% block content %}
+{% extends 'health_dash/base.html' %}
+{% load static%} 
+{% block content %}
 <style>
     table,
     th,
@@ -21,6 +23,57 @@
         display: none;
         /* border: 1px #dadada solid; */
     }
+
+    .slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 25px;
+        background: #D3D3D3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+    
+    .slider:hover {
+        opacity: 1;
+    }
+    
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        background: #FF0000;
+        cursor: pointer;
+    }
+    
+    .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        background: #FF0000;
+        cursor: pointer;
+    }
+    
+    .sliderticks {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px;
+    }
+    
+    .sliderticks p {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        width: 1px;
+        background: #D3D3D3;
+        height: 10px;
+        line-height: 40px;
+        margin: 0 0 20px 0;
+    }
+    
     
     input[type="range"]::-moz-range-track {
         padding: 0 10px;
@@ -331,6 +384,17 @@
                                             <div class="checkbox">
                                                 <label><input type="checkbox" value="{mahaschool}" onchange="getBoundaryst(this)"><span> Schools (Maharashtra's only as for now) </span></label>
                                             </div>
+                                            
+                                             <div class="checkbox">
+                                                <label><input type="checkbox" value="{govtri}" onchange="getBoundaryst(this)"><span> Government Schools (Maharashtra's only as for now) </span></label>
+                                            </div>
+
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="{aidtri}" onchange="getBoundaryst(this)"><span> Aided Schools (Maharashtra's only as for now) </span></label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="{mahatrib}" onchange="getBoundaryst(this)"><span> Tribal Areas (Maharashtra's only as for now) </span></label>
+                                            </div>
                                         </div>
                                     </table>
                                 </div>
@@ -354,16 +418,16 @@
                                                         <h6 style="color: #820522"> Maharashtra Government Health Facilities</h6>
                                                         <div id="ru" value="ru">Facilities from Census 2011-Rural
                                                             <label for="one">
-                      <input type="checkbox" id="val" value="{CHC}" name='Rural' onchange="GetSelectedfac(this)"/>CHC</label>
+                      <input type="checkbox" id="val" value="{CHC}" name='Rural' onchange="GetSelectedfac(this)"/> CHC</label>
                                                             <label for="two">
-                      <input type="checkbox" id="phs" value="{PHC}" name='Rural' onchange="GetSelectedfac(this)"/>PHC</label>
+                      <input type="checkbox" id="phs" value="{PHC}" name='Rural' onchange="GetSelectedfac(this)"/> PHC</label>
                                                         </div>
                                                         <hr>
                                                         <div id="ur" value="ur">Facilities from Census 2011-Urban
                                                             <label for="three">
-                      <input type="checkbox" id="allo"  value="{Allo}" onchange="GetSelectedfac(this)"/>Allopathy Hospital</label>
+                      <input type="checkbox" id="allo"  value="{Allo}" onchange="GetSelectedfac(this)"/> Allopathy Hospital</label>
                                                             <label for="three">
-                      <input type="checkbox" id="alt" value="{Alt}" onchange="GetSelectedfac(this)"/>Alternate Hospital</label>
+                      <input type="checkbox" id="alt" value="{Alt}" onchange="GetSelectedfac(this)"/> Alternate Hospital</label>
                                                         </div>
                                                         <hr>
                                                         <div id="ur" value="ur">Dedicated COVID Facilities-Arogya
@@ -380,39 +444,39 @@
                                                     <div id="kobo" value="kobo">
                                                         <h6 style="color: #820522">Community Volunteered Hospital Data of India</h6>
                                                         <label for="three">
-                    <input type="checkbox" value="hospital" onchange="toggleKoboFacility(this)"/>Hospital</label>
+                    <input type="checkbox" value="hospital" onchange="toggleKoboFacility(this)"/> Hospital</label>
                                                         <label for="three">
-                    <input type="checkbox" value="subcenter" onchange="toggleKoboFacility(this)"/>Sub center</label>
+                    <input type="checkbox" value="subcenter" onchange="toggleKoboFacility(this)"/> Sub center</label>
                                                         <label for="three">
-                    <input type="checkbox" value="mhu" onchange="toggleKoboFacility(this)"/>Mobile Health Unit</label>
+                    <input type="checkbox" value="mhu" onchange="toggleKoboFacility(this)"/> Mobile Health Unit</label>
                                                         <label for="three">
-                    <input type="checkbox" value="phc" onchange="toggleKoboFacility(this)"/>Primary Health Centre</label>
+                    <input type="checkbox" value="phc" onchange="toggleKoboFacility(this)"/> Primary Health Centre</label>
                                                         <label for="three">
-                    <input type="checkbox" value="clinic" onchange="toggleKoboFacility(this)"/>Clinic</label>
+                    <input type="checkbox" value="clinic" onchange="toggleKoboFacility(this)"/> Clinic</label>
                                                         <label for="three">
-                    <input type="checkbox" value="phu" onchange="toggleKoboFacility(this)"/>Primary Health Units</label>
+                    <input type="checkbox" value="phu" onchange="toggleKoboFacility(this)"/> Primary Health Units</label>
                                                         <label for="three">
-                    <input type="checkbox" value="ashu" onchange="toggleKoboFacility(this)"/>Ashram School Health Units</label>
+                    <input type="checkbox" value="ashu" onchange="toggleKoboFacility(this)"/> Ashram School Health Units</label>
                                                         <label for="three">
-                    <input type="checkbox" value="mobmedu" onchange="toggleKoboFacility(this)"/>Mobile Medical Units</label>
+                    <input type="checkbox" value="mobmedu" onchange="toggleKoboFacility(this)"/> Mobile Medical Units</label>
                                                         <label for="three">
-                    <input type="checkbox" value="hfwi" onchange="toggleKoboFacility(this)"/>Health and family welfare institute</label>
+                    <input type="checkbox" value="hfwi" onchange="toggleKoboFacility(this)"/> Health and family welfare institute</label>
                                                         <label for="three">
-                    <input type="checkbox" value="mhi" onchange="toggleKoboFacility(this)"/>Mental Health Institute</label>
+                    <input type="checkbox" value="mhi" onchange="toggleKoboFacility(this)"/> Mental Health Institute</label>
                                                         <label for="three">
-                    <input type="checkbox" value="dc" onchange="toggleKoboFacility(this)"/>Diagnostic Center</label>
+                    <input type="checkbox" value="dc" onchange="toggleKoboFacility(this)"/> Diagnostic Center</label>
                                                         <label for="three">
-                    <input type="checkbox" value="phrmcy" onchange="toggleKoboFacility(this)"/>Pharmacy</label>
+                    <input type="checkbox" value="phrmcy" onchange="toggleKoboFacility(this)"/> Pharmacy</label>
                                                         <label for="three">
-                    <input type="checkbox" value="optical" onchange="toggleKoboFacility(this)"/>Optical Shop</label>
+                    <input type="checkbox" value="optical" onchange="toggleKoboFacility(this)"/> Optical Shop</label>
                                                         <label for="three">
-                    <input type="checkbox" value="delvry" onchange="toggleKoboFacility(this)"/>Delivery Center</label>
+                    <input type="checkbox" value="delvry" onchange="toggleKoboFacility(this)"/> Delivery Center</label>
                                                         <label for="three">
-                    <input type="checkbox" value="dropin" onchange="toggleKoboFacility(this)"/>Drop In Centre</label>
+                    <input type="checkbox" value="dropin" onchange="toggleKoboFacility(this)"/> Drop In Centre</label>
                                                         <label for="three">
-                    <input type="checkbox" value="dspnsry" onchange="toggleKoboFacility(this)"/>Dispensary</label>
+                    <input type="checkbox" value="dspnsry" onchange="toggleKoboFacility(this)"/> Dispensary</label>
                                                         <label for="three">
-                    <input type="checkbox" value="othr" onchange="toggleKoboFacility(this)"/>Other</label>
+                    <input type="checkbox" value="othr" onchange="toggleKoboFacility(this)"/> Other</label>
                                                         <label for="three">                                                                                                                                                                                
                  </div>   
                          
@@ -493,15 +557,15 @@
                                     <button type="button" class="btn btn-primary" id='find-nearest'>Find Nearest Facility</button>
                                     <div id="slider">
                                         <label>Set Range</label><br>
-                                        <input type="range" min="1" max="20" value="1" class="slider" id="myRange" step="5" list="steplist">
-                                        <datalist id="steplist">
-                                            <option>1</option>
-                                            <option>5</option>
-                                            <option>10</option>
-                                            <option>15</option>
-                                            <option>20</option>
-                                        </datalist>
-                                        
+                                        <input type="range" min="1" max="20" value="1" class="slider" id="myRange" step="1">
+                                        <div class="sliderticks">
+                                            <p>1</p>
+                                            <p>5</p>
+                                            <p>10</p>
+                                            <p>15</p>
+                                            <p>20</p>
+                                        </div>
+
                                         <button type="button" class="btn btn-primary" id='setbuffer'>Health facilities within <span id="demo"></span> Km </button>
 
                                     </div>
@@ -763,7 +827,7 @@
                                         if (boundary == "{state}")
                                             putWMS("geonode:states_in_india");
                                         else if (boundary == "{district}")
-                                            putWMS("geonode:all_india_districts_10may2020");
+                                            putWMS("geonode:all_india_districts_11june2020");
                                         else if (boundary == "{mumwards}")
                                             putwards("Mumbai City", 'geonode:corporatorwardboundary_mumbai_13may');
                                         else if (boundary == "{mumadm}")
@@ -778,7 +842,7 @@
                                         if (boundary == "{state}")
                                             removeWMS("geonode:states_in_india");
                                         else if (boundary == "{district}")
-                                            removeWMS("geonode:all_india_districts_10may2020");
+                                            removeWMS("geonode:all_india_districts_11june2020");
                                         else if (boundary == "{mumwards}")
                                             removewards();
                                         else if (boundary == "{mumsubwards}")
@@ -799,6 +863,12 @@
                                             putWMS("geonode:maha_demography_with_mumbai");
                                         else if (boundary == "{maharoad}")
                                             putWMS("geonode:osm_highways");
+                                        else if (boundary == "{mahatrib}")
+                                            putWMS("geonode:maha_tribal_villages_and_towns");
+                                        else if (boundary == "{govtri}")
+                                            putWMS("geonode:govt_schools_30april");
+                                        else if (boundary == "{aidtri}")
+                                            putWMS("geonode:aided_schools_30april");
                                         else
                                             putWMS("geonode:school_16_17_11april");
                                     } else {
@@ -806,8 +876,15 @@
                                             removeWMS("geonode:maha_demography_with_mumbai");
                                         else if (boundary == "{maharoad}")
                                             removeWMS("geonode:osm_highways");
+                                        else if (boundary == "{mahatrib}")
+                                            removeWMS("geonode:maha_tribal_villages_and_towns");
+                                        else if (boundary == "{govtri}")
+                                            removeWMS("geonode:govt_schools_30april");
+                                        else if (boundary == "{aidtri}")
+                                            removeWMS("geonode:aided_schools_30april");
                                         else
                                             removeWMS("geonode:school_16_17_11april");
+
                                     }
                                 }
 
@@ -985,21 +1062,37 @@
                                 let healthFacilityInBB = null;
                                 let oldhfbb = null;
 
+                                let healthFacility1 = null;
+                                let healthFacility2 = null;
                                 $setbuffer.on('click', function(e) {
-                                    if (oldhfbb){
-                                                mymap.removeLayer(oldhfbb);
-                                                oldhfbb = null;
-                                                healthFacilityInBB = null;
-                                            }
+                                    if (oldhfbb) {
+                                        mymap.removeLayer(oldhfbb);
+                                        oldhfbb = null;
+                                        healthFacilityInBB = null;
+                                        healthFacility2 = null;
+                                        healthFacility1 = null;
+                                    }
+                                    mymap.removeLayer(circle);
+
+                                    var radius = (output.innerHTML) * 1000;
+                                    var circleCenter = currentPos;
+                                    var circleOptions = {
+                                        color: 'red',
+                                        fillColor: '#f03',
+                                        fillOpacity: 0.1
+                                    }
+                                    circle = new L.circle(circleCenter, radius, circleOptions);
+                                    circle.addTo(mymap)
                                     querybuf(currentPos);
-
-
+                                    queryArog(currentPos);
+                                    //querybufCHCPHC(currentPos)
+                                    //querybufAlloALt(currentPos)
                                 });
                                 var highlight = L.circleMarker()
                                 let indstate = document.getElementById('indstate').value;
 
-                               
-                                function querybuf(currentPos    ) {
+
+                                function querybuf(currentPos) {
 
                                     function onEachFeatureForPointBB(feature, layer) {
                                         const unavailable = '-';
@@ -1025,28 +1118,29 @@
                                     }
 
                                     let keys = Object.keys(activeKoboHealthFacity)
-                                    let query=''
-                                    keys.forEach((v,i) => {
-                                        query+=v+">0.0"
-                                    if (i != keys.length-1){
-                                        query+= " OR "
-                                    }
+                                    let query = ''
+                                    keys.forEach((v, i) => {
+                                        query += v + ">0.0"
+                                        if (i != keys.length - 1) {
+                                            query += " OR "
+                                        }
                                     })
+                                    console.log(query)
 
                                     let rootUrl = '{{site_url}}geoserver/geonode/ows';
-                                    let bbOffset = .009009 * slider.value;
+                                    let bbOffset = output.innerHTML / 111;
                                     let options = {
                                         service: 'WFS',
                                         version: '1.0.0',
                                         request: 'GetFeature',
                                         outputFormat: 'application/json',
-                                        typeName: 'geonode:cumulative_healthfacility_18may',
+                                        typeName: 'geonode:cumulative_health_facility_till_2june',
                                         cql_filter: `BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset}) AND (${query})`,
-                                        propertyName: 'the_geom,facltyname,facltytyp,address_te1,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
+                                        propertyName: 'the_geom,facltyname,facltytyp,address_te,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
                                     };
                                     let parameters = L.Util.extend(options);
                                     cql_url = rootUrl + L.Util.getParamString(parameters);
-                                    console.log('bound',cql_url)
+                                    console.log('bound', cql_url)
                                     mymap.spin(true, {
                                         lines: 9,
                                         length: 2,
@@ -1065,7 +1159,12 @@
                                             response.json().then(function(geojsonData) {
                                                 let healthFacilityInBB = L.geoJson(geojsonData.features, {
                                                     pointToLayer: function(feature, latlng) {
-                                                        return L.circleMarker(latlng,{color: "yellow", weight: 6, opacity: .1,fillOpacity: 0.8});
+                                                        return L.circleMarker(latlng, {
+                                                            color: "yellow",
+                                                            weight: 6,
+                                                            opacity: .1,
+                                                            fillOpacity: 0.8
+                                                        });
                                                     },
                                                     onEachFeature: onEachFeatureForPointBB,
                                                 }).addTo(mymap);
@@ -1077,15 +1176,376 @@
                                         }).catch(function(err) {
                                         console.log('Fetch Error :-S', err);
                                     });
-                  
-                                    
-                                  
+
+
+
                                 }
 
+                                function queryArog(currentPos) {
+
+                                    function onEachFeatureForPointBB(feature, layer) {
+                                        const unavailable = '-';
+                                        const updateDate = "Dedicated COVID Facilities-Arogya";
+                                        layer.bindPopup(`<table class = 'popupclass'>
+                                       <tr><td>Facility Name:</td><td> ${feature.properties.faclty_nam}</td></tr>
+
+                                       <tr><td>Category:</td><td> ${feature.properties.category}</td></tr>
+                                        <tr><td>Facility Type:</td><td> ${feature.properties.type}</td></tr>
+                                      <tr><td>Total Isolation beds(excluding ICU beds)</td><td> ${feature.properties.iso_minus_}</td></tr>
+                        <tr><td>Isolation beds of Confirmed Cases:</td><td> ${feature.properties.iso_confm_}</td></tr>
+                        <tr><td>Isolation beds for Suspected Cases:</td><td> ${feature.properties.iso_suspec}</td></tr>
+                        <tr><td>O2 Supported Beds:</td><td> ${feature.properties.o2suported}</td></tr>
+                        <tr><td>Total ICU Beds:</td><td> ${feature.properties.total_icu}</td></tr>
+                        <tr><td>No. of Ventilators:</td><td>${feature.properties.ventilator}</td></tr>
+                        <tr><td>Address:</td><td>${feature.properties.address}</td></tr>
+                        <tr><td>Management:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Food Arrangement:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Website:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Last updated:</td><td> 10th June,2020</td></tr>
+                        <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
+                        </table>`)
+                                    }
+
+
+                                    let keys = Object.keys(activearogyaFacity)
+                                    let query = ''
+                                    keys.forEach((v, i) => {
+                                        query += "category =" + "'" + v + "'"
+
+                                        if (i != keys.length - 1) {
+                                            query += " OR "
+                                        }
+                                    })
+                                    console.log(query)
+
+                                    let rootUrl = '{{site_url}}geoserver/geonode/ows';
+                                    let bbOffset = output.innerHTML / 111;
+                                    let options = {
+                                        service: 'WFS',
+                                        version: '1.0.0',
+                                        request: 'GetFeature',
+                                        outputFormat: 'application/json',
+                                        typeName: 'geonode:covid_hospital_10june_with_added_facility_all',
+                                        cql_filter: `BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset}) AND (${query})`,
+                                        propertyName: 'the_geom,faclty_nam,type,iso_minus_,iso_confm_,iso_suspec,o2suported,total_icu,ventilator,address,category'
+                                    };
+                                    let parameters = L.Util.extend(options);
+                                    cql_url = rootUrl + L.Util.getParamString(parameters);
+                                    console.log('bound', cql_url)
+                                    mymap.spin(true, {
+                                        lines: 9,
+                                        length: 2,
+                                        width: 20,
+                                        scale: 60,
+                                        radius: 70,
+                                        color: "grey"
+                                    });
+                                    fetch(cql_url).then(
+                                        function(response) {
+                                            if (response.status !== 200) {
+                                                console.log('Looks like there was a problem. Status Code: ' +
+                                                    response.status);
+                                                return;
+                                            }
+                                            response.json().then(function(geojsonData) {
+                                                let healthFacilityInBB = L.geoJson(geojsonData.features, {
+                                                    pointToLayer: function(feature, latlng) {
+                                                        return L.circleMarker(latlng, {
+                                                            color: "yellow",
+                                                            weight: 6,
+                                                            opacity: .1,
+                                                            fillOpacity: 0.8
+                                                        });
+                                                    },
+                                                    onEachFeature: onEachFeatureForPointBB,
+                                                }).addTo(mymap);
+                                                mymap.spin(false);
+                                                oldhfbb = healthFacilityInBB;
+                                            });
+
+
+                                        }).catch(function(err) {
+                                        console.log('Fetch Error :-S', err);
+                                    });
+
+                                }
+
+
+
+
+                                function querybufCHCPHC(currentPos) {
+
+                                    let keys = Object.keys(activatedHealthFacility);
+                                    let arr = [];
+                                    let arr1 = [];
+
+
+                                    let query = ''
+
+
+                                    let k = ''
+                                    let x = ''
+                                    let y = ''
+
+
+                                    keys.forEach((v, i) => {
+                                        k = v;
+                                        if (k == 'CHC')
+                                            arr.push(k);
+                                        else if (k == 'PHC')
+                                            arr.push(k);
+                                        else if (k == 'Allo')
+                                            arr1.push(k)
+                                        else if (k == 'Alt')
+                                            arr1.push(k)
+
+
+                                        return (arr, arr1)
+                                    })
+                                    let chcphc = [];
+
+                                    arr.forEach((f, i) => {
+                                        if (f == 'CHC') {
+                                            x = 'chc_num'
+                                            chcphc.push(x)
+                                        }
+                                        if (f == 'PHC') {
+                                            y = 'phc_num'
+                                            chcphc.push(y)
+                                        }
+                                        console.log(chcphc)
+                                        return chcphc;
+
+                                    })
+                                    chcphc.forEach((p, i) => {
+
+                                        query += p + ">0"
+                                        if (i != chcphc.length - 1) {
+                                            query += " OR "
+                                        }
+                                    })
+
+
+                                    const url = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:maha_village_health_centroid_29mar';
+
+
+                                    let bbOffset = output.innerHTML / 111;
+
+
+                                    console.log(query)
+                                    newurl = url + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(${query}) `;
+
+
+                                    // if (k == 'CHC')
+                                    // newurl = url + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(chc_num > 0) `;
+                                    //else if (k == 'PHC')
+                                    //newurl = url + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(phc_num > 0)`;
+                                    //else if (k == 'Allo')
+                                    //newurl = url2 + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(h_allo_tot>0)`;
+                                    //else if (k == 'Alt')
+                                    //newurl = url2 + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(h_alt_tot > 0)`;
+
+
+
+                                    console.log(newurl)
+
+
+                                    function onEachFeatureForPointBB(feature, layer) {
+                                        if (k === 'CHC') {
+                                            layer.bindPopup(`<div class = 'text-center'>CHC<br>
+                                Source: Census 2011<br>
+                                Village Name: ${feature.properties.village_na}<br>
+                                Distance Range: ${feature.properties.chc_distan}<br>
+                                Doctors In Position :${feature.properties.chc_doc_in}<br>
+                                Doctors Total Strength :${feature.properties.chc_doc_nu}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.chc_param_}<br>
+                                Para Medical Staff In Position : ${feature.properties.chc_para_1}
+                                </div>`)
+                                        }
+                                        if (k === 'PHC') {
+                                            layer.bindPopup(`<div class = 'text-center'>PHC<br>
+                                Source: Census 2011<br>
+                                Village Name: ${feature.properties.village_na}<br>
+                                Distance Range: ${feature.properties.phc_distan}<br>
+                                Doctors In Position :${feature.properties.phc_doc_in}<br>
+                                Doctors Total Strength :${feature.properties.phc_doc_nu}<br>
+                                Para Medical Staff Total Strength : ${feature.properties.phc_param_}<br>
+                                Para Medical Staff In Position : ${feature.properties.phc_para_1}fen
+                                </div>`)
+                                        }
+
+
+                                    }
+                                    fetch(newurl).then(
+                                        function(response) {
+                                            if (response.status !== 200) {
+                                                console.log('Looks like there was a problem. Status Code: ' +
+                                                    response.status);
+                                                return;
+                                            }
+
+
+                                            response.json().then(function(geojsonData) {
+                                                // console.log(geojsonData.features);
+                                                let healthFacilityBB = L.geoJson(geojsonData.features, {
+                                                    pointToLayer: function(feature, latlng) {
+                                                        return L.circleMarker(latlng, {
+                                                            color: "yellow",
+                                                            weight: 6,
+                                                            opacity: .1,
+                                                            fillOpacity: 0.8
+                                                        });
+                                                    },
+                                                    onEachFeature: onEachFeatureForPointBB,
+                                                }).addTo(mymap);
+                                                oldhfbb = healthFacilityBB;
+                                            });
+
+
+                                        }).catch(function(err) {
+                                        console.log('Fetch Error :-S', err);
+                                    });
+
+                                }
+
+                                function querybufAlloALt(currentPos) {
+                                    let keys = Object.keys(activatedHealthFacility);
+                                    let arr = [];
+                                    let arr1 = [];
+
+
+                                    let query = ''
+
+
+                                    let k = ''
+
+                                    let z = ''
+                                    let u = ''
+
+                                    keys.forEach((v, i) => {
+                                        k = v;
+                                        if (k == 'CHC')
+                                            arr.push(k);
+                                        else if (k == 'PHC')
+                                            arr.push(k);
+                                        else if (k == 'Allo')
+                                            arr1.push(k)
+                                        else if (k == 'Alt')
+                                            arr1.push(k)
+
+
+                                        return (arr, arr1)
+                                    })
+
+                                    let alloalt = [];
+
+                                    arr1.forEach((j, i) => {
+                                        if (j == 'Allo') {
+                                            z = 'h_allo_tot'
+                                            alloalt.push(z)
+                                        }
+                                        if (j == 'Alt') {
+                                            u = 'h_alt_tot'
+                                            alloalt.push(u)
+                                        }
+                                        return alloalt;
+                                    })
+                                    console.log(alloalt)
+                                    alloalt.forEach((b, i) => {
+
+                                        query += b + ">0"
+                                        if (i != alloalt.length - 1) {
+                                            query += " OR "
+                                        }
+                                    })
+
+                                    const url2 = 'https://makerghat.urbansciences.in/geoserver/ows?service=WFS&version=1.0.0&request=GetFeature&outputFormat=json&typename=geonode:townhealth_centroid_15apr';
+
+
+                                    let bbOffset = output.innerHTML / 111;
+
+
+                                    console.log(query)
+                                    newurl = url2 + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(${query}) `;
+
+
+                                    // if (k == 'CHC')
+                                    // newurl = url + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(chc_num > 0) `;
+                                    //else if (k == 'PHC')
+                                    //newurl = url + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(phc_num > 0)`;
+                                    //else if (k == 'Allo')
+                                    //newurl = url2 + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(h_allo_tot>0)`;
+                                    //else if (k == 'Alt')
+                                    //newurl = url2 + `&cql_filter=BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset})&(h_alt_tot > 0)`;
+
+
+
+                                    console.log(newurl)
+
+
+                                    function onEachFeatureForPointBB(feature, layer) {
+
+                                        if (k === 'Allo') {
+                                            layer.bindPopup(`<div class = 'text-center'>Allopathy Hospital<br>
+                            Distance Range: ${feature.properties.h_allo_dst}<br>
+                            Doctors In Position :${feature.properties.h_allo_din}<br>
+                            Doctors Total Strength :${feature.properties.h_allo_doc}<br>
+                            Total Beds :${feature.properties.h_allo_bed}<br>
+                            Para Medical Staff Total Strength : ${feature.properties.h_allo_pm}<br>
+                            Para Medical Staff In Position : ${feature.properties.h_allo_pin}
+                            </div>`)
+                                        } else if (k === 'Alt') {
+                                            layer.bindPopup(`<div class = 'text-center'>Alternate Hospital<br>
+                Distance Range: ${feature.properties.h_alt_dst}<br>
+                            Doctors In Position :${feature.properties.h_alt_din}<br>
+                            Doctors Total Strength :${feature.properties.h_alt_doc}<br>
+                            Total Beds :${feature.properties.h_alt_bed}<br>
+                            Para Medical Staff Total Strength : ${feature.properties.h_alt_pm}<br>
+                            Para Medical Staff In Position : ${feature.properties.h_alt_pin}
+                            </div>`)
+                                        }
+
+                                    }
+
+                                    fetch(newurl).then(
+                                        function(response) {
+                                            if (response.status !== 200) {
+                                                console.log('Looks like there was a problem. Status Code: ' +
+                                                    response.status);
+                                                return;
+                                            }
+
+
+                                            response.json().then(function(geojsonData) {
+                                                // console.log(geojsonData.features);
+                                                let healthFacilityBB = L.geoJson(geojsonData.features, {
+                                                    pointToLayer: function(feature, latlng) {
+                                                        return L.circleMarker(latlng, {
+                                                            color: "yellow",
+                                                            weight: 6,
+                                                            opacity: .1,
+                                                            fillOpacity: 0.8
+                                                        });
+                                                    },
+                                                    onEachFeature: onEachFeatureForPointBB,
+                                                }).addTo(mymap);
+                                                oldhfbb = healthFacilityBB;
+                                            });
+
+
+                                        }).catch(function(err) {
+                                        console.log('Fetch Error :-S', err);
+                                        //})
+                                    })
+                                }
                                 // FIND NEAREST BUTTON
                                 $findNearest.on('click', function(e) {
                                     queryFeatures(currentPos, 1);
                                 });
+
 
                                 // IF LOCATION FETCH BY BROWSER SUCCESS
                                 function success(position) {
@@ -1259,17 +1719,20 @@
                                 var distLayerList = [];
                                 var wardLayerList = [];
                                 var wmshealthLayerList = [];
-
+                                var wms_legend;
+                                let insti_content;
                                 var searchControl;
 
 
 
                                 $('#indstate').on('change', function() {
 
-
+                                    if (area) {
+                                        mymap.removeLayer(area);
+                                    }
                                     clear_layer();
                                     clearpoint_layer();
-
+                                    clear_pinlayer();
                                     let indstate = document.getElementById('indstate').value;
 
                                     putWMSLayerst();
@@ -1279,9 +1742,12 @@
                                 })
 
                                 $('#district').on('change', function() {
+                                    if (area) {
+                                        mymap.removeLayer(area);
+                                    }
                                     //clear_layer();
                                     clearpoint_layer();
-
+                                    clear_pinlayer();
                                     let district = document.getElementById('district').value;
 
                                     putWMSLayerdist();
@@ -1396,15 +1862,18 @@
                                 function putWMSLayerdist() {
                                     var dist = document.getElementById('district').value;
                                     var state = document.getElementById('indstate').value;
-
+                                    var layers='geonode:india_pincodes_12june';
                                     //console.log(indstate);
                                     //var stLayerLatLong= listState[indstate];
                                     if (dist == 'Mumbai City' || dist == 'Mumbai Suburban')
                                         mymap.setView([19.0760, 72.8777], 11);
-
+                                    if(state=="Chhattisgarh")
+                                    {
+                                        layers='geonode:all_india_districts_11june2020';
+                                    }
                                     clear_distlayer();
                                     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms', {
-                                        layers: 'geonode:india_pincodes_13may',
+                                        layers:layers ,
                                         format: 'image/png',
                                         transparent: 'true',
                                         // version: '1.3.0',
@@ -1455,7 +1924,21 @@
                                     });
                                     wms_layer.addTo(mymap);
                                     newLayerList.push(wms_layer);
+
+                                    if(wms_legend){
+                                        mymap.removeControl(wms_legend);
+                                    }
+                                    console.log(wms_legend); 
+                                    addWMSLegend(layer);
+                                    TRIBLAYER="https://makerghat.urbansciences.in/geoserver/geonode/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS="+wms_layer.options.layers+"&QUERY_LAYERS="+wms_layer.options.layers;
+
+
                                 }
+                                function addWMSLegend(layer){
+                                    lagendGraphic = "https://makerghat.urbansciences.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER="+layer+"&LEGEND_OPTIONS=forceLabels:on";
+                                    wms_legend = L.wmsLegend(lagendGraphic);
+                                }
+
 
                                 let area = null;
 
@@ -1499,14 +1982,14 @@
                                     var state = document.getElementById('indstate').value;
 
                                     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms', {
-                                        layers: "geonode:india_pincodes_12may",
+                                        layers: "geonode:india_pincodes_12june",
                                         cql_filter: "pincode='" + pincode + "'",
                                         cql_filter: `pincode='${pincode}' AND state='${state}'`,
                                         format: 'image/png',
                                         transparent: 'true',
                                     });
                                     wms_layer.addTo(mymap);
-                                    setView('geonode:india_pincodes_12may', pincode);
+                                    setView('geonode:india_pincodes_12june', pincode);
 
                                     pinLayerList.push(wms_layer);
 
@@ -1603,6 +2086,9 @@
                                 }
 
                                 function removeWMS(unchecked_layer) {
+                                    if(wms_legend){
+                                        mymap.removeControl(wms_legend);
+                                    }
                                     newLayerList.forEach((layer, index) => {
                                         if (layer.options.layers === unchecked_layer) {
                                             mymap.removeLayer(layer);
@@ -1665,7 +2151,7 @@
                                 function putKoboHealthFacitywms(facility) {
                                     //console.log(cql);
                                     var wms_layer = L.tileLayer.wms('https://makerghat.urbansciences.in/geoserver/wms', {
-                                        layers: 'geonode:cumulative_healthfacility_18may',
+                                        layers: 'geonode:cumulative_health_facility_till_2june',
                                         format: 'image/png',
                                         transparent: 'true',
                                         tiled: 'true',
@@ -1694,9 +2180,9 @@
                                         version: '1.0.0',
                                         request: 'GetFeature',
                                         outputFormat: 'application/json',
-                                        typeName: 'geonode:cumulative_healthfacility_18may',
+                                        typeName: 'geonode:cumulative_health_facility_till_2june',
                                         cql_filter: `${facility}>0.0 AND state_gen='${indstate}'`,
-                                        propertyName: 'the_geom,facltyname,facltytyp,address_te1,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
+                                        propertyName: 'the_geom,facltyname,facltytyp,address_te,amenities,state_gen,district_g,pincode_ge,totbed,state_gen'
                                     };
                                     let parameters = L.Util.extend(options);
                                     cql_url = rootUrl + L.Util.getParamString(parameters)
@@ -1711,7 +2197,7 @@
                                             opacity: 1,
                                             fillOpacity: 0.8
                                         };
-                                        if (fac === 'hospital') circleProp['fillColor'] = 'bluevoilet'
+                                        if (fac === 'hospital') circleProp['fillColor'] = 'orangered'
                                         else if (fac === 'mhu') circleProp['fillColor'] = 'teal'
                                         else if (fac === 'subcenter') circleProp['fillColor'] = 'aqua'
                                         else if (fac === 'phc') circleProp['fillColor'] = 'crimson'
@@ -1723,7 +2209,7 @@
                                         else if (fac === 'mhi') circleProp['fillColor'] = 'lightseagreen'
                                         else if (fac === 'dc') circleProp['fillColor'] = 'maroon'
                                         else if (fac === 'phrmcy') circleProp['fillColor'] = 'midnightblue'
-                                        else if (fac === 'optical') circleProp['fillColor'] = 'orangered'
+                                        else if (fac === 'optical') circleProp['fillColor'] = 'blue'
                                         else if (fac === 'delvry') circleProp['fillColor'] = 'palevioletred'
                                         else if (fac === 'dspnsry') circleProp['fillColor'] = 'peru'
                                         else if (fac === 'othr') circleProp['fillColor'] = 'purple'
@@ -1748,7 +2234,7 @@
                         <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
                         <tr><td>Website:</td><td> ${unavailable}</td></tr>
                         <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Last updated:</td><td> 12th May 2020</td></tr>
+                        <tr><td>Last updated:</td><td> 2nd June 2020</td></tr>
                         <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
                         </table>`)
                                     }
@@ -1796,17 +2282,28 @@
                                         version: '1.0.0',
                                         request: 'GetFeature',
                                         outputFormat: 'application/json',
-                                        typeName: 'geonode:maha_govt_corona_hospital_21may2020',
+                                        typeName: 'geonode:covid_hospital_10june_with_added_facility_all',
                                         cql_filter: `category='${cql}'`,
                                         propertyName: 'the_geom,faclty_nam,type,iso_minus_,iso_confm_,iso_suspec,o2suported,total_icu,ventilator,address,category'
+                                    
                                     };
                                     let parameters = L.Util.extend(options);
                                     cql_url = rootUrl + L.Util.getParamString(parameters)
                                     console.log(cql_url);
+                                    
+                                    function geojsonMarkerOptions(feature,fac) {
+                                        var rad;
+                                        var num=`${feature.properties.iso_minus_}`;
+                                        if(num>0 && num<320){
+                                            rad=7;
+                                        }else if(num>320 && num<640){
+                                            rad=9;
+                                        }else{
+                                            rad=11;
+                                        }
 
-                                    function geojsonMarkerOptions(fac) {
                                         let circleProp = {
-                                            radius: 7,
+                                            radius: rad,
                                             fillColor: "#",
                                             color: "#000",
                                             weight: 1,
@@ -1840,6 +2337,7 @@
                         <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
                         <tr><td>Website:</td><td> ${unavailable}</td></tr>
                         <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
+                        <tr><td>Last updated:</td><td> 10th June,2020</td></tr>
                         <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
                         </table>`)
                                     }
@@ -1862,7 +2360,7 @@
                                             response.json().then(function(geojsonData) {
                                                 healthFacility = L.geoJson(geojsonData.features, {
                                                     pointToLayer: function(feature, latlng) {
-                                                        return L.circleMarker(latlng, geojsonMarkerOptions(facility));
+                                                        return L.circleMarker(latlng, geojsonMarkerOptions(feature,facility));
                                                     },
                                                     onEachFeature: onEachFeatureForPoint,
                                                 }).addTo(mymap);
@@ -1968,7 +2466,7 @@
                             </div>`)
                                         } else if (facility === 'Alt') {
                                             layer.bindPopup(`<div class = 'text-center'>Alternate Hospital<br>
-                Distance Range: ${feature.properties.h_alt_dst}<br>
+                            Distance Range: ${feature.properties.h_alt_dst}<br>
                             Doctors In Position :${feature.properties.h_alt_din}<br>
                             Doctors Total Strength :${feature.properties.h_alt_doc}<br>
                             Total Beds :${feature.properties.h_alt_bed}<br>
@@ -2025,6 +2523,7 @@
                                     // compose the URL for the request
 
                                     var URL = TRIBLAYER + '&BBOX=' + BBOX + '&FEATURE_COUNT=1&HEIGHT=' + HEIGHT + '&WIDTH=' + WIDTH + '&INFO_FORMAT=application%2Fjson&TILED=false&CRS=EPSG%3A3857&I=' + X + '&J=' + Y;
+                                    //console.log(e);
                                     $.ajax({
                                         url: URL,
                                         dataType: "json",
@@ -2037,9 +2536,36 @@
                                                 var popup = new L.Popup({
                                                     maxWidth: 300
                                                 });
-                                                console.log(feature.properties.facltytyp);
+                                                //console.log(feature.properties.facltytyp);
+                                                if(feature.properties.type==="aided ashramschool")
+                                                {
+                                                  insti_content ="<table class = 'popupclass' ><tr><td><b>District</b></td><td>" + feature.properties.district + "</td></tr>" +
+                                                    "<tr><td><b>Block</b></td><td>" + feature.properties.taluka + "</td></tr>" +
+                                                    "<tr><td><b>Village</b></td><td>" + feature.properties.village + "</td></tr>" +
+                                                    "<tr><td><b>School Name</b></td><td>" + feature.properties.school_nam + "</td></tr>" +
+                                                    
+                                                    
+                                                    "</table>";
+                                                }else if(feature.properties.area_name){
+                                                     insti_content = "<table class = 'popupclass' ><tr><td><b>Additional TSP District</b></td><td>"+feature.properties.district+"</td></tr>"+
+                                                       "<tr><td><b>Village Name</b></td><td>"+feature.properties.area_name+"</td></tr>"+             
+                                                        "<tr><td><b>Total Population</b></td><td>"+feature.properties.tot_p+"</td></tr>"+
+                                                        "<tr><td><b>Total Tribal Population</b></td><td>"+feature.properties.st_pop+"</td></tr>"+
+                                                        "<tr><td><b>Percentage Total Tribal Population</b></td><td>"+feature.properties.percent_of+"%"+"</td></tr></table>";
+                                                }else if(feature.properties.name_of_sc){
+                                                     insti_content = "<table class = 'popupclass' ><tr><td><b>District</b></td><td>"+feature.properties.district+"</td></tr>"+
+                                                        "<tr><td><b>Block</b></td><td>"+feature.properties.taluka+"</td></tr>"+             
+                                                        "<tr><td><b>Village</b></td><td>"+feature.properties.village+"</td></tr>"+
+                                                        "<tr><td><b>School Name</b></td><td>"+feature.properties.name_of_sc+"</td></tr>";
 
-                                                let insti_content = "<table class = 'popupclass' ><tr><td><b>Facility Name</b></td><td>" + feature.properties.facltyname + "</td></tr>" +
+                                                }else if(feature.properties.village__1){
+                                                    insti_content = "<table class = 'popupclass' ><tr><td><b>District</b></td><td>"+feature.properties.distname+"</td></tr>"+
+                                                        "<tr><td><b>Block</b></td><td>"+feature.properties.block_name+"</td></tr>"+             
+                                                        "<tr><td><b>Village</b></td><td>"+feature.properties.village_na+"</td></tr>"+
+                                                        "<tr><td><b>School Name</b></td><td>"+feature.properties.school_nam+"</td></tr>";
+
+                                                }else{
+                                                 insti_content = "<table class = 'popupclass' ><tr><td><b>Facility Name</b></td><td>" + feature.properties.facltyname + "</td></tr>" +
                                                     "<tr><td><b>Facility Type</b></td><td>" + feature.properties.facltytyp + "</td></tr>" +
                                                     "<tr><td><b>Amenities</b></td><td>" + feature.properties.amenities + "</td></tr>" +
                                                     "<tr><td><b>Address</b></td><td>" + feature.properties.address_te1 + "</td></tr>" +
@@ -2053,10 +2579,10 @@
                                                     "<tr><td><b>Email ID</b></td><td>" + "Unavailable" + "</td></tr>" +
                                                     "<tr><td><b>Website</b></td><td>" + "Unavailable" + "</td></tr>" +
                                                     "<tr><td><b>Phone number</b></td><td>" + "Unavailable" + "</td></tr>" +
-                                                    "<tr><td><b>Last updated</b></td><td>" + "18 May" + "</td></tr>" +
+                                                    "<tr><td><b>Last updated</b></td><td>" + "2nd June,2020" + "</td></tr>" +
                                                     `<tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>` +
                                                     "</table>";
-
+                                                }
 
                                                 popup.setContent(insti_content);
                                                 popup.setLatLng(e.latlng);
