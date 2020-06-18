@@ -1192,7 +1192,7 @@
                                        <tr><td>Category:</td><td> ${feature.properties.category}</td></tr>
                                         <tr><td>Facility Type:</td><td> ${feature.properties.type}</td></tr>
                                       <tr><td>Total Isolation beds(excluding ICU beds)</td><td> ${feature.properties.iso_minus_}</td></tr>
-                        <tr><td>Isolation beds of Confirmed Cases:</td><td> ${feature.properties.iso_confm_}</td></tr>
+                        <tr><td>Isolation beds of Confirmed Cases:</td><td> ${feature.properties.iso_cnfm_}</td></tr>
                         <tr><td>Isolation beds for Suspected Cases:</td><td> ${feature.properties.iso_suspec}</td></tr>
                         <tr><td>O2 Supported Beds:</td><td> ${feature.properties.o2suported}</td></tr>
                         <tr><td>Total ICU Beds:</td><td> ${feature.properties.total_icu}</td></tr>
@@ -1228,9 +1228,9 @@
                                         version: '1.0.0',
                                         request: 'GetFeature',
                                         outputFormat: 'application/json',
-                                        typeName: 'geonode:covid_hospital_10june_with_added_facility_all',
+                                        typeName: 'geonode:covid_hospital_15june',
                                         cql_filter: `BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset}) AND (${query})`,
-                                        propertyName: 'the_geom,faclty_nam,type,iso_minus_,iso_confm_,iso_suspec,o2suported,total_icu,ventilator,address,category'
+                                        propertyName: 'the_geom,faclty_nam,type,iso_minus_,iso_cnfm_,iso_suspec,o2suported,total_icu,ventilator,address,category'
                                     };
                                     let parameters = L.Util.extend(options);
                                     cql_url = rootUrl + L.Util.getParamString(parameters);
@@ -2282,9 +2282,9 @@
                                         version: '1.0.0',
                                         request: 'GetFeature',
                                         outputFormat: 'application/json',
-                                        typeName: 'geonode:covid_hospital_10june_with_added_facility_all',
+                                        typeName: 'geonode:covid_hospital_15june',
                                         cql_filter: `category='${cql}'`,
-                                        propertyName: 'the_geom,faclty_nam,type,iso_minus_,iso_confm_,iso_suspec,o2suported,total_icu,ventilator,address,category'
+                                        propertyName: 'the_geom,faclty_nam,type,iso_minus_,iso_cnfm_,iso_suspec,o2suported,total_icu,ventilator,address,category'
                                     
                                     };
                                     let parameters = L.Util.extend(options);
@@ -2326,7 +2326,7 @@
                         <tr><td>Category:</td><td> ${feature.properties.category}</td></tr>
                          <tr><td>Facility Type:</td><td> ${feature.properties.type}</td></tr>
                         <tr><td>Total Isolation beds(excluding ICU beds)</td><td> ${feature.properties.iso_minus_}</td></tr>
-                        <tr><td>Isolation beds of Confirmed Cases:</td><td> ${feature.properties.iso_confm_}</td></tr>
+                        <tr><td>Isolation beds of Confirmed Cases:</td><td> ${feature.properties.iso_cnfm_}</td></tr>
                         <tr><td>Isolation beds for Suspected Cases:</td><td> ${feature.properties.iso_suspec}</td></tr>
                         <tr><td>O2 Supported Beds:</td><td> ${feature.properties.o2suported}</td></tr>
                         <tr><td>Total ICU Beds:</td><td> ${feature.properties.total_icu}</td></tr>
