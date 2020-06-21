@@ -584,8 +584,19 @@
 
 
                             <script>
+
+                            	// $(document).ready(function() {
+                            	// 	 $('#indstate').on('change', function() {
+                            	// 	 	if (this.value == 'Chhattisgarh'){
+                            	// 	 		$("#block").hide();
+                            	// 	 	}
+
+                            	// 	 }
+
+                            	// });
                                 $(document).ready(function() {
                                     $('#district').on('change', function() {
+                                    	var state=document.getElementById("indstate");
                                         if (this.value == 'Mumbai City') {
                                             $("#mumwards").show();
                                             $("#mumsubwards").hide();
@@ -598,6 +609,9 @@
                                             $("#mumsubwards").show();
 
                                             $("#block").hide();
+                                        }else if(state="Chhattisgarh"){
+                                            $("#block").hide();
+
                                         } else {
                                             $("#mumwards").hide();
                                             $("#mumsubwards").hide();
@@ -1989,7 +2003,7 @@
                                         transparent: 'true',
                                     });
                                     wms_layer.addTo(mymap);
-                                    setView('geonode:india_pincodes_12june', pincode);
+                                    setView('geonode:india_pincodes_12june',pincode);
 
                                     pinLayerList.push(wms_layer);
 
