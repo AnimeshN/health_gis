@@ -2299,7 +2299,7 @@
                                         outputFormat: 'application/json',
                                         typeName: 'geonode:covid_dedicated_hospitals',
                                         cql_filter: `category='${cql}'`,
-                                        propertyName: 'the_geom,faclty_nam,type,iso_minus_,iso_confm_,iso_suspec,o2suported,total_icu,ventilator,address,category'
+                                        propertyName: 'the_geom,faclty_nam,type,iso_minus_,iso_confm_,iso_suspec,o2suported,total_icu,ventilator,address,category,date'
                                     
                                     };
                                     let parameters = L.Util.extend(options);
@@ -2345,14 +2345,14 @@
                         <tr><td>Isolation beds for Suspected Cases:</td><td> ${feature.properties.iso_suspec}</td></tr>
                         <tr><td>O2 Supported Beds:</td><td> ${feature.properties.o2suported}</td></tr>
                         <tr><td>Total ICU Beds:</td><td> ${feature.properties.total_icu}</td></tr>
-                        <tr><td>No. of Ventilators:</td><td>${feature.properties.ventilator}</td></tr>
-                        <tr><td>Address:</td><td>${feature.properties.address}</td></tr>
+                        <tr><td>No. of Ventilators:</td><td> ${feature.properties.ventilator}</td></tr>
+                        <tr><td>Address:</td><td> ${feature.properties.address}</td></tr>
                         <tr><td>Management:</td><td> ${unavailable}</td></tr>
                         <tr><td>Food Arrangement:</td><td> ${unavailable}</td></tr>
                         <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
                         <tr><td>Website:</td><td> ${unavailable}</td></tr>
                         <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Last updated:</td><td> 10th June,2020</td></tr>
+                        <tr><td>Last updated:</td><td> ${feature.properties.date}</td></tr>
                         <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
                         </table>`)
                                     }
