@@ -1154,14 +1154,7 @@
                                     let parameters = L.Util.extend(options);
                                     cql_url = rootUrl + L.Util.getParamString(parameters);
                                     console.log('bound', cql_url)
-                                    mymap.spin(true, {
-                                        lines: 9,
-                                        length: 2,
-                                        width: 20,
-                                        scale: 60,
-                                        radius: 70,
-                                        color: "grey"
-                                    });
+                                    
                                     fetch(cql_url).then(
                                         function(response) {
                                             if (response.status !== 200) {
@@ -1181,7 +1174,6 @@
                                                     },
                                                     onEachFeature: onEachFeatureForPointBB,
                                                 }).addTo(mymap);
-                                                mymap.spin(false);
                                                 oldhfbb = healthFacilityInBB;
                                             });
 
@@ -1194,96 +1186,7 @@
 
                                 }
 
-                                function queryArog(currentPos) {
-
-                                    function onEachFeatureForPointBB(feature, layer) {
-                                        const unavailable = '-';
-                                        const updateDate = "Dedicated COVID Facilities-Arogya";
-                                        layer.bindPopup(`<table class = 'popupclass'>
-                                       <tr><td>Facility Name:</td><td> ${feature.properties.faclty_nam}</td></tr>
-                                       <tr><td>Category:</td><td> ${feature.properties.category}</td></tr>
-                                        <tr><td>Facility Type:</td><td> ${feature.properties.type}</td></tr>
-                                      <tr><td>Total Isolation beds(excluding ICU beds)</td><td> ${feature.properties.iso_minus_}</td></tr>
-                        <tr><td>Isolation beds of Confirmed Cases:</td><td> ${feature.properties.iso_cnfm_}</td></tr>
-                        <tr><td>Isolation beds for Suspected Cases:</td><td> ${feature.properties.iso_suspec}</td></tr>
-                        <tr><td>O2 Supported Beds:</td><td> ${feature.properties.o2suported}</td></tr>
-                        <tr><td>Total ICU Beds:</td><td> ${feature.properties.total_icu}</td></tr>
-                        <tr><td>No. of Ventilators:</td><td>${feature.properties.ventilator}</td></tr>
-                        <tr><td>Address:</td><td>${feature.properties.address}</td></tr>
-                        <tr><td>Management:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Food Arrangement:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Email ID:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Website:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Phone number:</td><td> ${unavailable}</td></tr>
-                        <tr><td>Last updated:</td><td> 10th June,2020</td></tr>
-                        <tr><button type="button" class="btn btn-outline-dark" style="color:white;"><a style="color:white;text-decoration:none" href="https://ee.humanitarianresponse.info/x/#BLiUveaW">Click here for Correction/Feedbacks</a></button></tr>
-                        </table>`)
-                                    }
-
-
-                                    let keys = Object.keys(activearogyaFacity)
-                                    let query = ''
-                                    keys.forEach((v, i) => {
-                                        query += "category =" + "'" + v + "'"
-
-                                        if (i != keys.length - 1) {
-                                            query += " OR "
-                                        }
-                                    })
-                                    console.log(query)
-
-                                    let rootUrl = '{{site_url}}geoserver/geonode/ows';
-                                    let bbOffset = output.innerHTML / 111;
-                                    let options = {
-                                        service: 'WFS',
-                                        version: '1.0.0',
-                                        request: 'GetFeature',
-                                        outputFormat: 'application/json',
-                                        typeName: 'geonode:covid_dedicated_hospitals',
-                                        cql_filter: `BBOX(the_geom,${currentPos[1]-bbOffset},${currentPos[0]-bbOffset},${currentPos[1]+bbOffset},${currentPos[0]+bbOffset}) AND (${query})`,
-                                        propertyName: 'the_geom,faclty_nam,type,iso_minus_,iso_cnfm_,iso_suspec,o2suported,total_icu,ventilator,address,category'
-                                    };
-                                    let parameters = L.Util.extend(options);
-                                    cql_url = rootUrl + L.Util.getParamString(parameters);
-                                    console.log('bound', cql_url)
-                                    mymap.spin(true, {
-                                        lines: 9,
-                                        length: 2,
-                                        width: 20,
-                                        scale: 60,
-                                        radius: 70,
-                                        color: "grey"
-                                    });
-                                    fetch(cql_url).then(
-                                        function(response) {
-                                            if (response.status !== 200) {
-                                                console.log('Looks like there was a problem. Status Code: ' +
-                                                    response.status);
-                                                return;
-                                            }
-                                            response.json().then(function(geojsonData) {
-                                                let healthFacilityInBB = L.geoJson(geojsonData.features, {
-                                                    pointToLayer: function(feature, latlng) {
-                                                        return L.circleMarker(latlng, {
-                                                            color: "yellow",
-                                                            weight: 6,
-                                                            opacity: .1,
-                                                            fillOpacity: 0.8
-                                                        });
-                                                    },
-                                                    onEachFeature: onEachFeatureForPointBB,
-                                                }).addTo(mymap);
-                                                mymap.spin(false);
-                                                oldhfbb = healthFacilityInBB;
-                                            });
-
-
-                                        }).catch(function(err) {
-                                        console.log('Fetch Error :-S', err);
-                                    });
-
-                                }
+                       
 
                                 function queryArog(currentPos) {
 
