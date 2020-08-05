@@ -215,7 +215,7 @@
                 <form>
                     <div class="multiselect">
                         <div class="selectBox" onclick="showCheckboxes2()">
-                            <button type="button" style="width: 90%;font-size:12px" class="btn btn-outline-dark">Select Health Facilies</button>
+                            <button type="button" style="width: 90%;font-size:12px" class="btn btn-outline-dark">Select Health Facility</button>
 
                             <div class="overSelect"></div>
                         </div>
@@ -405,7 +405,7 @@
                                         <form>
                                             <div class="multiselect">
                                                 <div class="selectBox" onclick="showCheckboxes()">
-                                                    <button type="button" style="width: 90%;font-size:12px" class="btn btn-outline-dark">Select Health Facilies</button>
+                                                    <button type="button" style="width: 90%;font-size:12px" class="btn btn-outline-dark">Select Health Facility</button>
                                                     <!-- <option>Select Health Facilities</option> -->
                                                     <div class="overSelect"></div>
                                                 </div>
@@ -2172,6 +2172,11 @@
 
                                     wms_layer.addTo(mymap);
                                     //console.log(wms_layer);
+                                     if (wms_legend) {
+                                        mymap.removeControl(wms_legend);
+                                    }
+                                    //console.log(wms_legend); 
+                                    addWMSLegend(facility);
                                     TRIBLAYER = "https://makerghat.urbansciences.in/geoserver/geonode/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS=" + wms_layer.options.layers + "&QUERY_LAYERS=" + wms_layer.options.layers;
                                     wmshealthLayerList.push(wms_layer);
                                     activeKoboAllIndiaHealthFacity[facility] = wms_layer;
