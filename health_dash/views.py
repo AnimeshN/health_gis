@@ -1,10 +1,12 @@
 from django.shortcuts import render
+from django.core.serializers import serialize
 from django.views.generic import TemplateView
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 from django.conf import settings
+from .models import TownhealthCentroid15Apr, MahaVillageHealthCentroid29Mar, CovidDedicatedHospitals, GovtSchools30April, AidedSchools30April, InstBifocals4May2020, InstVti4May2020, TotIti13Apr2020
 
 # Create your views here.
 

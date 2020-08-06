@@ -82,15 +82,14 @@
 <link rel="stylesheet" href="{% static 'leaflet-minimap/Control.MiniMap.min.css' %}">
  
 
- <!--d3fordependentdropdown-->
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<!--d3fordependentdropdown--> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 
 <script  src="https://d3js.org/d3.v4.min.js"></script>
 
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-
 
 <!-- leaflet lagend graphic -->
 
@@ -99,11 +98,6 @@
 
 <!-- <link rel="stylesheet" href=""/>
 <script src="leaflet-legend-graphics/leaflet.wmslegend.js"></script> -->
-
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
 
 </head>
 
@@ -135,42 +129,53 @@ body {
       .mobileShow {display: inline;}
   }
   </style>
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">HealthGIS</a>
+  <a class="navbar-brand" href="#">Ahmadnagar Facility GIS</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item disable">
-        <a class="nav-link" href="#">Source: Census 2011 <span class="sr-only">(current)</span></a>
+    <ul class="navbar-nav mr-auto" style="margin-left:850px;">
+     
+       <!-- <li class="nav-item active">
+        <a class="nav-link" href="#">Query Builder</a>
+      </li> -->
+      <li class="nav-item active">
+        <a class="nav-link" href="#"><b>Maps</b></a>
       </li>
 
-
-<!-- 
       <li class="nav-item active">
-        <a class="nav-link" href="{% url 'rural_health' %}">Rural<span class="sr-only">(current)</span></a>
-    </li>
-
-    <li class="nav-item active">
-      <a class="nav-link" href="{% url 'urban_health' %}">Urban<span class="sr-only">(current)</span></a>
-  
-  </li> -->
-
-      <li class="nav-item active">
-          <a class="nav-link" href="https://ee.humanitarianresponse.info/x/#URXRVsvI">Volunteer<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="#">Resources</a>
       </li>
+
+      <!-- <li class="nav-item active">
+        <a class="nav-link" href="#">
+         <select>
+          <option value="volvo">Resources</option>
+          <option value="saab">Analysis</option>
+          <option value="fiat">Content</option>
+          
+        </select></a>
+      </li> -->
+      
+
+       <!-- <li class="nav-item active">
+        <a class="nav-link" href="#">
+         <select>
+          <option value="volvo">Login</option>
+          <option value="saab">District Collector</option>
+          <option value="fiat">Tehsildar</option>
+          <option value="audi">Department Officer</option>
+          <option value="audi">Municipal Corporation</option>
+        </select></a>
+      </li> -->
     </ul>
 
     <ul class="navbar-nav ml-auto">
 
     </ul>
-    <!-- <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form> -->
+    
   </div>
 </nav>
 
@@ -185,8 +190,8 @@ body {
 </div>
 
 <script>
-
 var mymap;
+
 var source = L.wms.source(
       "https://makerghat.urbansciences.in/geoserver/wms",
       {
@@ -196,8 +201,8 @@ var source = L.wms.source(
   );
 
   mymap = L.map('mapdiv', {
-    center:[19.0760, 84.8777], 
-    zoom:5, zoomControl:false, 
+    center:[19.7515,75.7139], 
+  zoom:6, zoomControl:false, 
     attributionControl:false,
     messagebox: true,
     contextmenu: true,
@@ -266,7 +271,7 @@ $('.select').click(function () {
   
   // var ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap);
   var ctlSidebar = L.control.sidebar('side-bar').addTo(mymap);
-  // var ctlPan = L.control.pan().addTo(mymap);
+  var ctlPan = L.control.pan().addTo(mymap);
 
   var ctlEasybutton = L.easyButton('fa fa fa-bars', function(){
       ctlSidebar.toggle(); 
